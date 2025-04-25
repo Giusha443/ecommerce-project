@@ -41,5 +41,14 @@ module.exports = tseslint.config(
       ...angular.configs.templateAccessibility,
     ],
     rules: {},
-  }
+  },
+  // {
+  //   files: ["*.html"],
+  //   excludedFiles: ["*inline-template-*.component.html"],
+  //   extends: [eslintPluginPrettierRecommended],
+  //   rules: {
+  //     // NOTE: WE ARE OVERRIDING THE DEFAULT CONFIG TO ALWAYS SET THE PARSER TO ANGULAR (SEE BELOW)
+  //     "prettier/ prettier": ["error", { "parser": "angular" }]
+  //   }
+  // }
 );
