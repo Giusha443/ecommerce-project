@@ -59,6 +59,6 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
 
-## Design Attribution  
-This project’s UI is based (or inspired by) on "**Multipurpose Ecommerce Website Lo-fi Template**" by **Xperienced Design**, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).  
+## Design Attribution
+This project’s UI is based (or inspired by) on "**Multipurpose Ecommerce Website Lo-fi Template**" by **Xperienced Design**, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 Original design: [multipurpose-ecommerce-website-lo-fi-template](https://www.figma.com/community/file/1347472132092037504/multipurpose-ecommerce-website-lo-fi-template)
