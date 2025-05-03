@@ -1,6 +1,46 @@
-# EcommerceProject
+# Ecommerce Project
+## Description
+Learning project for Rsschool task "eCommerce-Application".
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+Making a __commercial__ ready **onlineshop** using CommerceTools trial project API.
+
+
+## Project technological stack
+ - **Angular** v19 with
+    * TypeScript
+    * Eslint
+    * Prettier
+    * Karma/jasmine for testing
+    * Commerce Tools SDK?
+
+
+## To run this project locally:
+1. Clone this repo
+2. Go to the project filder
+3. Run `npm install` to install all dependencies
+4. Register at CommerceTools to get your own apiClient
+5. Download `Mobile and spa client` template apiClient as `.env` file and put it in root folder of the project
+6. Run, build or deploy. Have fun!
+
+
+## Project Scripts
+
+To lint code using Eslint, run:
+
+```bash
+ng lint
+```
+
+To format code using Prettier, run:
+```bash
+npm run format
+```
+
+To prepare Husky hooks, run
+```bash
+npm run prepare
+```
+
 
 ## Development server
 
@@ -54,9 +94,8 @@ ng e2e
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+> This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
 
 
 ## Design Attribution
