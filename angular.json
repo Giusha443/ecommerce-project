@@ -15,7 +15,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@ngx-env/builder:application",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/ecommerce-project",
             "index": "src/index.html",
@@ -49,6 +49,12 @@
               "outputHashing": "all"
             },
             "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -57,7 +63,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@ngx-env/builder:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "ecommerce-project:build:production"
@@ -66,15 +72,13 @@
               "buildTarget": "ecommerce-project:build:development"
             }
           },
-          "defaultConfiguration": "development",
-          "options": {}
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@ngx-env/builder:extract-i18n",
-          "options": {}
+          "builder": "@angular-devkit/build-angular:extract-i18n"
         },
         "test": {
-          "builder": "@ngx-env/builder:karma",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
@@ -86,8 +90,7 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": [],
-            "builderMode": "browser"
+            "scripts": []
           }
         },
         "lint": {
@@ -100,7 +103,9 @@
     }
   },
   "cli": {
-    "schematicCollections": ["angular-eslint"],
+    "schematicCollections": [
+      "angular-eslint"
+    ],
     "analytics": false
   }
 }

@@ -1,57 +1,38 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ApiRoot, createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { AuthMiddlewareOptions, Client, ClientBuilder, HttpMiddlewareOptions } from '@commercetools/sdk-client-v2';
+import { HttpClient } from '@angular/common/http';
+import { ProductResponse, TokenResponse } from './services.model';
+import { Observable } from 'rxjs';
+import { environment } from '../environments/environment.development';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ApiService {
-  readonly projectKey = import.meta.env.NG_APP_CTP_PROJECT_KEY;
-  private apiRoot!: ApiRoot;
+  readonly authUrl = `${environment.host}/oauth/token`;
+  readonly anonymousToken = `${environment.host}/oauth/${environment.projectKey}/anonymous/token`;
+  readonly productsUrl = `${environment.apiUrl}/${environment.projectKey}/products`;
 
-  constructor(private http: HttpClient) {
-    this.initializeClient();
-  }
+  constructor(private api: HttpClient) {}
 
-  private initializeClient() {
-    const authMiddlewareOptions: AuthMiddlewareOptions = {
-      host: import.meta.env.NG_APP_CTP_AUTH_URL,
-      projectKey: this.projectKey,
-      credentials: {
-        clientId: import.meta.env.NG_APP_CTP_CLIENT_ID,
-        clientSecret: import.meta.env.NG_APP_CTP_CLIENT_SECRET,
+  private requestToken(url: string): Observable<TokenResponse> {
+    const params = new URLSearchParams();
+    params.append('grant_type', 'client_credentials');
+    params.append('scope', `manage_project:${environment.projectKey}`); //на счет scopa не уверен для анонима
+    return this.api.post<TokenResponse>(url, params.toString(), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${btoa(`${environment.clientId}:${environment.clientSecret}`)}`,
       },
-      scopes: [`manage_project:${this.projectKey}`],
-      fetch: this.angularFetch.bind(this),
-    };
-
-    const httpMiddlewareOptions: HttpMiddlewareOptions = {
-      host: import.meta.env.NG_APP_CTP_API_URL,
-      fetch: this.angularFetch.bind(this),
-    };
-
-    const client: Client = new ClientBuilder()
-      .withProjectKey(this.projectKey)
-      .withClientCredentialsFlow(authMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
-      .withLoggerMiddleware()
-      .build();
-
-    this.apiRoot = createApiBuilderFromCtpClient(client);
+    });
   }
 
-  private async angularFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    const response = await this.http
-      .request(init?.method || 'GET', input.toString(), {
-        headers: init?.headers as any,
-        body: init?.body as any,
-      })
-      .toPromise();
-    return new Response(JSON.stringify(response));
+  getAuthToken(): Observable<TokenResponse> {
+    return this.requestToken(this.authUrl);
   }
 
-  getApiRoot(): ApiRoot {
-    return this.apiRoot;
+  getAnonymousToken(): Observable<TokenResponse> {
+    return this.requestToken(this.anonymousToken);
+  }
+
+  getProducts() {
+    return this.api.get<ProductResponse>(this.productsUrl);
   }
 }
