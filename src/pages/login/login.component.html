@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="nav">d</div>
+    <div class="outliner">
+      <div class="login-container">
+        <div class="login-form">
+          <h2>Login</h2>
+          <div class="register">Don't have an account? <a href="#">Create a new one</a></div>
+
+          <p class="label">Enter Your Email Or Name</p>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput placeholder="Enter email or phone" />
+          </mat-form-field>
+
+          <p class="label">Enter Your Password</p>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="'Toggle password visibility'"
+              type="button">
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <button mat-stroked-button color="primary" class="login-button">Login</button>
+
+          <div class="actions">
+            <a href="#">Forgot Your Password?</a>
+          </div>
+        </div>
+        <div class="login-image"></div>
+      </div>
+    </div>
+  </body>
+</html>
