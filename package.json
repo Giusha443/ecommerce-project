@@ -31,6 +31,7 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^22.15.3",
     "angular-eslint": "19.3.0",
     "commitlint": "^19.8.0",
     "eslint": "^9.23.0",
