@@ -57,10 +57,10 @@
   },
   "lint-staged": {
     "*.{json,js,ts,html}": [
-      "npx prettier --write --ignore-unknown -l"
+      "npx prettier --write -l"
     ],
     "*.{js,ts,jsx}": [
-      "npx eslint --quiet --fix"
+      "npx eslint --fix"
     ]
   },
   "commitlint": {
