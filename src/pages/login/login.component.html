@@ -1,33 +1,35 @@
-<div class="outliner">
-  <div class="login-container">
-    <div class="login-form">
-      <h2>Login</h2>
-      <div class="register">Don't have an account? <a href="#">Create a new one</a></div>
+<div class="login-container">
+  <div class="login-form">
+    <h2 class="login-form__header">Login</h2>
 
-      <p class="label">Enter Your Email Or Name</p>
-      <mat-form-field appearance="outline" class="full-width">
-        <input matInput placeholder="Enter email or phone" />
-      </mat-form-field>
-
-      <p class="label">Enter Your Password</p>
-      <mat-form-field appearance="outline" class="full-width">
-        <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="hidePassword = !hidePassword"
-          [attr.aria-label]="'Toggle password visibility'"
-          type="button">
-          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
-
-      <button mat-stroked-button color="primary" class="login-button">Login</button>
-
-      <div class="actions">
-        <a href="#">Forgot Your Password?</a>
-      </div>
+    <div class="login-form__register">
+      Don't have an account? <a class="login-form__register-link" href="#">Create a new one</a>
     </div>
-    <div class="login-image"></div>
+
+    <p class="login-form__label">Enter Your Email Or Name</p>
+    <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+      <input matInput placeholder="Enter email or phone" />
+    </mat-form-field>
+
+    <p class="login-form__label">Enter Your Password</p>
+    <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+      <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="hidePassword = !hidePassword"
+        [attr.aria-label]="'Toggle password visibility'"
+        type="button">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-stroked-button class="login-form__login-button">Login</button>
+
+    <div class="login-form__forgot-password">
+      <a class="login-form__forgot-password-link" href="#">Forgot Your Password?</a>
+    </div>
   </div>
+
+  <div class="gradient"></div>
 </div>
