@@ -14,6 +14,7 @@ export class ApiService {
 
   private requestToken(url: string): Observable<TokenResponse> {
     const params = new URLSearchParams();
+
     params.append('grant_type', 'client_credentials');
     params.append('scope', `manage_project:${environment.projectKey}`); //на счет scopa не уверен для анонима
     return this.api.post<TokenResponse>(url, params.toString(), {
