@@ -6,6 +6,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { intercept } from '../services/interceptor/api.interceptor';
 
 export const appConfig: ApplicationConfig = {
+
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
