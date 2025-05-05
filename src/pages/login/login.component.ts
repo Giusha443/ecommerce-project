@@ -14,5 +14,5 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  hidePassword = true;
+  public hidePassword = true;
 }
