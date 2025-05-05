@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ProductResponse, TokenResponse } from './services.model';
+import { ProductResponse, TokenResponse } from './api-response.model';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   readonly authUrl = `${environment.host}/oauth/token`;
-  readonly anonymousToken = `${environment.host}/oauth/${environment.projectKey}/anonymous/token`;
+  readonly anonymousTokenUrl = `${environment.host}/oauth/${environment.projectKey}/anonymous/token`;
   readonly productsUrl = `${environment.apiUrl}/${environment.projectKey}/products`;
 
   constructor(private api: HttpClient) {}
@@ -29,7 +29,7 @@ export class ApiService {
   }
 
   getAnonymousToken(): Observable<TokenResponse> {
-    return this.requestToken(this.anonymousToken);
+    return this.requestToken(this.anonymousTokenUrl);
   }
 
   getProducts() {
