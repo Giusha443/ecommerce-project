@@ -2,29 +2,42 @@
   <div class="login-form">
     <h2 class="login-form__header">Login</h2>
 
-    <div class="login-form__register">
-      Don't have an account? <a class="login-form__register-link" href="#">Create a new one</a>
-    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="login-form__register">
+        Don't have an account? <a class="login-form__register-link" href="#">Create a new one</a>
+      </div>
 
-    <p class="login-form__label">Enter Your Email Or Name</p>
-    <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
-      <input matInput placeholder="Enter email or phone" />
-    </mat-form-field>
+      <p class="login-form__label">Enter Your Email</p>
+      <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+        <input matInput formControlName="email" placeholder="Enter email" />
+        <mat-error *ngIf="email?.hasError('required')">Email is required.</mat-error>
+        <mat-error *ngIf="email?.hasError('email') || email?.hasError('pattern')">Invalid email format.</mat-error>
+      </mat-form-field>
 
-    <p class="login-form__label">Enter Your Password</p>
-    <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
-      <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" />
-      <button
-        mat-icon-button
-        matSuffix
-        (click)="hidePassword = !hidePassword"
-        [attr.aria-label]="'Toggle password visibility'"
-        type="button">
-        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-      </button>
-    </mat-form-field>
+      <p class="login-form__label">Enter Your Password</p>
+      <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          placeholder="Enter password"
+          formControlName="password" />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Toggle password visibility'"
+          type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="password?.hasError('required')">Password is required.</mat-error>
+        <mat-error *ngIf="password?.hasError('minlength')">Password must be at least 8 characters.</mat-error>
+        <mat-error *ngIf="password?.hasError('pattern')"
+          >Must include upper, lower, digit, and no whitespace.</mat-error
+        >
+      </mat-form-field>
 
-    <button mat-stroked-button class="login-form__login-button">Login</button>
+      <button mat-stroked-button type="submit" class="login-form__login-button">Login</button>
+    </form>
 
     <div class="login-form__forgot-password">
       <a class="login-form__forgot-password-link" href="#">Forgot Your Password?</a>

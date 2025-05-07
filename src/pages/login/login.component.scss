@@ -59,6 +59,7 @@
   font-size: 20px;
   margin-bottom: 1.5rem;
   padding: 24px 16px;
+  margin-top: 0.5rem;
 }
 
 .login-form__forgot-password {
@@ -116,4 +117,11 @@
   .gradient {
     height: 200px;
   }
+}
+
+mat-error {
+  font-size: 0.85rem;
+  color: #e53935;
+  font-weight: 500;
+  margin-top: 4px;
 }
