@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,22 +44,18 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
+  public onSubmit(): void {
     if (this.loginForm.invalid) {
-      this.snackBar.open('Please correct the validation errors.', 'Close', { duration: 3000 });
       return;
     }
-
-    const formData = this.loginForm.value;
-    console.log('Form submitted:', formData);
     this.snackBar.open('Login successful (stubbed)!', 'Close', { duration: 3000 });
   }
 
-  get email() {
+  public get email(): AbstractControl | null {
     return this.loginForm.get('email');
   }
 
-  get password() {
+  public get password(): AbstractControl | null {
     return this.loginForm.get('password');
   }
 }
