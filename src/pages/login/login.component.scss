@@ -44,7 +44,6 @@
 
 .login-form__field {
   width: 100%;
-  margin-bottom: 1rem;
 }
 
 .login-form__field--full-width {
@@ -59,6 +58,7 @@
   font-size: 20px;
   margin-bottom: 1.5rem;
   padding: 24px 16px;
+  margin-top: 2.2rem;
 }
 
 .login-form__forgot-password {
@@ -115,5 +115,24 @@
 
   .gradient {
     height: 200px;
+  }
+}
+
+mat-error {
+  font-size: 0.85rem;
+  color: #e53935;
+  font-weight: 500;
+  margin-top: 4px;
+}
+// .login-form__login-button.disabled-fake {
+//   opacity: 1;
+//   pointer-events: none;
+// }
+
+.custom-disabled-style {
+  color: #fff !important;
+  &.mat-button-disabled {
+    pointer-events: auto !important;
+    opacity: 1 !important;
   }
 }
