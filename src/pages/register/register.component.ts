@@ -89,8 +89,8 @@ export class RegisterComponent {
       () => {
         this.loginAfterRegistration(formData);
       },
-      err => {
-        this.showError(err.message || 'Registration failed');
+      () => {
+        this.showError('Registration failed');
       }
     );
   }
@@ -101,8 +101,8 @@ export class RegisterComponent {
         this.router.navigate(['']);
         this.showSuccess('Login successful (stubbed)!');
       },
-      err => {
-        this.showError(err.message || 'Login after registration failed');
+      () => {
+        this.showError('Login after registration failed');
       }
     );
   }

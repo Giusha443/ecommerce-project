@@ -33,7 +33,7 @@ export class ApiService {
   getCustomerToken(credentials: { email: string; password: string }): Observable<TokenResponse> {
     const body = new URLSearchParams();
     body.append('grant_type', 'password');
-    body.append('email', credentials.email);
+    body.append('username', credentials.email);
     body.append('password', credentials.password);
     body.append('scope', `manage_project:${environment.projectKey}`);
     return this.http.post<TokenResponse>(this.getCustomersTokenUrl, body, {

@@ -124,3 +124,15 @@ mat-error {
   font-weight: 500;
   margin-top: 4px;
 }
+// .login-form__login-button.disabled-fake {
+//   opacity: 1;
+//   pointer-events: none;
+// }
+
+.custom-disabled-style {
+  color: #fff !important;
+  &.mat-button-disabled {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+  }
+}
