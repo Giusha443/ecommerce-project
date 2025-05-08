@@ -1,8 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+
+interface TokenStore {
+  accessToken: string;
+  refreshToken: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
-  accessToken$ = new BehaviorSubject<null | string>(null);
-  refreshToken$ = new BehaviorSubject<null | string>(null);
+  tokens = 'tokens_commerce_technik';
+  setTokens(tokens: Partial<TokenStore>) {
+    const listToken = { accessToken: '', refreshToken: '', ...tokens };
+    localStorage.setItem(this.tokens, JSON.stringify(listToken));
+  }
+  getTokens(): TokenStore {
+    const tokens = JSON.parse(localStorage.getItem(this.tokens) || '');
+    return tokens || { accessToken: '', refreshToken: '' };
+  }
 }

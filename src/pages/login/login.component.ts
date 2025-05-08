@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -25,11 +26,14 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class LoginComponent {
   public hidePassword = true;
   public loginForm: FormGroup;
+  api: ApiService;
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar
   ) {
+    this.api = inject(ApiService);
+
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^\S+@\S+\.\S+$/)]],
       password: [
@@ -51,7 +55,7 @@ export class LoginComponent {
     }
 
     const formData = this.loginForm.value;
-    console.log('Form submitted:', formData);
+    this.api.getCustomerToken(formData).subscribe(console.log);
     this.snackBar.open('Login successful (stubbed)!', 'Close', { duration: 3000 });
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ProductResponse, TokenResponse } from './api-response.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Customer, CustomerProps, Introspect, ProductResponse, TokenResponse } from './api-response.model';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment.development';
 
@@ -9,30 +9,69 @@ export class ApiService {
   readonly authUrl = `${environment.host}/oauth/token`;
   readonly anonymousTokenUrl = `${environment.host}/oauth/${environment.projectKey}/anonymous/token`;
   readonly productsUrl = `${environment.apiUrl}/${environment.projectKey}/products`;
+  readonly introspectUrl = `${environment.host}/${environment.projectKey}/oauth/introspect`;
+  readonly customersUrl = `${environment.apiUrl}/${environment.projectKey}/customers`;
+  readonly getCustomersTokenUrl = `${environment.host}/oauth/${environment.projectKey}/customers/token`;
+  readonly refreshTokenUrl = `${environment.host}/oauth/token`;
 
-  constructor(private api: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-  private requestToken(url: string): Observable<TokenResponse> {
-    const params = new URLSearchParams();
-    params.append('grant_type', 'client_credentials');
-    params.append('scope', `manage_project:${environment.projectKey}`); //на счет scopa не уверен для анонима
-    return this.api.post<TokenResponse>(url, params.toString(), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${btoa(`${environment.clientId}:${environment.clientSecret}`)}`,
-      },
+  getClientCredentialsToken(scope: string, path?: string): Observable<TokenResponse> {
+    const body = new URLSearchParams();
+    body.append('grant_type', 'client_credentials');
+    body.append('scope', scope);
+    return this.http.post<TokenResponse>(path || this.authUrl, body, {
+      headers: this.getAuthHeaders(),
     });
   }
 
-  getAuthToken(): Observable<TokenResponse> {
-    return this.requestToken(this.authUrl);
-  }
-
   getAnonymousToken(): Observable<TokenResponse> {
-    return this.requestToken(this.anonymousTokenUrl);
+    const scope = `manage_project:${environment.projectKey}`;
+    return this.getClientCredentialsToken(scope, this.anonymousTokenUrl);
   }
 
-  getProducts() {
-    return this.api.get<ProductResponse>(this.productsUrl);
+  getCustomerToken(credentials: { email: string; password: string }): Observable<TokenResponse> {
+    const body = new URLSearchParams();
+    body.append('grant_type', 'password');
+    body.append('email', credentials.email);
+    body.append('password', credentials.password);
+    body.append('scope', `manage_project:${environment.projectKey}`);
+    return this.http.post<TokenResponse>(this.getCustomersTokenUrl, body, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  refreshToken(refreshToken: string): Observable<TokenResponse> {
+    const body = new URLSearchParams();
+    body.append('grant_type', 'refresh_token');
+    body.append('refresh_token', refreshToken);
+    return this.http.post<TokenResponse>(this.refreshTokenUrl, body, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  introspectToken(token: string): Observable<Introspect> {
+    const body = new URLSearchParams();
+    body.append('token', token);
+    return this.http.post<Introspect>(this.introspectUrl, body, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+  }
+
+  createCustomer(customerData: CustomerProps): Observable<Customer> {
+    return this.http.post<Customer>(this.customersUrl, customerData, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  getProducts(): Observable<ProductResponse> {
+    return this.http.get<ProductResponse>(this.productsUrl);
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${btoa(`${environment.clientId}:${environment.clientSecret}`)}`,
+    });
   }
 }

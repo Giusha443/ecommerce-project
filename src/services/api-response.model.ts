@@ -67,3 +67,55 @@ interface ProductVariant {
   }[];
   sku?: string;
 }
+
+export interface BaseResource {
+  id: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  createdBy?: ClientLogging;
+  lastModifiedBy?: ClientLogging;
+}
+
+export interface ClientLogging {
+  clientId: string;
+  isPlatformClient: boolean;
+}
+
+export interface Address {
+  country: string;
+  city: string;
+  streetName: string;
+}
+
+export interface Customer extends BaseResource {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  addresses: Address[];
+  billingAddressIds?: string[];
+  shippingAddressIds?: string[];
+  customerGroupAssignments?: unknown[];
+  authenticationMode: 'Password' | 'ExternalAuth';
+  isEmailVerified: boolean;
+  key?: string;
+  lastMessageSequenceNumber: number;
+  versionModifiedAt: string;
+  stores?: unknown[];
+}
+export interface CustomerProps {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  addresses: Address[];
+  key?: string;
+}
+
+export interface Introspect {
+  active: boolean;
+  scope: string;
+  exp: number;
+  client_id: string;
+}
