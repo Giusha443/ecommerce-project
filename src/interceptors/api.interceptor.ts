@@ -1,17 +1,21 @@
 import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { StorageService } from '../storage.service';
+import { StorageService } from '../services/storage.service';
 import { inject } from '@angular/core';
-import { ApiService } from '../api.service';
+import { ApiService } from '../services/api.service';
 
 export function intercept(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   // Здесь отрабатывает на REQUEST
   const api = inject(ApiService);
   const store = inject(StorageService);
   let modifiedReq = req.clone({});
-  if (req.url !== api.authUrl && req.url !== api.anonymousTokenUrl) {
-    const accessToken = store.accessToken$.getValue();
-
+  if (
+    req.url !== api.authUrl &&
+    req.url !== api.anonymousTokenUrl &&
+    req.url !== api.refreshTokenUrl &&
+    req.url !== api.getCustomersTokenUrl
+  ) {
+    const accessToken = store.getTokens().accessToken;
     if (!accessToken) {
       //перенаправить на станицу логина
       throw Error('Token is not found');
@@ -22,6 +26,7 @@ export function intercept(req: HttpRequest<unknown>, next: HttpHandlerFn): Obser
       },
     });
   }
+
   return next(modifiedReq).pipe(
     tap({
       next: (event: HttpEvent<unknown>) => {
