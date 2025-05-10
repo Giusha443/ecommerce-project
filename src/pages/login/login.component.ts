@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -17,6 +17,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    RouterLink,
     MatSnackBarModule,
   ],
   templateUrl: './login.component.html',
