@@ -11,7 +11,7 @@
         <input matInput formControlName="firstName" placeholder="Enter first name" />
         <mat-error *ngIf="firstName?.hasError('required')">First name is required.</mat-error>
         <mat-error *ngIf="firstName?.hasError('minlength') || firstName?.hasError('maxlength')"
-          >Length: from 4 symbols.</mat-error
+          >Length: from 2 symbols.</mat-error
         >
       </mat-form-field>
       <p class="login-form__label">Enter Your Last name</p>
@@ -19,7 +19,7 @@
         <input matInput formControlName="lastName" placeholder="Enter last name" />
         <mat-error *ngIf="lastName?.hasError('required')">Last name is required.</mat-error>
         <mat-error *ngIf="lastName?.hasError('minlength') || lastName?.hasError('maxlength')"
-          >Length: from 4 symbols.</mat-error
+          >Length: from 2 symbols.</mat-error
         >
       </mat-form-field>
       <p class="login-form__label">Enter Your Birth day</p>
@@ -36,7 +36,7 @@
           max="2025-12-31" />
         <mat-error *ngIf="dateOfBirth?.hasError('required')">Day of birth is required.</mat-error>
       </mat-form-field>
-      <p class="login-form__label">Enter Your Country</p>
+      <p class="login-form__label">Enter Your Address</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <mat-select matInput formControlName="country">
           @for (data of countries; track data) {
@@ -45,16 +45,74 @@
         </mat-select>
         <mat-error *ngIf="country?.hasError('required')">Country is required.</mat-error>
       </mat-form-field>
-      <p class="login-form__label">Enter Your City</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="city" placeholder="Enter city" />
         <mat-error *ngIf="city?.hasError('required')">City is required.</mat-error>
       </mat-form-field>
-      <p class="login-form__label">Enter Your Street</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="street" placeholder="Enter street" />
         <mat-error *ngIf="street?.hasError('required')">Street is required.</mat-error>
       </mat-form-field>
+      <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+        <input matInput formControlName="postalCode" placeholder="Enter postal code" />
+        <mat-error *ngIf="postalCode?.hasError('required')">Postal code is required.</mat-error>
+      </mat-form-field>
+      <mat-checkbox appearance="outline" class="example-margin" formControlName="isDefaultAddress"
+        >Set as default address</mat-checkbox
+      >
+      @if (!registerForm.get('isDefaultAddress')?.value) {
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header>
+              <mat-panel-title> Set billing and shipping addresses </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div>
+              <p class="login-form__label">Enter billing Address</p>
+              <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                <mat-select matInput formControlName="countryBilling">
+                  @for (data of countries; track data) {
+                    <mat-option [value]="data.code">{{ data.name }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                <input matInput formControlName="cityBilling" placeholder="Enter city" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                <input matInput formControlName="streetBilling" placeholder="Enter street" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                <input matInput formControlName="postalCodeBilling" placeholder="Enter postal code" />
+              </mat-form-field>
+              <mat-checkbox appearance="outline" class="example-margin" formControlName="isBothAddress"
+                >Set as shipping address too</mat-checkbox
+              >
+            </div>
+            @if (!registerForm.get('isBothAddress')?.value) {
+              <div>
+                <p class="login-form__label">Enter shipping Address</p>
+                <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                  <mat-select matInput formControlName="countryShipping">
+                    @for (data of countries; track data) {
+                      <mat-option [value]="data.code">{{ data.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                  <input matInput formControlName="cityShipping" placeholder="Enter city" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                  <input matInput formControlName="streetShipping" placeholder="Enter street" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
+                  <input matInput formControlName="postalCodeShipping" placeholder="Enter postal code" />
+                </mat-form-field>
+              </div>
+            }
+          </mat-expansion-panel>
+        </mat-accordion>
+      }
+
       <p class="login-form__label">Enter Your Email</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="email" placeholder="Enter email" />
@@ -85,7 +143,9 @@
         >
       </mat-form-field>
 
-      <button mat-stroked-button type="submit" class="login-form__login-button">Register</button>
+      <button mat-stroked-button type="submit" [disabled]="registerForm.invalid" class="login-form__login-button">
+        Register
+      </button>
     </form>
   </div>
 

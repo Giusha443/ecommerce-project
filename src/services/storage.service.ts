@@ -7,7 +7,7 @@ interface TokenStore {
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
-  tokens = 'tokens_commerce_technik';
+  private readonly tokens = 'tokens_commerce_technik';
   setTokens(tokens: Partial<TokenStore>) {
     const listToken = { accessToken: '', refreshToken: '', ...tokens };
     localStorage.setItem(this.tokens, JSON.stringify(listToken));

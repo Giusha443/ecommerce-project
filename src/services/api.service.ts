@@ -6,13 +6,13 @@ import { environment } from '../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  readonly authUrl = `${environment.host}/oauth/token`;
-  readonly anonymousTokenUrl = `${environment.host}/oauth/${environment.projectKey}/anonymous/token`;
-  readonly productsUrl = `${environment.apiUrl}/${environment.projectKey}/products`;
-  readonly introspectUrl = `${environment.host}/${environment.projectKey}/oauth/introspect`;
-  readonly customersUrl = `${environment.apiUrl}/${environment.projectKey}/customers`;
-  readonly getCustomersTokenUrl = `${environment.host}/oauth/${environment.projectKey}/customers/token`;
-  readonly refreshTokenUrl = `${environment.host}/oauth/token`;
+  public readonly authUrl = `${environment.host}/oauth/token`;
+  public readonly anonymousTokenUrl = `${environment.host}/oauth/${environment.projectKey}/anonymous/token`;
+  public readonly productsUrl = `${environment.apiUrl}/${environment.projectKey}/products`;
+  public readonly introspectUrl = `${environment.host}/${environment.projectKey}/oauth/introspect`;
+  public readonly customersUrl = `${environment.apiUrl}/${environment.projectKey}/customers`;
+  public readonly getCustomersTokenUrl = `${environment.host}/oauth/${environment.projectKey}/customers/token`;
+  public readonly refreshTokenUrl = `${environment.host}/oauth/token`;
 
   constructor(private http: HttpClient) {}
 
@@ -59,6 +59,8 @@ export class ApiService {
   }
 
   createCustomer(customerData: CustomerProps): Observable<Customer> {
+    console.log(customerData);
+
     return this.http.post<Customer>(this.customersUrl, customerData, {
       headers: { 'Content-Type': 'application/json' },
     });

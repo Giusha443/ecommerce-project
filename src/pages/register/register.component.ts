@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,10 +9,30 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { MatSelectModule } from '@angular/material/select';
+import { StorageService } from '../../services/storage.service';
+import { catchError, throwError } from 'rxjs';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 interface Country {
   code: string;
   name: string;
+}
+interface CustomerData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  addresses: {
+    country: string;
+    city: string;
+    streetName: string;
+    postalCode: string;
+    defaultShippingAddress?: boolean;
+    defaultBillingAddress?: boolean;
+  }[];
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
 }
 
 @Component({
@@ -27,32 +47,47 @@ interface Country {
     MatSnackBarModule,
     RouterLink,
     MatSelectModule,
+    MatCheckbox,
+    MatExpansionModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  countries: Country[] = [
+  public countries: Country[] = [
     { code: 'RU', name: 'Russia' },
     { code: 'BY', name: 'Belarus' },
     { code: 'US', name: 'United States' },
   ];
   public hidePassword = true;
   public registerForm: FormGroup;
-
+  public isValidForm = false;
+  public panelOpenState = signal(false);
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private storage: StorageService
   ) {
     this.registerForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(4)]],
-      lastName: ['', [Validators.required, Validators.minLength(4)]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       dateOfBirth: ['', [Validators.required]],
       country: ['', [Validators.required]],
+      countryBilling: [''],
+      countryShipping: [''],
       city: ['', [Validators.required]],
+      cityBilling: [''],
+      cityShipping: [''],
       street: ['', [Validators.required]],
+      streetBilling: [''],
+      streetShipping: [''],
+      postalCode: ['', Validators.required],
+      postalCodeBilling: [''],
+      postalCodeShipping: [''],
+      isDefaultAddress: [''],
+      isBothAddress: [''],
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^\S+@\S+\.\S+$/)]],
       password: [
         '',
@@ -65,14 +100,12 @@ export class RegisterComponent {
       ],
     });
   }
-  onSubmit() {
-    if (this.registerForm.invalid) {
-      this.showError('Please correct the validation errors.');
-      return;
-    }
 
+  onSubmit(): void {
     const formData = this.registerForm.value;
-    const customerData = {
+    console.log(formData);
+
+    const customerData: CustomerData = {
       email: formData.email,
       password: formData.password,
       firstName: formData.firstName,
@@ -82,65 +115,114 @@ export class RegisterComponent {
           country: formData.country,
           city: formData.city,
           streetName: formData.street,
+          postalCode: formData.postalCode,
         },
       ],
     };
-    this.api.createCustomer(customerData).subscribe(
-      () => {
-        this.loginAfterRegistration(formData);
-      },
-      () => {
-        this.showError('Registration failed');
+
+    if (formData.countryBilling) {
+      customerData.addresses.push({
+        country: formData.countryBilling,
+        city: formData.cityBilling,
+        streetName: formData.streetBilling,
+        postalCode: formData.postalCodeBilling,
+      });
+      customerData.defaultBillingAddress = 1;
+      if (formData.isBothAddress) {
+        customerData.defaultShippingAddress = 1;
+        customerData.defaultBillingAddress = 1;
       }
-    );
+      if (formData.countryShipping) {
+        customerData.addresses.push({
+          country: formData.countryShipping,
+          city: formData.cityShipping,
+          streetName: formData.streetShipping,
+          postalCode: formData.postalCodeShipping,
+        });
+        customerData.defaultShippingAddress = 2;
+      }
+    } else {
+      if (formData.countryShipping) {
+        customerData.addresses.push({
+          country: formData.countryShipping,
+          city: formData.cityShipping,
+          streetName: formData.streetShipping,
+          postalCode: formData.postalCodeShipping,
+        });
+        customerData.defaultShippingAddress = 1;
+      }
+    }
+
+    if (formData.isDefaultAddress) {
+      customerData.defaultShippingAddress = 0;
+      customerData.defaultBillingAddress = 0;
+    }
+    this.api
+      .createCustomer(customerData)
+      .pipe(
+        catchError(err => {
+          this.showError('Registration failed');
+          return throwError(() => err);
+        })
+      )
+      .subscribe(() => {
+        this.loginAfterRegistration(formData);
+      });
   }
 
-  private loginAfterRegistration(formData: { email: string; password: string }) {
-    this.api.getCustomerToken({ email: formData.email, password: formData.password }).subscribe(
-      () => {
+  private loginAfterRegistration(formData: { email: string; password: string }): void {
+    this.api
+      .getCustomerToken({ email: formData.email, password: formData.password })
+      .pipe(
+        catchError(error => {
+          this.showError('Login after registration failed');
+          return throwError(() => error);
+        })
+      )
+      .subscribe(data => {
+        this.storage.setTokens({ accessToken: data.access_token, refreshToken: data.refresh_token });
         this.router.navigate(['']);
         this.showSuccess('Login successful (stubbed)!');
-      },
-      () => {
-        this.showError('Login after registration failed');
-      }
-    );
+      });
   }
 
-  private showError(message: string) {
+  private showError(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 5000,
     });
   }
 
-  private showSuccess(message: string) {
+  private showSuccess(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000,
     });
   }
 
-  get firstName() {
+  get firstName(): AbstractControl | null {
     return this.registerForm.get('firstName');
   }
-  get lastName() {
+  get lastName(): AbstractControl | null {
     return this.registerForm.get('lastName');
   }
-  get dateOfBirth() {
+  get dateOfBirth(): AbstractControl | null {
     return this.registerForm.get('dateOfBirth');
   }
-  get country() {
+  get country(): AbstractControl | null {
     return this.registerForm.get('country');
   }
-  get city() {
+  get city(): AbstractControl | null {
     return this.registerForm.get('city');
   }
-  get street() {
+  get street(): AbstractControl | null {
     return this.registerForm.get('street');
   }
-  get email() {
+  get email(): AbstractControl | null {
     return this.registerForm.get('email');
   }
-  get password() {
+  get password(): AbstractControl | null {
     return this.registerForm.get('password');
+  }
+  get postalCode(): AbstractControl | null {
+    return this.registerForm.get('postalCode');
   }
 }
