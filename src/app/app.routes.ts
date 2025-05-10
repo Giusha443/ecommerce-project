@@ -1,35 +1,9 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../guards/auth.guard';
+import { Routes } from '@angular/router';
+import { LoginComponent } from '../pages/login/login.component';
+import { RegisterComponent } from '../pages/register/register.component';
 
 export const routes: Routes = [
-  {
-    path: 'login',
-    loadComponent: () => import('../pages/login/login.component').then(m => m.LoginComponent),
-    canActivate: [AuthGuard],
-  },
-  // {
-  //   path: 'main',
-  //   loadComponent: () => import('../pages/main/main.component').then(m => m.MainComponent),
-  //   canActivate: [AuthGuard],
-  // },
-  {
-    path: 'registration',
-    loadComponent: () => import('../pages/registration/registration.component').then(m => m.RegisterComponent),
-  },
-  // {
-  //   path: '',
-  //   redirectTo: 'main',
-  //   pathMatch: 'full',
-  // },
-  // {
-  //   path: '**',
-  //   redirectTo: 'main',
-  // },
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: RegisterComponent },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
-
-// @NgModule({
-//   imports: [RouterModule.forRoot(routes)],
-//   exports: [RouterModule],
-// })
-// export class AppRoutingModule {}
