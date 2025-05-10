@@ -21,10 +21,10 @@ import { AuthService } from '../../services/auth.service';
     MatButtonModule,
     MatSnackBarModule,
   ],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  templateUrl: './registration.component.html',
+  // styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
   public hidePassword = true;
   public loginForm: FormGroup;
   public loading = false;
