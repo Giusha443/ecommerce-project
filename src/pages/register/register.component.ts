@@ -103,8 +103,6 @@ export class RegisterComponent {
 
   onSubmit(): void {
     const formData = this.registerForm.value;
-    console.log(formData);
-
     const customerData: CustomerData = {
       email: formData.email,
       password: formData.password,
