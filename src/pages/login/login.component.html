@@ -4,7 +4,7 @@
 
     <form [formGroup]="loginForm">
       <div class="login-form__register">
-        Don't have an account? <a class="login-form__register-link" href="#">Create a new one</a>
+        Don't have an account? <a class="login-form__register-link" [routerLink]="['/signup']">Create a new one</a>
       </div>
 
       <p class="login-form__label">Enter Your Email</p>
