@@ -12,7 +12,7 @@ import { HeaderIconsComponent } from '../../components/header-icons/header-icons
 })
 export class HeaderComponent {
   // constructor(private auth: AuthService) {}
-  isUserLoggedIn = false;
+  public isUserLoggedIn = false;
   // onInit(): void {
   //   this.isUserLoggedIn = this.auth. // method checking if user is athorised
   // }
