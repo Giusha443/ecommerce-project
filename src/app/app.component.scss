@@ -1,0 +1,12 @@
+app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem;
+  background-color: var(--mat-sys-background);
+}
+
+.app-wraper {
+  background-color: var(--mat-sys-background);
+  // height: 100dvh;
+}

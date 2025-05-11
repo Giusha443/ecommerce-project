@@ -1,0 +1,15 @@
+@if (isAuthed()) {
+  <button mat-icon-button themed class="header-icon__link" routerLink="/profile">
+    <mat-icon title="My profile">account_circle</mat-icon>
+  </button>
+  <button mat-icon-button class="header-icon__link" routerLink="signup">
+    <mat-icon title="Logout">logout</mat-icon>
+  </button>
+} @else {
+  <button mat-icon-button class="header-icon__link" routerLink="/login">
+    <mat-icon title="Log in as existing user">login</mat-icon>
+  </button>
+  <button mat-icon-button class="header-icon__link" routerLink="signup">
+    <mat-icon title="Register new user">person_add</mat-icon>
+  </button>
+}

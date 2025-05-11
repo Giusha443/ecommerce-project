@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+
+
+.header-icon__link {
+  @include mat.icon-button-overrides((
+      icon-color: var(--mat-sys-primary),
+      state-layer-color: var(--mat-sys-primary),
+      ripple-color: var(--mat-sys-inverse-primary)
+      ));
+  display: flex;
+  align-items: center;
+  // --mat-sys-corner-full: 0.5rem 0.5rem; // tried to override
+
+  padding: 0.5rem;
+  border-radius: var(--mat-sys-corner-full);
+
+  &:hover {
+    background-color: var(--color-secondary);
+  }
+}
