@@ -1,12 +1,9 @@
 @use '@angular/material' as mat;
 
-
 .header-icon__link {
-  @include mat.icon-button-overrides((
-      icon-color: var(--mat-sys-primary),
+  @include mat.icon-button-overrides((icon-color: var(--mat-sys-primary),
       state-layer-color: var(--mat-sys-primary),
-      ripple-color: var(--mat-sys-inverse-primary)
-      ));
+      ripple-color: var(--mat-sys-inverse-primary)));
   display: flex;
   align-items: center;
 

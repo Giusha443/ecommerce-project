@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { StorageService } from '../services/storage.service';
 import { environment } from '../environments/environment.development';
-import { HeaderComponent } from '../pages/header/header.component';
+import { HeaderComponent } from '../components/header/header.component';
 
 @Component({
   selector: 'app-root',

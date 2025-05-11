@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LogoComponent } from '../../components/logo/logo.component';
-import { MenuComponent } from '../../components/menu/menu.component';
-import { HeaderIconsComponent } from '../../components/header-icons/header-icons.component';
+import { LogoComponent } from '../logo/logo.component';
+import { MenuComponent } from '../menu/menu.component';
+import { HeaderIconsComponent } from './header-icons/header-icons.component';
 
 @Component({
   selector: 'app-header',
