@@ -19,6 +19,9 @@ body {
 
 // settings for body tag mainly
 .root {
+  margin: 0 auto;
+  max-width: 70rem;
+  background-color: var(--mat-sys-outline);
   // Color overrides for menu
   @include mat.menu-overrides((item-label-text-color: var(--mat-sys-primary, orange),
       item-icon-color: var(--mat-sys-primary),
@@ -26,7 +29,4 @@ body {
       item-hover-state-layer-color: var(--mat-sys-inverse-primary),
       divider-color: var(--mat-sys-on-primary-container),
     ));
-  margin: 0 auto;
-  max-width: 70rem;
-  background-color: var(--mat-sys-outline);
 }
