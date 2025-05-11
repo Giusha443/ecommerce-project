@@ -10,11 +10,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header-icons.component.scss',
 })
 export class HeaderIconsComponent {
-  @Input() isAuthedProp = '';
-  isAuthed = (): boolean => {
-    if (this.isAuthedProp === 'true') {
-      return true;
-    }
-    return false;
-  };
+  @Input() isAuthedProp = true;
 }

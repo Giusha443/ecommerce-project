@@ -16,9 +16,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './menu.component.scss',
 })
 export class MenuComponent implements OnInit {
-  menuItems: MenuItem[] = MENU_ITEMS;
-  burgerOn = false;
-  breakPoint = '(max-width: 768px)';
+  public menuItems: MenuItem[] = MENU_ITEMS;
+  public burgerOn = false;
+  private breakPoint = '(max-width: 768px)';
   constructor(private breakpointObserver: BreakpointObserver) {}
   ngOnInit(): void {
     this.breakpointObserver.observe(this.breakPoint).subscribe(result => {

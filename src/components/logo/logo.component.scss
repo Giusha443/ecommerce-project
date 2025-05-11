@@ -1,14 +1,9 @@
-.app-logo {
-  width: 3rem;
-  height: 2.222rem;
-}
-
-.app-logo-icon.mdc-button {
+.app-logo.mdc-button {
   color: var(--color-primary);
   padding: 0 var(--button-radius-padding, 0.5rem);
   border-radius: var(--button-radius-padding, 0.5rem);
 
   & .mat-icon {
-    width: 2.9rem;
+    width: 3rem;
   }
 }
