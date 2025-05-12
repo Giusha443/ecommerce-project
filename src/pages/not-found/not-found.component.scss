@@ -1,0 +1,12 @@
+.app-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 1rem;
+}
+
+.app-not-found__buttons {
+  display: flex;
+  gap: 0.5rem;
+}
