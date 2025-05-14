@@ -1,59 +1,61 @@
-// import { Injectable } from '@angular/core';
-// import { Router } from '@angular/router';
-// import { BehaviorSubject, Observable, tap } from 'rxjs';
-// import { ApiService } from './api.service';
-// import { StorageService } from './storage.service';
-// import { TokenResponse } from './api-response.model';
+import { Injectable } from '@angular/core';
+import { ApiService } from './api.service';
+import { StorageService } from './storage.service';
+import { Observable, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { TokenResponse } from './api-response.model';
 
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class AuthService {
-//   private isAuthenticated$ = new BehaviorSubject<boolean>(false);
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthService {
+  constructor(
+    private api: ApiService,
+    private store: StorageService,
+    private router: Router
+  ) {}
 
-//   constructor(
-//     private apiService: ApiService,
-//     private storageService: StorageService,
-//     private router: Router
-//   ) {
-//     // Check if there's a token in the storage service on initialization
-//     this.storageService.accessToken$.subscribe(token => {
-//       this.isAuthenticated$.next(!!token);
-//     });
-//   }
+  login(email: string, password: string): Observable<TokenResponse> {
+    return this.api.getCustomerToken({ email, password }).pipe(
+      tap(response => {
+        console.log('Login successful, saving token and redirecting');
+        this.store.setTokens({
+          accessToken: response.access_token,
+          refreshToken: response.refresh_token || '',
+        });
+        // Redirect to main page after successful login
+        this.router.navigate(['/main']);
+      })
+    );
+  }
 
-//   login(email: string, password: string): Observable<TokenResponse> {
-//     return this.apiService.getAuthToken().pipe(
-//       tap((response: TokenResponse) => {
-//         // Store the tokens
-//         this.storageService.accessToken$.next(response.access_token);
-//         if (response.refresh_token) {
-//           this.storageService.refreshToken$.next(response.refresh_token);
-//         }
-//         this.isAuthenticated$.next(true);
+  checkLoginStatus(): boolean {
+    try {
+      const tokens = this.store.getTokens();
+      return !!tokens && !!tokens.accessToken;
+    } catch (error) {
+      console.error('Error checking login status:', error);
+      return false;
+    }
+  }
 
-//         // Redirect to main page after successful login
-//         this.router.navigate(['/main']);
-//       })
-//     );
-//   }
+  logout(): void {
+    console.log('Logging out and redirecting to login page');
+    this.store.clearTokens(); // Make sure we have this method
+    this.router.navigate(['/login']);
+  }
 
-//   public logout(): void {
-//     // Clear tokens and set authentication status to false
-//     this.storageService.accessToken$.next(null);
-//     this.storageService.refreshToken$.next(null);
-//     this.isAuthenticated$.next(false);
-
-//     // Redirect to login page
-//     this.router.navigate(['/login']);
-//   }
-
-//   public isAuthenticated(): Observable<boolean> {
-//     return this.isAuthenticated$.asObservable();
-//   }
-
-//   // Method to check if the user is logged in
-//   public checkLoginStatus(): boolean {
-//     return this.isAuthenticated$.getValue();
-//   }
-// }
+  /**
+   * Redirect authenticated users away from login page
+   * @returns boolean indicating if redirect was performed
+   */
+  redirectIfLoggedIn(): boolean {
+    if (this.checkLoginStatus()) {
+      console.log('User is logged in, redirecting to main');
+      this.router.navigate(['/main']);
+      return true;
+    }
+    console.log('User is not logged in, staying on login page');
+    return false;
+  }
+}

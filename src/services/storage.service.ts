@@ -16,4 +16,12 @@ export class StorageService {
     const tokens = JSON.parse(localStorage.getItem(this.tokens) || '');
     return tokens || { accessToken: '', refreshToken: '' };
   }
+  clearTokens(): void {
+    try {
+      localStorage.removeItem(this.tokens);
+      console.log('Tokens cleared from storage');
+    } catch (error) {
+      console.error('Error clearing tokens:', error);
+    }
+  }
 }

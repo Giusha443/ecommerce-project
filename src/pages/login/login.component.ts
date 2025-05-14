@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -20,6 +20,7 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -32,8 +33,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private authService: AuthService,
-    private router: Router
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^\S+@\S+\.\S+$/)]],
@@ -50,24 +50,26 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if user is already authenticated
-    if (this.authService.checkLoginStatus()) {
-      this.router.navigate(['/main']);
-    }
+    console.log('LoginComponent initialized');
+    // We don't need to call redirectIfLoggedIn here
+    // because the loginGuard is already handling this
   }
 
   public onSubmit(): void {
     if (this.loginForm.invalid) {
+      console.log('Form is invalid', this.loginForm.errors);
       return;
     }
 
     this.loading = true;
     const { email, password } = this.loginForm.value;
+    console.log('Attempting login for:', email);
 
     this.authService.login(email, password).subscribe({
-      next: () => {
+      next: response => {
+        console.log('Login response received');
         this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
-        // Note: Redirection is handled in the AuthService
+        // No need to navigate here - the AuthService handles it
       },
       error: error => {
         console.error('Login error:', error);
