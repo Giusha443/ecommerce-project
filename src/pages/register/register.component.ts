@@ -10,7 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { MatSelectModule } from '@angular/material/select';
 import { StorageService } from '../../services/storage.service';
-import { catchError, throwError } from 'rxjs';
+import { catchError, distinctUntilChanged, throwError } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { minAgeValidator, postalCodeValidator } from '../../utils/utils';
@@ -102,15 +102,21 @@ export class RegisterComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.registerForm.get('country')?.valueChanges.subscribe(() => {
-      this.registerForm.get('postalCode')?.updateValueAndValidity();
-    });
-    this.registerForm.get('countryBilling')?.valueChanges.subscribe(() => {
-      this.registerForm.get('postalCodeBilling')?.updateValueAndValidity();
-    });
-    this.registerForm.get('countryShipping')?.valueChanges.subscribe(() => {
-      this.registerForm.get('postalCodeShipping')?.updateValueAndValidity();
-    });
+    this.registerForm.valueChanges
+      .pipe(
+        distinctUntilChanged((prev, curr) => {
+          return (
+            prev.country === curr.country &&
+            prev.countryBilling === curr.countryBilling &&
+            prev.countryShipping === curr.countryShipping
+          );
+        })
+      )
+      .subscribe(() => {
+        this.registerForm.get('postalCode')?.updateValueAndValidity();
+        this.registerForm.get('postalCodeBilling')?.updateValueAndValidity();
+        this.registerForm.get('postalCodeShipping')?.updateValueAndValidity();
+      });
   }
   onSubmit(): void {
     const formData = this.registerForm.value;
