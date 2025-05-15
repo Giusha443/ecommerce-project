@@ -1,0 +1,23 @@
+@use '@angular/material' as mat;
+
+.app-menu__list {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.burger {
+  &.app-menu__list {
+    flex-direction: column;
+    display: none;
+  }
+}
+
+.app-burger-button {
+  @include mat.icon-button-overrides((icon-color: var(--mat-sys-primary),
+      state-layer-color: var(--mat-sys-primary),
+      ripple-color: var(--mat-sys-inverse-primary)));
+  color: var(--color-primary);
+}
