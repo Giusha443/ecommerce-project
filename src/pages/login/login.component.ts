@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,7 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -17,19 +19,21 @@ import { RouterLink } from '@angular/router';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink,
     MatSnackBarModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   public hidePassword = true;
   public loginForm: FormGroup;
+  public loading = false;
 
   constructor(
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^\S+@\S+\.\S+$/)]],
@@ -45,11 +49,37 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit(): void {
+    console.log('LoginComponent initialized');
+    // We don't need to call redirectIfLoggedIn here
+    // because the loginGuard is already handling this
+  }
+
   public onSubmit(): void {
     if (this.loginForm.invalid) {
+      console.log('Form is invalid', this.loginForm.errors);
       return;
     }
-    this.snackBar.open('Login successful (stubbed)!', 'Close', { duration: 3000 });
+
+    this.loading = true;
+    const { email, password } = this.loginForm.value;
+    console.log('Attempting login for:', email);
+
+    this.authService.login(email, password).subscribe({
+      next: response => {
+        console.log('Login response received');
+        this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
+        // No need to navigate here - the AuthService handles it
+      },
+      error: error => {
+        console.error('Login error:', error);
+        this.snackBar.open('Login failed. Please check your credentials.', 'Close', { duration: 5000 });
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   public get email(): AbstractControl | null {
