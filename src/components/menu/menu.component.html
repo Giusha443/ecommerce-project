@@ -1,0 +1,19 @@
+@if (burgerOn) {
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="app-burger-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+}
+
+<mat-menu #menu="matMenu" class="app-menu">
+  @for (item of menuItems; track $index) {
+    <button mat-menu-item routerLink="{{ item.route }}">
+      <!-- <mat-icon>{{ item.item }}</mat-icon> -->
+      <span>{{ item.item }}</span>
+    </button>
+  }
+</mat-menu>
+<ul class="app-menu__list" [ngClass]="{ burger: burgerOn }">
+  @for (item of menuItems; track $index) {
+    <app-menu-item [content]="item" />
+  }
+</ul>

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,10 +10,10 @@ import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { MatSelectModule } from '@angular/material/select';
 import { StorageService } from '../../services/storage.service';
-import { catchError, throwError } from 'rxjs';
+import { catchError, distinctUntilChanged, throwError } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { minAgeValidator, postalCodeValidator } from '../../utils/utils';
 interface Country {
   code: string;
   name: string;
@@ -53,12 +53,13 @@ interface CustomerData {
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   public countries: Country[] = [
     { code: 'RU', name: 'Russia' },
     { code: 'BY', name: 'Belarus' },
     { code: 'US', name: 'United States' },
   ];
+  private countYears = 13;
   public hidePassword = true;
   public registerForm: FormGroup;
   public isValidForm = false;
@@ -71,21 +72,21 @@ export class RegisterComponent {
     private storage: StorageService
   ) {
     this.registerForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.pattern(/^\p{L}*$/u)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
-      dateOfBirth: ['', [Validators.required]],
+      dateOfBirth: ['', [Validators.required, minAgeValidator(this.countYears)]],
       country: ['', [Validators.required]],
       countryBilling: [''],
       countryShipping: [''],
-      city: ['', [Validators.required]],
+      city: ['', [Validators.required, Validators.pattern(/^\p{L}*$/u)]],
       cityBilling: [''],
       cityShipping: [''],
       street: ['', [Validators.required]],
       streetBilling: [''],
       streetShipping: [''],
-      postalCode: ['', Validators.required],
-      postalCodeBilling: [''],
-      postalCodeShipping: [''],
+      postalCode: ['', [Validators.required, postalCodeValidator('country')]],
+      postalCodeBilling: ['', [postalCodeValidator('countryBilling')]],
+      postalCodeShipping: ['', [postalCodeValidator('countryShipping')]],
       isDefaultAddress: [''],
       isBothAddress: [''],
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^\S+@\S+\.\S+$/)]],
@@ -100,7 +101,23 @@ export class RegisterComponent {
       ],
     });
   }
-
+  ngOnInit(): void {
+    this.registerForm.valueChanges
+      .pipe(
+        distinctUntilChanged((prev, curr) => {
+          return (
+            prev.country === curr.country &&
+            prev.countryBilling === curr.countryBilling &&
+            prev.countryShipping === curr.countryShipping
+          );
+        })
+      )
+      .subscribe(() => {
+        this.registerForm.get('postalCode')?.updateValueAndValidity();
+        this.registerForm.get('postalCodeBilling')?.updateValueAndValidity();
+        this.registerForm.get('postalCodeShipping')?.updateValueAndValidity();
+      });
+  }
   onSubmit(): void {
     const formData = this.registerForm.value;
     const customerData: CustomerData = {
@@ -222,5 +239,11 @@ export class RegisterComponent {
   }
   get postalCode(): AbstractControl | null {
     return this.registerForm.get('postalCode');
+  }
+  get postalCodeBilling(): AbstractControl | null {
+    return this.registerForm.get('postalCodeBilling');
+  }
+  get postalCodeShipping(): AbstractControl | null {
+    return this.registerForm.get('postalCodeShipping');
   }
 }

@@ -1,8 +1,32 @@
-html,
-body {
+@use '@angular/material' as mat;
+@use "./scss/constants";
+
+html {
   height: 100%;
 }
+
+// Very debatable section
+// * {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+// }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// settings for body tag mainly
+.root {
+  margin: 0 auto;
+  max-width: 70rem;
+  background-color: var(--mat-sys-outline);
+  // Color overrides for menu
+  @include mat.menu-overrides((item-label-text-color: var(--mat-sys-primary, orange),
+      item-icon-color: var(--mat-sys-primary),
+      container-color: var(--mat-sys-background),
+      item-hover-state-layer-color: var(--mat-sys-inverse-primary),
+      divider-color: var(--mat-sys-on-primary-container),
+    ));
 }

@@ -9,10 +9,10 @@ export const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
   { path: 'signup', component: RegisterComponent },
-  {
-    //when u will write the main page adjust this route
+  { 
     path: 'main',
     component: MainComponent,
     canActivate: [authGuard],
   },
+
 ];
