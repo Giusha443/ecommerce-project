@@ -1,18 +1,25 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
 import { LoginComponent } from '../pages/login/login.component';
-import { RegisterComponent } from '../pages/register/register.component';
+import { NotFoundComponent } from '../pages/not-found/not-found.component';
 import { authGuard, loginGuard } from '../guards/auth.guard';
-import { MainComponent } from '../pages/main/main.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'main', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
-  { path: 'signup', component: RegisterComponent },
-  { 
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'login',
+    loadComponent: () => import('../pages/login/login.component').then(l => l.LoginComponent),
+    canActivate: [loginGuard],
+  },
+  {
+    path: 'signup',
+    loadComponent: () => import('../pages/register/register.component').then(r => r.RegisterComponent),
+  },
+  {
     path: 'main',
-    component: MainComponent,
+    loadComponent: () => import('../pages/main/main.component').then(m => m.MainComponent),
     canActivate: [authGuard],
   },
-
+  { path: '', redirectTo: 'main', pathMatch: 'full' },
+  { path: '**', component: NotFoundComponent },
 ];

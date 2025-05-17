@@ -8,6 +8,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideRouter([]), provideHttpClient()],
+
     }).compileComponents();
   });
 
@@ -23,10 +24,11 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('ecommerce-project');
   });
 
-  // it('should render title', () => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   fixture.detectChanges();
-  //   const compiled = fixture.nativeElement as HTMLElement;
-  //   expect(compiled.querySelector('h1')?.textContent).toContain('Hello, ecommerce-project');
-  // });
+  it('should compile html code', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled).toBeTruthy();
+  });
+
 });
