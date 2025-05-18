@@ -57,7 +57,7 @@ import { BehaviorSubject } from 'rxjs';
       }
 
       .auth-status-card {
-        max-width: 600px;
+        max-width: 33rem;
         width: 100%;
       }
 
@@ -69,7 +69,7 @@ import { BehaviorSubject } from 'rxjs';
       }
 
       .my-3 {
-        margin: 16px 0;
+        margin: 1rem 0;
       }
     `,
   ],
@@ -86,14 +86,10 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('MainComponent initialized');
     this.checkAuthStatus();
   }
 
   checkAuthStatus(): void {
-    // console.log('Auth status checked:', this.isAuthenticated.value);
-
-    // if (this.isAuthenticated) {
     const tokens = this.storageService.getTokens();
     // Safely show a preview of the token (first 10 chars)
     if (tokens && tokens.accessToken) {
@@ -101,17 +97,9 @@ export class MainComponent implements OnInit {
     } else {
       this.tokenPreview = 'Token exists but cannot be displayed';
     }
-
-    // } else {
-    //   // If not authenticated, redirect to login after a short delay
-    //   console.log('Not authenticated, will redirect to login...');
-    //   setTimeout(() => this.router.navigate(['/login']), 2000);
-    // }
   }
 
   logout(): void {
-    console.log('Logging out...');
     this.authService.logout();
-    // The logout method in AuthService already handles redirection
   }
 }

@@ -34,13 +34,10 @@ export class AuthService {
   }
 
   checkLoginStatus(): boolean {
-    // console.log('checkLoginStatus', this.isAuthenticated.getValue());
     try {
       const tokens = this.store.getTokens();
       if (!!tokens && !!tokens.accessToken) {
-        // console.log(!!tokens && !!tokens.accessToken);
         this.isAuthenticated.next(true);
-        // console.log('checkLoginStatus', this.isAuthenticated.getValue());
         return true;
       }
     } catch (error) {
@@ -50,13 +47,14 @@ export class AuthService {
   }
 
   logout(): void {
-    console.log('Logging out and redirecting to login page');
     this.store.clearTokens(); // Make sure we have this method
     this.isAuthenticated.next(false);
     this.router.navigate(['main']);
   }
 
   /**
+   * It looks unused anywhere!
+   *
    * Redirect authenticated users away from login page
    * @returns boolean indicating if redirect was performed
    */
