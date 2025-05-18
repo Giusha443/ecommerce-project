@@ -3,6 +3,7 @@ const eslint = require('@eslint/js');
 const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
+const noComments = require('eslint-plugin-no-commented-code');
 
 module.exports = tseslint.config(
   {
@@ -14,6 +15,8 @@ module.exports = tseslint.config(
       ...angular.configs.tsRecommended,
       eslintPluginPrettierRecommended,
     ],
+    plugins: { 'no-comments': noComments },
+
     processor: angular.processInlineTemplates,
     rules: {
       '@angular-eslint/directive-selector': [
@@ -32,6 +35,25 @@ module.exports = tseslint.config(
           style: 'kebab-case',
         },
       ],
+      '@typescript-eslint/explicit-member-accessibility': [
+        'error',
+        {
+          accessibility: 'explicit',
+          overrides: {
+            constructors: 'no-public',
+          },
+        },
+      ],
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      'no-magic-numbers': [
+        'error',
+        {
+          ignore: [-1, 0, 1],
+          ignoreArrayIndexes: true,
+        },
+      ],
+      'no-comments/no-commented-code': 'warn',
     },
   },
   {
@@ -40,40 +62,11 @@ module.exports = tseslint.config(
     rules: {
       '@angular-eslint/template/banana-in-box': 'error',
       '@angular-eslint/template/no-negated-async': 'error',
-      '@angular-eslint/template/cyclomatic-complexity': ['error', 5],
-
-      '@angular-eslint/template/accessibility-alt-text': 'error',
-      '@angular-eslint/template/accessibility-table-scope': 'error',
       '@angular-eslint/template/no-positive-tabindex': 'error',
-
       '@angular-eslint/template/use-track-by-function': 'error',
       '@angular-eslint/template/no-call-expression': 'error',
-
       '@angular-eslint/template/no-duplicate-attributes': 'error',
-      '@angular-eslint/template/no-inline-styles': 'error',
-
-      '@angular-eslint/prefer-on-push-component-change-detection': 'error',
-
-      '@typescript-eslint/explicit-member-accessibility': [
-        'error',
-        {
-          accessibility: 'explicit',
-          overrides: {
-            конструкторы: 'no-public',
-          },
-        },
-      ],
-      '@typescript-eslint/no-unused-vars': 'error',
-      'unused-imports/no-unused-imports': 'error',
-      '@typescript-eslint/explicit-function-return-type': 'error',
-      'no-commented-out-code': 'error',
-      'no-magic-numbers': [
-        'error',
-        {
-          ignore: [-1, 0, 1],
-          ignoreArrayIndexes: true,
-        },
-      ],
+      '@angular-eslint/template/no-inline-styles': 'warn',
     },
   }
 

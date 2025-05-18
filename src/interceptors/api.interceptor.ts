@@ -5,6 +5,8 @@ import { inject } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { Router } from '@angular/router';
 
+const INVALID_TOKEN_ERROR = 401;
+
 export function intercept(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   // Intercept and handle request
   const api = inject(ApiService);
@@ -41,7 +43,7 @@ export function intercept(req: HttpRequest<unknown>, next: HttpHandlerFn): Obser
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error Intercepted:', err);
-        if (err.status === 401) {
+        if (err.status === INVALID_TOKEN_ERROR) {
           // Handle unauthorized access
           // Redirect to login page
           router.navigate(['/login']);

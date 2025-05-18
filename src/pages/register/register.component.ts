@@ -35,6 +35,8 @@ interface CustomerData {
   defaultBillingAddress?: number;
 }
 
+const MIN_YEARS_TO_LOGIN = 13;
+const MIN_LENGTH_VALIDATE_PASSWORD = 8;
 @Component({
   selector: 'app-register',
   imports: [
@@ -59,7 +61,7 @@ export class RegisterComponent implements OnInit {
     { code: 'BY', name: 'Belarus' },
     { code: 'US', name: 'United States' },
   ];
-  private countYears = 13;
+  private countYears = MIN_YEARS_TO_LOGIN;
   public hidePassword = true;
   public registerForm: FormGroup;
   public isValidForm = false;
@@ -94,14 +96,14 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(8),
+          Validators.minLength(MIN_LENGTH_VALIDATE_PASSWORD),
           Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])?[A-Za-z\d!@#$%^&*]{8,}$/),
           Validators.pattern(/^\S+$/),
         ],
       ],
     });
   }
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.registerForm.valueChanges
       .pipe(
         distinctUntilChanged((prev, curr) => {
@@ -118,7 +120,7 @@ export class RegisterComponent implements OnInit {
         this.registerForm.get('postalCodeShipping')?.updateValueAndValidity();
       });
   }
-  onSubmit(): void {
+  public onSubmit(): void {
     const formData = this.registerForm.value;
     const customerData: CustomerData = {
       email: formData.email,
@@ -213,37 +215,122 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  get firstName(): AbstractControl | null {
+  public get firstNameRequiredError(): boolean {
+    return this.registerForm.get('firstName')?.hasError('required') ?? false;
+  }
+
+  public get firstNamePatternError(): boolean {
+    return this.registerForm.get('firstName')?.hasError('pattern') ?? false;
+  }
+
+  public get lastNameRequiredError(): boolean {
+    return this.registerForm.get('lastName')?.hasError('required') ?? false;
+  }
+
+  public get lastNamePatternError(): boolean {
+    return this.registerForm.get('lastName')?.hasError('pattern') ?? false;
+  }
+
+  public get dateOfBirthRequiredError(): boolean {
+    return this.registerForm.get('dateOfBirth')?.hasError('required') ?? false;
+  }
+
+  public get dateOfBirthMinAgeError(): boolean {
+    return this.registerForm.get('dateOfBirth')?.hasError('minAge') ?? false;
+  }
+
+  public get countryRequiredError(): boolean {
+    return this.registerForm.get('country')?.hasError('required') ?? false;
+  }
+
+  public get cityRequiredError(): boolean {
+    return this.registerForm.get('city')?.hasError('required') ?? false;
+  }
+
+  public get cityPatternError(): boolean {
+    return this.registerForm.get('city')?.hasError('pattern') ?? false;
+  }
+
+  public get streetRequiredError(): boolean {
+    return this.registerForm.get('street')?.hasError('required') ?? false;
+  }
+  public get postalCodeRequiredError(): boolean {
+    return this.registerForm.get('postalCode')?.hasError('required') ?? false;
+  }
+
+  public get postalCodeValidError(): boolean {
+    return this.registerForm.get('postalCode')?.hasError('postCodeValid') ?? false;
+  }
+
+  public get postalCodeBillingValidError(): boolean {
+    return this.registerForm.get('postalCodeBilling')?.hasError('postCodeValid') ?? false;
+  }
+
+  public get postalCodeShippingValidError(): boolean {
+    return this.registerForm.get('postalCodeShipping')?.hasError('postCodeValid') ?? false;
+  }
+
+  public get emailRequiredError(): boolean {
+    return this.registerForm.get('email')?.hasError('required') ?? false;
+  }
+
+  public get emailFormatError(): boolean {
+    return (
+      (this.registerForm.get('email')?.hasError('email') || this.registerForm.get('email')?.hasError('pattern')) ??
+      false
+    );
+  }
+
+  public get passwordRequiredError(): boolean {
+    return this.registerForm.get('password')?.hasError('required') ?? false;
+  }
+
+  public get passwordMinLengthError(): boolean {
+    return this.registerForm.get('password')?.hasError('minlength') ?? false;
+  }
+
+  public get passwordPatternError(): boolean {
+    return this.registerForm.get('password')?.hasError('pattern') ?? false;
+  }
+
+  public get isDefaultAddressValue(): boolean {
+    return this.registerForm.get('isDefaultAddress')?.value ?? false;
+  }
+
+  public get isBothAddressValue(): boolean {
+    return this.registerForm.get('isBothAddress')?.value ?? false;
+  }
+  public get firstName(): AbstractControl | null {
     return this.registerForm.get('firstName');
   }
-  get lastName(): AbstractControl | null {
+  public get lastName(): AbstractControl | null {
     return this.registerForm.get('lastName');
   }
-  get dateOfBirth(): AbstractControl | null {
+  public get dateOfBirth(): AbstractControl | null {
     return this.registerForm.get('dateOfBirth');
   }
-  get country(): AbstractControl | null {
+  public get country(): AbstractControl | null {
     return this.registerForm.get('country');
   }
-  get city(): AbstractControl | null {
+  public get city(): AbstractControl | null {
     return this.registerForm.get('city');
   }
-  get street(): AbstractControl | null {
+  public get street(): AbstractControl | null {
     return this.registerForm.get('street');
   }
-  get email(): AbstractControl | null {
+  public get email(): AbstractControl | null {
     return this.registerForm.get('email');
   }
-  get password(): AbstractControl | null {
+  public get password(): AbstractControl | null {
     return this.registerForm.get('password');
   }
-  get postalCode(): AbstractControl | null {
+  public get postalCode(): AbstractControl | null {
     return this.registerForm.get('postalCode');
   }
-  get postalCodeBilling(): AbstractControl | null {
+  public get postalCodeBilling(): AbstractControl | null {
     return this.registerForm.get('postalCodeBilling');
   }
-  get postalCodeShipping(): AbstractControl | null {
+  public get postalCodeShipping(): AbstractControl | null {
     return this.registerForm.get('postalCodeShipping');
   }
 }

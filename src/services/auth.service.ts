@@ -15,7 +15,7 @@ export class AuthService {
     private router: Router
   ) {}
 
-  login(email: string, password: string): Observable<TokenResponse> {
+  public login(email: string, password: string): Observable<TokenResponse> {
     return this.api.getCustomerToken({ email, password }).pipe(
       tap(response => {
         console.log('Login successful, saving token and redirecting');
@@ -29,7 +29,7 @@ export class AuthService {
     );
   }
 
-  checkLoginStatus(): boolean {
+  public checkLoginStatus(): boolean {
     try {
       const tokens = this.store.getTokens();
       return !!tokens && !!tokens.accessToken;
@@ -39,7 +39,7 @@ export class AuthService {
     }
   }
 
-  logout(): void {
+  public logout(): void {
     console.log('Logging out and redirecting to login page');
     this.store.clearTokens(); // Make sure we have this method
     this.router.navigate(['/login']);
@@ -49,7 +49,7 @@ export class AuthService {
    * Redirect authenticated users away from login page
    * @returns boolean indicating if redirect was performed
    */
-  redirectIfLoggedIn(): boolean {
+  public redirectIfLoggedIn(): boolean {
     if (this.checkLoginStatus()) {
       console.log('User is logged in, redirecting to main');
       this.router.navigate(['/main']);

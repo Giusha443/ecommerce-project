@@ -16,7 +16,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getClientCredentialsToken(scope: string, path?: string): Observable<TokenResponse> {
+  public getClientCredentialsToken(scope: string, path?: string): Observable<TokenResponse> {
     const body = new URLSearchParams();
     body.append('grant_type', 'client_credentials');
     body.append('scope', scope);
@@ -25,12 +25,12 @@ export class ApiService {
     });
   }
 
-  getAnonymousToken(): Observable<TokenResponse> {
+  public getAnonymousToken(): Observable<TokenResponse> {
     const scope = `manage_project:${environment.projectKey}`;
     return this.getClientCredentialsToken(scope, this.anonymousTokenUrl);
   }
 
-  getCustomerToken(credentials: { email: string; password: string }): Observable<TokenResponse> {
+  public getCustomerToken(credentials: { email: string; password: string }): Observable<TokenResponse> {
     const body = new URLSearchParams();
     body.append('grant_type', 'password');
     body.append('username', credentials.email);
@@ -41,7 +41,7 @@ export class ApiService {
     });
   }
 
-  refreshToken(refreshToken: string): Observable<TokenResponse> {
+  public refreshToken(refreshToken: string): Observable<TokenResponse> {
     const body = new URLSearchParams();
     body.append('grant_type', 'refresh_token');
     body.append('refresh_token', refreshToken);
@@ -50,7 +50,7 @@ export class ApiService {
     });
   }
 
-  introspectToken(token: string): Observable<Introspect> {
+  public introspectToken(token: string): Observable<Introspect> {
     const body = new URLSearchParams();
     body.append('token', token);
     return this.http.post<Introspect>(this.introspectUrl, body, {
@@ -58,7 +58,7 @@ export class ApiService {
     });
   }
 
-  createCustomer(customerData: CustomerProps): Observable<Customer> {
+  public createCustomer(customerData: CustomerProps): Observable<Customer> {
     console.log(customerData);
 
     return this.http.post<Customer>(this.customersUrl, customerData, {
@@ -66,7 +66,7 @@ export class ApiService {
     });
   }
 
-  getProducts(): Observable<ProductResponse> {
+  public getProducts(): Observable<ProductResponse> {
     return this.http.get<ProductResponse>(this.productsUrl);
   }
 

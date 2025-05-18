@@ -6,33 +6,34 @@
         Do you have an account?
         <a class="login-form__register-link" routerLink="/login" ariaCurrentWhenActive="page">Login</a>
       </div>
+
       <p class="login-form__label">Enter Your First name</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="firstName" placeholder="Enter first name" />
-        <mat-error *ngIf="firstName?.hasError('required')">First name is required.</mat-error>
-        <mat-error *ngIf="firstName?.hasError('pattern')">Letters only, it is quantity one or more.</mat-error>
+        <mat-error *ngIf="firstNameRequiredError">First name is required.</mat-error>
+        <mat-error *ngIf="firstNamePatternError">Letters only, it is quantity one or more.</mat-error>
       </mat-form-field>
+
       <p class="login-form__label">Enter Your Last name</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="lastName" placeholder="Enter last name" />
-        <mat-error *ngIf="lastName?.hasError('required')">Last name is required.</mat-error>
-        <mat-error *ngIf="lastName?.hasError('pattern')">Letters only, it is quantity one or more.</mat-error>
+        <mat-error *ngIf="lastNameRequiredError">Last name is required.</mat-error>
+        <mat-error *ngIf="lastNamePatternError">Letters only, it is quantity one or more.</mat-error>
       </mat-form-field>
+
       <p class="login-form__label">Enter Your Birth day</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input
           matInput
           formControlName="dateOfBirth"
           type="date"
-          id="exampleInput"
-          name="input"
-          ng-model="example.value"
           placeholder="yyyy-MM-dd"
           min="1990-01-01"
           max="2025-12-31" />
-        <mat-error *ngIf="dateOfBirth?.hasError('required')">Day of birth is required.</mat-error>
-        <mat-error *ngIf="dateOfBirth?.hasError('minAge')">You must be over 13 years old.</mat-error>
+        <mat-error *ngIf="dateOfBirthRequiredError">Day of birth is required.</mat-error>
+        <mat-error *ngIf="dateOfBirthMinAgeError">You must be over 13 years old.</mat-error>
       </mat-form-field>
+
       <p class="login-form__label">Enter Your Address</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <mat-select matInput formControlName="country">
@@ -40,31 +41,37 @@
             <mat-option [value]="data.code">{{ data.name }}</mat-option>
           }
         </mat-select>
-        <mat-error *ngIf="country?.hasError('required')">Country is required.</mat-error>
+        <mat-error *ngIf="countryRequiredError">Country is required.</mat-error>
       </mat-form-field>
+
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="city" placeholder="Enter city" />
-        <mat-error *ngIf="city?.hasError('required')">City is required.</mat-error>
-        <mat-error *ngIf="city?.hasError('pattern')">Must contain only letters.</mat-error>
+        <mat-error *ngIf="cityRequiredError">City is required.</mat-error>
+        <mat-error *ngIf="cityPatternError">Must contain only letters.</mat-error>
       </mat-form-field>
+
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="street" placeholder="Enter street" />
-        <mat-error *ngIf="street?.hasError('required')">Street is required.</mat-error>
+        <mat-error *ngIf="streetRequiredError">Street is required.</mat-error>
       </mat-form-field>
+
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="postalCode" placeholder="Enter postal code" />
-        <mat-error *ngIf="postalCode?.hasError('required')">Postal code is required.</mat-error>
-        <mat-error *ngIf="postalCode?.hasError('postCodeValid')">Postal code is not valid.</mat-error>
+        <mat-error *ngIf="postalCodeRequiredError">Postal code is required.</mat-error>
+        <mat-error *ngIf="postalCodeValidError">Postal code is not valid.</mat-error>
       </mat-form-field>
-      <mat-checkbox appearance="outline" class="example-margin" formControlName="isDefaultAddress"
-        >Set as default address</mat-checkbox
-      >
-      @if (!registerForm.get('isDefaultAddress')?.value) {
+
+      <mat-checkbox appearance="outline" class="example-margin" formControlName="isDefaultAddress">
+        Set as default address
+      </mat-checkbox>
+
+      @if (!isDefaultAddressValue) {
         <mat-accordion>
           <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title> Set billing and shipping addresses </mat-panel-title>
             </mat-expansion-panel-header>
+
             <div>
               <p class="login-form__label">Enter billing Address</p>
               <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
@@ -74,21 +81,26 @@
                   }
                 </mat-select>
               </mat-form-field>
+
               <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
                 <input matInput formControlName="cityBilling" placeholder="Enter city" />
               </mat-form-field>
+
               <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
                 <input matInput formControlName="streetBilling" placeholder="Enter street" />
               </mat-form-field>
+
               <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
                 <input matInput formControlName="postalCodeBilling" placeholder="Enter postal code" />
-                <mat-error *ngIf="postalCodeBilling?.hasError('postCodeValid')">Postal code is not valid.</mat-error>
+                <mat-error *ngIf="postalCodeBillingValidError">Postal code is not valid.</mat-error>
               </mat-form-field>
-              <mat-checkbox appearance="outline" class="example-margin" formControlName="isBothAddress"
-                >Set as shipping address too</mat-checkbox
-              >
+
+              <mat-checkbox appearance="outline" class="example-margin" formControlName="isBothAddress">
+                Set as shipping address too
+              </mat-checkbox>
             </div>
-            @if (!registerForm.get('isBothAddress')?.value) {
+
+            @if (!isBothAddressValue) {
               <div>
                 <p class="login-form__label">Enter shipping Address</p>
                 <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
@@ -98,15 +110,18 @@
                     }
                   </mat-select>
                 </mat-form-field>
+
                 <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
                   <input matInput formControlName="cityShipping" placeholder="Enter city" />
                 </mat-form-field>
+
                 <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
                   <input matInput formControlName="streetShipping" placeholder="Enter street" />
                 </mat-form-field>
+
                 <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
                   <input matInput formControlName="postalCodeShipping" placeholder="Enter postal code" />
-                  <mat-error *ngIf="postalCodeShipping?.hasError('postCodeValid')">Postal code is not valid.</mat-error>
+                  <mat-error *ngIf="postalCodeShippingValidError">Postal code is not valid.</mat-error>
                 </mat-form-field>
               </div>
             }
@@ -117,8 +132,8 @@
       <p class="login-form__label">Enter Your Email</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">
         <input matInput formControlName="email" placeholder="Enter email" />
-        <mat-error *ngIf="email?.hasError('required')">Email is required.</mat-error>
-        <mat-error *ngIf="email?.hasError('email') || email?.hasError('pattern')">Invalid email format.</mat-error>
+        <mat-error *ngIf="emailRequiredError">Email is required.</mat-error>
+        <mat-error *ngIf="emailFormatError">Invalid email format.</mat-error>
       </mat-form-field>
 
       <p class="login-form__label">Enter Your Password</p>
@@ -137,11 +152,9 @@
           type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <mat-error *ngIf="password?.hasError('required')">Password is required.</mat-error>
-        <mat-error *ngIf="password?.hasError('minlength')">Password must be at least 8 characters.</mat-error>
-        <mat-error *ngIf="password?.hasError('pattern')"
-          >Must include upper, lower, digit, and no whitespace.</mat-error
-        >
+        <mat-error *ngIf="passwordRequiredError">Password is required.</mat-error>
+        <mat-error *ngIf="passwordMinLengthError">Password must be at least 8 characters.</mat-error>
+        <mat-error *ngIf="passwordPatternError">Must include upper, lower, digit, and no whitespace.</mat-error>
       </mat-form-field>
 
       <button mat-stroked-button type="submit" [disabled]="registerForm.invalid" class="login-form__login-button">
