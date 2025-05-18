@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-header-icons',
@@ -10,5 +12,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header-icons.component.scss',
 })
 export class HeaderIconsComponent {
-  @Input({ required: true }) isAuthedProp = false;
+  public isAuthed: BehaviorSubject<boolean>;
+  constructor(private auth: AuthService) {
+    this.isAuthed = this.auth.isAuthenticated;
+  }
 }

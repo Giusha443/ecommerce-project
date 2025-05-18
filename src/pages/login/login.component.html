@@ -32,9 +32,9 @@
         </button>
         <mat-error *ngIf="password?.hasError('required')">Password is required.</mat-error>
         <mat-error *ngIf="password?.hasError('minlength')">Password must be at least 8 characters.</mat-error>
-        <mat-error *ngIf="password?.hasError('pattern')"
-          >Must include upper, lower, digit, and no whitespace.</mat-error
-        >
+        <mat-error *ngIf="password?.hasError('pattern')">
+          Must include upper, lower, digit, and no whitespace.
+        </mat-error>
       </mat-form-field>
       <button
         mat-stroked-button

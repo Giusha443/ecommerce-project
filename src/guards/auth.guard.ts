@@ -1,41 +1,36 @@
 import { inject } from '@angular/core';
-import { Router, CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 /**
  * Auth guard to protect routes from unauthorized access
  * Redirects to login page if user is not authenticated
  */
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  console.log('Auth Guard - isLoggedIn:', authService.checkLoginStatus());
-
-  if (authService.checkLoginStatus()) {
+  if (authService.isAuthenticated.getValue()) {
     return true;
   }
-
-  // Redirect to login page and update browser history
-  return router.createUrlTree(['/login']);
+  router.navigate(['main']);
+  return false;
 };
 
 /**
  * Login guard to prevent authenticated users from accessing login page
  * Redirects to main page if user is already authenticated
  */
-export const loginGuard: CanActivateFn = (route, state) => {
+export const loginGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  console.log('Login Guard - isLoggedIn:', authService.checkLoginStatus());
+  console.log('checkLoginStatus', authService.checkLoginStatus());
+  console.log('isAuthenticated', authService.isAuthenticated.getValue());
 
-  if (!authService.checkLoginStatus()) {
-    console.log('Not logged in - allowing access to login page');
-    return true;
+  if (authService.isAuthenticated.getValue()) {
+    router.navigate(['main']);
+    return false;
   }
-
-  console.log('Already logged in - redirecting to main');
-  // Redirect to main page and update browser history
-  return router.createUrlTree(['/main']);
+  return true;
 };

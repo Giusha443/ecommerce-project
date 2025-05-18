@@ -4,6 +4,8 @@ import { ApiService } from '../services/api.service';
 import { StorageService } from '../services/storage.service';
 import { environment } from '../environments/environment.development';
 import { HeaderComponent } from '../components/header/header.component';
+import { AuthService } from '../services/auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +15,18 @@ import { HeaderComponent } from '../components/header/header.component';
 })
 export class AppComponent implements OnInit {
   title = 'ecommerce-project';
+  private isAuthorised: BehaviorSubject<boolean>;
   constructor(
     private api: ApiService,
-    private store: StorageService
-  ) {}
+    private store: StorageService,
+    private auth: AuthService
+  ) {
+    this.isAuthorised = auth.isAuthenticated;
+  }
   ngOnInit() {
     this.api.getClientCredentialsToken(`manage_project:${environment.projectKey}`).subscribe(data => {
       this.store.setTokens({ accessToken: data.access_token, refreshToken: data.refresh_token });
+      this.auth.checkLoginStatus();
     });
   }
 }

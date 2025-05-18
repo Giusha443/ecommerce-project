@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { StorageService } from './storage.service';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { TokenResponse } from './api-response.model';
 
@@ -9,11 +9,14 @@ import { TokenResponse } from './api-response.model';
   providedIn: 'root',
 })
 export class AuthService {
+  public isAuthenticated: BehaviorSubject<boolean>;
   constructor(
     private api: ApiService,
     private store: StorageService,
     private router: Router
-  ) {}
+  ) {
+    this.isAuthenticated = new BehaviorSubject(false);
+  }
 
   login(email: string, password: string): Observable<TokenResponse> {
     return this.api.getCustomerToken({ email, password }).pipe(
@@ -23,26 +26,34 @@ export class AuthService {
           accessToken: response.access_token,
           refreshToken: response.refresh_token || '',
         });
+        this.isAuthenticated.next(true);
         // Redirect to main page after successful login
-        this.router.navigate(['/main']);
+        this.router.navigate(['main']);
       })
     );
   }
 
   checkLoginStatus(): boolean {
+    // console.log('checkLoginStatus', this.isAuthenticated.getValue());
     try {
       const tokens = this.store.getTokens();
-      return !!tokens && !!tokens.accessToken;
+      if (!!tokens && !!tokens.accessToken) {
+        // console.log(!!tokens && !!tokens.accessToken);
+        this.isAuthenticated.next(true);
+        // console.log('checkLoginStatus', this.isAuthenticated.getValue());
+        return true;
+      }
     } catch (error) {
       console.error('Error checking login status:', error);
-      return false;
     }
+    return false;
   }
 
   logout(): void {
     console.log('Logging out and redirecting to login page');
     this.store.clearTokens(); // Make sure we have this method
-    this.router.navigate(['/login']);
+    this.isAuthenticated.next(false);
+    this.router.navigate(['main']);
   }
 
   /**
