@@ -23,27 +23,27 @@ import { BehaviorSubject } from 'rxjs';
         <mat-card-content>
           <p>
             Authentication Status:
-            <strong [ngStyle]="{ color: isAuthenticated.getValue() ? 'green' : 'red' }">
-              {{ isAuthenticated.getValue() ? 'Authenticated' : 'Not Authenticated' }}
+            <strong [ngStyle]="{ color: (isAuthenticated$ | async) ? 'green' : 'red' }">
+              {{ (isAuthenticated$ | async) ? 'Authenticated' : 'Not Authenticated' }}
             </strong>
           </p>
 
           <mat-divider class="my-3"></mat-divider>
 
-          <div *ngIf="isAuthenticated.getValue()">
+          <div *ngIf="isAuthenticated$ | async">
             <p>You have successfully logged in and were redirected to the main page.</p>
             <p>Token Info (truncated):</p>
             <pre>{{ tokenPreview }}</pre>
           </div>
 
-          <div *ngIf="!isAuthenticated.getValue()">
+          <div *ngIf="(isAuthenticated$ | async) === false">
             <p>You should be redirected to login page soon...</p>
           </div>
         </mat-card-content>
 
         <mat-card-actions>
           <button mat-raised-button color="primary" (click)="checkAuthStatus()">Check Auth Status</button>
-          <button mat-raised-button color="warn" (click)="logout()" *ngIf="isAuthenticated">Logout</button>
+          <button mat-raised-button color="warn" (click)="logout()" *ngIf="isAuthenticated$ | async">Logout</button>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -75,14 +75,14 @@ import { BehaviorSubject } from 'rxjs';
   ],
 })
 export class MainComponent implements OnInit {
-  public isAuthenticated: BehaviorSubject<boolean>;
+  public isAuthenticated$: BehaviorSubject<boolean>;
   tokenPreview = '';
   constructor(
     private authService: AuthService,
     private storageService: StorageService,
     private router: Router
   ) {
-    this.isAuthenticated = this.authService.isAuthenticated;
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
   }
 
   ngOnInit(): void {

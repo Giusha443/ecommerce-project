@@ -15,13 +15,13 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'ecommerce-project';
-  private isAuthorised: BehaviorSubject<boolean>;
+  private isAuthorised$: BehaviorSubject<boolean>;
   constructor(
     private api: ApiService,
     private store: StorageService,
     private auth: AuthService
   ) {
-    this.isAuthorised = auth.isAuthenticated;
+    this.isAuthorised$ = auth.isAuthenticated$;
   }
   ngOnInit() {
     this.api.getClientCredentialsToken(`manage_project:${environment.projectKey}`).subscribe(data => {

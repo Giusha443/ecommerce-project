@@ -9,13 +9,13 @@ import { TokenResponse } from './api-response.model';
   providedIn: 'root',
 })
 export class AuthService {
-  public isAuthenticated: BehaviorSubject<boolean>;
+  public isAuthenticated$: BehaviorSubject<boolean>;
   constructor(
     private api: ApiService,
     private store: StorageService,
     private router: Router
   ) {
-    this.isAuthenticated = new BehaviorSubject(false);
+    this.isAuthenticated$ = new BehaviorSubject(false);
   }
 
   login(email: string, password: string): Observable<TokenResponse> {
@@ -26,7 +26,7 @@ export class AuthService {
           accessToken: response.access_token,
           refreshToken: response.refresh_token || '',
         });
-        this.isAuthenticated.next(true);
+        this.isAuthenticated$.next(true);
         // Redirect to main page after successful login
         this.router.navigate(['main']);
       })
@@ -37,7 +37,7 @@ export class AuthService {
     try {
       const tokens = this.store.getTokens();
       if (!!tokens && !!tokens.accessToken) {
-        this.isAuthenticated.next(true);
+        this.isAuthenticated$.next(true);
         return true;
       }
     } catch (error) {
@@ -48,7 +48,7 @@ export class AuthService {
 
   logout(): void {
     this.store.clearTokens(); // Make sure we have this method
-    this.isAuthenticated.next(false);
+    this.isAuthenticated$.next(false);
     this.router.navigate(['main']);
   }
 
