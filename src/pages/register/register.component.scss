@@ -30,7 +30,9 @@
 .mat-mdc-outlined-button:not(:disabled) {
   color: #fff;
 }
-
+mat-error {
+  margin-top: 0;
+}
 .login-form__register-link {
   text-decoration: underline;
   color: #282828;
@@ -118,10 +120,13 @@
     height: 200px;
   }
 }
-
+mat-form-field {
+  margin-bottom: 6px;
+}
 mat-error {
-  font-size: 0.85rem;
+  display: inline;
+  font-size: 0.78rem;
   color: #e53935;
   font-weight: 500;
-  margin-top: 4px;
+  line-height: 0.2;
 }
