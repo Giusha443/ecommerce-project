@@ -3,8 +3,9 @@
     <h2 class="login-form__header">Signup</h2>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="login-form__register">
-        Do you have an account?
-        <a class="login-form__register-link" routerLink="/login" ariaCurrentWhenActive="page">Login</a>
+        Do you have an account?<a class="login-form__register-link" routerLink="/login" ariaCurrentWhenActive="page"
+          >Login</a
+        >
       </div>
       <p class="login-form__label">Enter Your First name</p>
       <mat-form-field appearance="outline" class="login-form__field login-form__field--full-width">

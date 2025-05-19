@@ -6,6 +6,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../services/storage.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -22,27 +23,27 @@ import { StorageService } from '../../services/storage.service';
         <mat-card-content>
           <p>
             Authentication Status:
-            <strong [ngStyle]="{ color: isAuthenticated ? 'green' : 'red' }">
-              {{ isAuthenticated ? 'Authenticated' : 'Not Authenticated' }}
+            <strong [ngStyle]="{ color: (isAuthenticated$ | async) ? 'green' : 'red' }">
+              {{ (isAuthenticated$ | async) ? 'Authenticated' : 'Not Authenticated' }}
             </strong>
           </p>
 
           <mat-divider class="my-3"></mat-divider>
 
-          <div *ngIf="isAuthenticated">
+          <div *ngIf="isAuthenticated$ | async">
             <p>You have successfully logged in and were redirected to the main page.</p>
             <p>Token Info (truncated):</p>
             <pre>{{ tokenPreview }}</pre>
           </div>
 
-          <div *ngIf="!isAuthenticated">
+          <div *ngIf="(isAuthenticated$ | async) === false">
             <p>You should be redirected to login page soon...</p>
           </div>
         </mat-card-content>
 
         <mat-card-actions>
           <button mat-raised-button color="primary" (click)="checkAuthStatus()">Check Auth Status</button>
-          <button mat-raised-button color="warn" (click)="logout()" *ngIf="isAuthenticated">Logout</button>
+          <button mat-raised-button color="warn" (click)="logout()" *ngIf="isAuthenticated$ | async">Logout</button>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -56,7 +57,7 @@ import { StorageService } from '../../services/storage.service';
       }
 
       .auth-status-card {
-        max-width: 600px;
+        max-width: 33rem;
         width: 100%;
       }
 
@@ -68,48 +69,37 @@ import { StorageService } from '../../services/storage.service';
       }
 
       .my-3 {
-        margin: 16px 0;
+        margin: 1rem 0;
       }
     `,
   ],
 })
 export class MainComponent implements OnInit {
-  isAuthenticated = false;
+  public isAuthenticated$: BehaviorSubject<boolean>;
   tokenPreview = '';
-
   constructor(
     private authService: AuthService,
     private storageService: StorageService,
     private router: Router
-  ) {}
+  ) {
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+  }
 
   ngOnInit(): void {
-    console.log('MainComponent initialized');
     this.checkAuthStatus();
   }
 
   checkAuthStatus(): void {
-    this.isAuthenticated = this.authService.checkLoginStatus();
-    console.log('Auth status checked:', this.isAuthenticated);
-
-    if (this.isAuthenticated) {
-      const tokens = this.storageService.getTokens();
-      // Safely show a preview of the token (first 10 chars)
-      if (tokens && tokens.accessToken) {
-        this.tokenPreview = `${tokens.accessToken.substring(0, 10)}... (truncated for security)`;
-      } else {
-        this.tokenPreview = 'Token exists but cannot be displayed';
-      }
+    const tokens = this.storageService.getTokens();
+    // Safely show a preview of the token (first 10 chars)
+    if (tokens && tokens.accessToken) {
+      this.tokenPreview = `${tokens.accessToken.substring(0, 10)}... (truncated for security)`;
     } else {
-      // If not authenticated, redirect to login after a short delay
-      console.log('Not authenticated, will redirect to login...');
-      setTimeout(() => this.router.navigate(['/login']), 2000);
+      this.tokenPreview = 'Token exists but cannot be displayed';
     }
   }
 
   logout(): void {
-    console.log('Logging out...');
     this.authService.logout();
-    // The logout method in AuthService already handles redirection
   }
 }

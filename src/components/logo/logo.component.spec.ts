@@ -18,7 +18,7 @@ describe('LogoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create logo component', () => {
     expect(component).toBeTruthy();
   });
 });

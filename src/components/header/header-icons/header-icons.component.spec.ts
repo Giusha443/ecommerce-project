@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderIconsComponent } from './header-icons.component';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('HeaderIconsComponent', () => {
   let component: HeaderIconsComponent;
@@ -10,7 +11,7 @@ describe('HeaderIconsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HeaderIconsComponent],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderIconsComponent);
@@ -18,7 +19,7 @@ describe('HeaderIconsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create header-icons component', () => {
     expect(component).toBeTruthy();
   });
 });
