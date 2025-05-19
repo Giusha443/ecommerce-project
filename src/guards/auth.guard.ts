@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { skip, tap } from 'rxjs';
 
 /**
  * Auth guard to protect routes from unauthorized access
@@ -9,12 +10,15 @@ import { AuthService } from '../services/auth.service';
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-
-  if (authService.isAuthenticated$.getValue()) {
-    return true;
-  }
-  router.navigate(['main']);
-  return false;
+  authService.checkLoginStatus();
+  return authService.isAuthenticated$.pipe(
+    skip(1),
+    tap(isAuthenticated => {
+      if (isAuthenticated) {
+        router.navigate(['main']);
+      }
+    })
+  );
 };
 
 /**
@@ -24,10 +28,12 @@ export const authGuard: CanActivateFn = () => {
 export const loginGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-
-  if (authService.isAuthenticated$.getValue()) {
-    router.navigate(['main']);
-    return false;
-  }
-  return true;
+  return authService.isAuthenticated$.pipe(
+    skip(1),
+    tap(isAuthenticated => {
+      if (isAuthenticated) {
+        router.navigate(['main']);
+      }
+    })
+  );
 };
