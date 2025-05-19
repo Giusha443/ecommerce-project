@@ -24,16 +24,31 @@ export const authGuard: CanActivateFn = () => {
 /**
  * Login guard to prevent authenticated users from accessing login page
  * Redirects to main page if user is already authenticated
+//  */
+// export const loginGuard: CanActivateFn = () => {
+//   const authService = inject(AuthService);
+//   const router = inject(Router);
+//   return authService.isAuthenticated$.pipe(
+//     skip(1),
+//     tap(isAuthenticated => {
+//       if (isAuthenticated) {
+//         router.navigate(['main']);
+//       }
+//     })
+//   );
+// };
+
+/**
+ * Login guard to prevent authenticated users from accessing login page
+ * Redirects to main page if user is already authenticated
  */
 export const loginGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  return authService.isAuthenticated$.pipe(
-    skip(1),
-    tap(isAuthenticated => {
-      if (isAuthenticated) {
-        router.navigate(['main']);
-      }
-    })
-  );
+
+  if (authService.isAuthenticated$.getValue()) {
+    router.navigate(['main']);
+    return false;
+  }
+  return true;
 };
