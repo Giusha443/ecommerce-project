@@ -8,7 +8,6 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideRouter([]), provideHttpClient()],
-
     }).compileComponents();
   });
 
@@ -30,5 +29,4 @@ describe('AppComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled).toBeTruthy();
   });
-
 });
