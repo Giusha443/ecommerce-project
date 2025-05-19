@@ -1,11 +1,11 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
-import { LoginComponent } from '../pages/login/login.component';
+// import { LoginComponent } from '../pages/login/login.component';
 import { NotFoundComponent } from '../pages/not-found/not-found.component';
 import { authGuard, loginGuard } from '../guards/auth.guard';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  // { path: 'login', component: LoginComponent },
   {
     path: 'login',
     loadComponent: () => import('../pages/login/login.component').then(l => l.LoginComponent),
