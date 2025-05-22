@@ -14,6 +14,7 @@ import { catchError, distinctUntilChanged, throwError } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { minAgeValidator, postalCodeValidator } from '../../utils/utils';
+import { AuthService } from '../../services/auth.service';
 interface Country {
   code: string;
   name: string;
@@ -69,6 +70,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
+    private auth: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
     private storage: StorageService
@@ -198,6 +200,7 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe(data => {
         this.storage.setTokens({ accessToken: data.access_token, refreshToken: data.refresh_token });
+        this.auth.isAuthenticatedPrivate$.next(true);
         this.router.navigate(['']);
         this.showSuccess('Login successful (stubbed)!');
       });

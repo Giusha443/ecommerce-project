@@ -1,52 +1,44 @@
 .login-container {
   display: flex;
-  flex-direction: row;
   width: 100%;
-  height: 100vh;
   border: 2px solid #b4b4b4;
   border-radius: 10px;
-  overflow: hidden;
   box-sizing: border-box;
 }
 
 .login-form {
   width: 50%;
-  padding: 30px 40px;
+  padding: 1rem 2rem;
   box-sizing: border-box;
-  height: 100vh;
 }
 
 .login-form__header {
   margin-bottom: 1rem;
-  font-size: 36px;
-  font-weight: 700;
+  font-size: 2rem;
   color: #3d3d3d;
 }
 
 .login-form__register {
-  margin-bottom: 52px;
-}
-.mat-mdc-outlined-button:not(:disabled) {
-  color: #fff;
+  margin-bottom: 2rem;
 }
 
-.login-form__register-link {
-  text-decoration: underline;
-  color: #282828;
-}
+// .mat-mdc-outlined-button:not(:disabled) {
+//   color: var(--color-secondary);
+// }
+
+// .login-form__register-link {
+//   text-decoration: underline;
+//   color: #282828;
+// }
 
 .login-form__label {
   color: #3d3d3d;
   font-size: 16px;
   margin-bottom: 0.4rem;
-  display: block;
+  // display: block;
 }
 
 .login-form__field {
-  width: 100%;
-}
-
-.login-form__field--full-width {
   width: 100%;
 }
 
@@ -68,7 +60,7 @@
 
 .login-form__forgot-password-link {
   font-size: 0.875rem;
-  color: #282828;
+  // color: #282828;
   text-decoration: underline;
   text-align: center;
   margin-bottom: 1.5rem;
@@ -76,7 +68,7 @@
 
 .gradient {
   width: 50%;
-  height: 100%;
+  // height: 100%;
   background: linear-gradient(135deg, #6fb1fc, #212d9b, #153164);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -88,14 +80,13 @@
     flex-direction: column;
   }
 
-  .login-form,
-  .gradient {
+  .login-form {
     width: 100%;
   }
 
   .gradient {
     display: none;
-    height: 300px;
+    // height: 300px;
   }
 
   .login-form__header {
@@ -110,12 +101,12 @@
 
 @media (max-width: 576px) {
   .login-form {
-    padding: 0px 20px;
+    padding: 0px 1rem;
   }
 
-  .gradient {
-    height: 200px;
-  }
+  // .gradient {
+  //   height: 200px;
+  // }
 }
 
 mat-error {
@@ -124,15 +115,17 @@ mat-error {
   font-weight: 500;
   margin-top: 4px;
 }
+
 // .login-form__login-button.disabled-fake {
 //   opacity: 1;
 //   pointer-events: none;
 // }
 
-.custom-disabled-style {
-  color: #fff !important;
-  &.mat-button-disabled {
-    pointer-events: auto !important;
-    opacity: 1 !important;
-  }
-}
+// .custom-disabled-style {
+//   color: #fff !important;
+
+//   &.mat-button-disabled {
+//     pointer-events: auto !important;
+//     opacity: 1 !important;
+//   }
+// }

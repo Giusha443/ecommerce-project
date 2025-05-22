@@ -10,10 +10,4 @@ import { HeaderIconsComponent } from './header-icons/header-icons.component';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
-  // constructor(private auth: AuthService) {}
-  public isUserLoggedIn = false;
-  // onInit(): void {
-  //   this.isUserLoggedIn = this.auth. // method checking if user is athorised
-  // }
-}
+export class HeaderComponent {}

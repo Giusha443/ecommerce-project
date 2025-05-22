@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MenuItemComponent } from './menu-item.component';
 import { provideRouter } from '@angular/router';
 
-describe('MenuComponent', () => {
+describe('MenuItemComponent', () => {
   let component: MenuItemComponent;
   let fixture: ComponentFixture<MenuItemComponent>;
 
@@ -18,7 +18,7 @@ describe('MenuComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create menu-item component', () => {
     expect(component).toBeTruthy();
   });
 });

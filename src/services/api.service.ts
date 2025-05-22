@@ -59,8 +59,6 @@ export class ApiService {
   }
 
   public createCustomer(customerData: CustomerProps): Observable<Customer> {
-    console.log(customerData);
-
     return this.http.post<Customer>(this.customersUrl, customerData, {
       headers: { 'Content-Type': 'application/json' },
     });

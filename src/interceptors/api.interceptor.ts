@@ -21,6 +21,7 @@ export function intercept(req: HttpRequest<unknown>, next: HttpHandlerFn): Obser
     req.url !== api.getCustomersTokenUrl
   ) {
     const accessToken = store.getTokens().accessToken;
+
     if (!accessToken) {
       // Redirect to login page if token is not found
       router.navigate(['/login']);
@@ -37,7 +38,6 @@ export function intercept(req: HttpRequest<unknown>, next: HttpHandlerFn): Obser
     tap({
       next: (event: HttpEvent<unknown>) => {
         if (event instanceof HttpResponse) {
-          console.log('Response Intercepted:', event);
           // Handle response if needed
         }
       },

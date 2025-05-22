@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -49,15 +49,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    console.log('LoginComponent initialized');
-    // We don't need to call redirectIfLoggedIn here
-    // because the loginGuard is already handling this
-  }
-
   public onSubmit(): void {
     if (this.loginForm.invalid) {
-      console.log('Form is invalid', this.loginForm.errors);
       return;
     }
 
@@ -67,13 +60,13 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(email, password).subscribe({
       next: response => {
-        console.log('Login response received');
-        this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
+        console.log('Login response received', response);
+        this.snackBar.open('Login successful!', 'X', { duration: 3000 });
         // No need to navigate here - the AuthService handles it
       },
       error: error => {
         console.error('Login error:', error);
-        this.snackBar.open('Login failed. Please check your credentials.', 'Close', { duration: 5000 });
+        this.snackBar.open('Login failed. Please check your credentials.', 'X', { duration: 5000 });
         this.loading = false;
       },
       complete: () => {

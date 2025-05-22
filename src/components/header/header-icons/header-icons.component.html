@@ -1,8 +1,8 @@
-@if (isAuthedProp) {
+@if (isAuthenticated$ | async) {
   <button mat-icon-button themed class="header-icon__link" routerLink="/profile">
     <mat-icon title="My profile">account_circle</mat-icon>
   </button>
-  <button mat-icon-button class="header-icon__link" routerLink="/logout">
+  <button mat-icon-button class="header-icon__link" routerLink="logout">
     <mat-icon title="Logout">logout</mat-icon>
   </button>
 } @else {
