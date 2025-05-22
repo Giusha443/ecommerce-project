@@ -48,7 +48,7 @@ export class AuthService {
     return false;
   }
 
-  logout(): void {
+  public logout(): void {
     this.store.clearTokens(); // Make sure we have this method
     this.isAuthenticated$.next(false);
     this.isAuthenticatedPrivate$.next(false);

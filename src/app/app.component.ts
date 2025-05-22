@@ -14,7 +14,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  title = 'ecommerce-project';
+  public title = 'ecommerce-project';
   private isAuthorised$: BehaviorSubject<boolean>;
   constructor(
     private api: ApiService,
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   ) {
     this.isAuthorised$ = auth.isAuthenticated$;
   }
-  ngOnInit() {
+  public ngOnInit(): void {
     this.api.getClientCredentialsToken(`manage_project:${environment.projectKey}`).subscribe(data => {
       this.store.setTokens({ accessToken: data.access_token, refreshToken: data.refresh_token });
       this.auth.checkLoginStatus();

@@ -20,7 +20,7 @@ export class MenuComponent implements OnInit {
   public burgerOn = false;
   private breakPoint = '(max-width: 768px)';
   constructor(private breakpointObserver: BreakpointObserver) {}
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.breakpointObserver.observe(this.breakPoint).subscribe(result => {
       this.burgerOn = result.matches;
     });

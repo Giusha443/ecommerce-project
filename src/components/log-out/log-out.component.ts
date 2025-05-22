@@ -13,7 +13,7 @@ export class LogOutComponent implements OnInit {
   constructor(private auth: AuthService) {
     this.snackBar = new MatSnackBar();
   }
-  ngOnInit(): void {
+  public ngOnInit(): void {
     // TODO: may be a username|e-mail to say bye `${user | email} logged out` or `Bye ${username | email}`
     this.snackBar.open('Logged out', '', {
       duration: 2000,
