@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
 })
 export class NotFoundComponent {
   constructor(private location: Location) {}
-  public back() {
+  public back(): void {
     this.location.back();
   }
 }

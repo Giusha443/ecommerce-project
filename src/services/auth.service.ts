@@ -37,7 +37,6 @@ export class AuthService {
 
   public checkLoginStatus(): boolean {
     try {
-      // const tokens = this.store.getTokens();
       if (this.isAuthenticatedPrivate$.getValue()) {
         this.isAuthenticated$.next(true);
         return true;
@@ -54,20 +53,4 @@ export class AuthService {
     this.isAuthenticatedPrivate$.next(false);
     this.router.navigate(['main']);
   }
-
-  /**
-   * It looks unused anywhere!
-   *
-   * Redirect authenticated users away from login page
-   * @returns boolean indicating if redirect was performed
-   */
-  // public redirectIfLoggedIn(): boolean {
-  //   if (this.checkLoginStatus()) {
-  //     console.log('User is logged in, redirecting to main');
-  //     this.router.navigate(['/main']);
-  //     return true;
-  //   }
-  //   console.log('User is not logged in, staying on login page');
-  //   return false;
-  // }
 }

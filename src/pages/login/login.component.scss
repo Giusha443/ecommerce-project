@@ -39,7 +39,12 @@
 }
 
 .login-form__field {
+  margin-top: 0.5rem;
   width: 100%;
+}
+
+.login-form__err {
+  margin-bottom: 1rem;
 }
 
 .login-form__login-button {
@@ -109,12 +114,12 @@
   // }
 }
 
-mat-error {
-  font-size: 0.85rem;
-  color: #e53935;
-  font-weight: 500;
-  margin-top: 4px;
-}
+// mat-error {
+//   font-size: 0.85rem;
+//   color: #e53935;
+//   font-weight: 500;
+//   margin-top: 4px;
+// }
 
 // .login-form__login-button.disabled-fake {
 //   opacity: 1;

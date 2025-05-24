@@ -9,6 +9,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
+const AUTH_PASSWORD_MIN_LENGTH = 8;
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -41,7 +42,7 @@ export class LoginComponent {
         '',
         [
           Validators.required,
-          Validators.minLength(8),
+          Validators.minLength(AUTH_PASSWORD_MIN_LENGTH),
           Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])?[A-Za-z\d!@#$%^&*]{8,}$/),
           Validators.pattern(/^\S+$/),
         ],
@@ -78,8 +79,26 @@ export class LoginComponent {
   public get email(): AbstractControl | null {
     return this.loginForm.get('email');
   }
+  public get emailHasErrorRequired(): boolean {
+    return this.email?.hasError('required') ?? false;
+  }
+  public get emailHasError(): boolean {
+    return this.email?.hasError('email') ?? false;
+  }
+  public get emailHasErrorPattern(): boolean {
+    return this.email?.hasError('pattern') ?? false;
+  }
 
   public get password(): AbstractControl | null {
     return this.loginForm.get('password');
+  }
+  public get passwordhasErrorRequired(): boolean {
+    return this.password?.hasError('required') || false;
+  }
+  public get passwordhasErrorMinLength(): boolean {
+    return this.password?.hasError('minlength') || false;
+  }
+  public get passwordhasErrorPattern(): boolean {
+    return this.password?.hasError('pattern') || false;
   }
 }
