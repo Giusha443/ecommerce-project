@@ -1,49 +1,62 @@
-.login-container {
+.register-container {
   display: flex;
   width: 100%;
-  // height: 100vh;
   border: 2px solid #b4b4b4;
   border-radius: 10px;
-  // overflow: hidden;
   box-sizing: border-box;
 }
 
-.login-form {
+.register-form {
   width: 50%;
   padding: 30px 40px;
   box-sizing: border-box;
 }
 
-.login-form__header {
+.register-form__header {
   margin-bottom: 1rem;
   font-size: 2rem;
   font-weight: 700;
   color: #3d3d3d;
 }
 
-.login-form__register {
+.register-form__register {
   margin-bottom: 3rem;
 }
+
 mat-error {
   margin-top: 0;
 }
-.login-form__register-link {
+
+.register-form__register-link {
   text-decoration: underline;
   // color: #282828;
 }
 
-.login-form__label {
-  color: #3d3d3d;
-  font-size: 16px;
-  margin-bottom: 0.4rem;
-  display: block;
-}
+// .register-form__label {
+//   color: #3d3d3d;
+//   font-size: 16px;
+//   margin-bottom: 0.4rem;
+//   display: block;
+// }
 
-.login-form__field {
+.register-form__field {
+  margin-top: 0.5rem;
   width: 100%;
+
+  &.email {
+    margin-top: 1rem;
+  }
 }
 
-.login-form__login-button {
+.register-form__fieldset {
+  margin-top: 0.5rem;
+
+  &.address {
+    margin-top: 2rem;
+  }
+}
+
+.register-form__register-button {
   width: 100%;
   background-color: #282828;
   color: #fff;
@@ -54,12 +67,12 @@ mat-error {
   margin-top: 2.2rem;
 }
 
-.login-form__forgot-password {
+.register-form__forgot-password {
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
-.login-form__forgot-password-link {
+.register-form__forgot-password-link {
   font-size: 0.875rem;
   color: #282828;
   text-decoration: underline;
@@ -77,11 +90,11 @@ mat-error {
 
 /* Responsive behavior */
 @media (max-width: 768px) {
-  .login-container {
+  .register-container {
     flex-direction: column;
   }
 
-  .login-form {
+  .register-form {
     width: 100%;
   }
 
@@ -90,32 +103,22 @@ mat-error {
     // height: 300px;
   }
 
-  .login-form__header {
+  .register-form__header {
     font-size: 24px;
   }
 
-  .login-form__login-button {
+  .register-form__register-button {
     font-size: 16px;
     padding: 16px;
   }
 }
 
 @media (max-width: 576px) {
-  .login-form {
+  .register-form {
     padding: 0px 20px;
   }
 
   // .gradient {
   //   height: 200px;
   // }
-}
-mat-form-field {
-  margin-bottom: 6px;
-}
-mat-error {
-  display: inline;
-  font-size: 0.78rem;
-  color: #e53935;
-  font-weight: 500;
-  line-height: 0.2;
 }

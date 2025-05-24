@@ -1,7 +1,7 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,8 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { minAgeValidator, postalCodeValidator } from '../../utils/utils';
 import { AuthService } from '../../services/auth.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 interface Country {
   code: string;
   name: string;
@@ -40,10 +42,12 @@ const MIN_YEARS_TO_LOGIN = 13;
 const MIN_LENGTH_VALIDATE_PASSWORD = 8;
 @Component({
   selector: 'app-register',
+  providers: [provideNativeDateAdapter()],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    MatLabel,
     MatInputModule,
     MatIconModule,
     MatButtonModule,
@@ -52,6 +56,7 @@ const MIN_LENGTH_VALIDATE_PASSWORD = 8;
     MatSelectModule,
     MatCheckbox,
     MatExpansionModule,
+    MatDatepickerModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
