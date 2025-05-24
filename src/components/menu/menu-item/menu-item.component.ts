@@ -10,5 +10,5 @@ import { MatButton } from '@angular/material/button';
   styleUrl: './menu-item.component.scss',
 })
 export class MenuItemComponent {
-  @Input() content: MenuItem = { item: '', route: '' };
+  @Input() public content: MenuItem = { item: '', route: '' };
 }

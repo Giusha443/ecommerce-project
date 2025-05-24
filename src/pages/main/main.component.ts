@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../services/storage.service';
 import { BehaviorSubject } from 'rxjs';
 
+const TRUNCATION_LENGTH = 10;
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -23,7 +24,7 @@ import { BehaviorSubject } from 'rxjs';
         <mat-card-content>
           <p>
             Authentication Status:
-            <strong [ngStyle]="{ color: (isAuthenticated$ | async) ? 'green' : 'red' }">
+            <strong class="status" [class.autheduser]="isAuthenticated$ | async">
               {{ (isAuthenticated$ | async) ? 'Authenticated' : 'Not Authenticated' }}
             </strong>
           </p>
@@ -71,6 +72,13 @@ import { BehaviorSubject } from 'rxjs';
       .my-3 {
         margin: 1rem 0;
       }
+      .status {
+        color: red;
+      }
+
+      .autheduser {
+        color: green;
+      }
     `,
   ],
 })
@@ -93,7 +101,7 @@ export class MainComponent implements OnInit {
     const tokens = this.storageService.getTokens();
     // Safely show a preview of the token (first 10 chars)
     if (tokens && tokens.accessToken) {
-      this.tokenPreview = `${tokens.accessToken.substring(0, 10)}... (truncated for security)`;
+      this.tokenPreview = `${tokens.accessToken.substring(0, TRUNCATION_LENGTH)}... (truncated for security)`;
     } else {
       this.tokenPreview = 'Token exists but cannot be displayed';
     }
