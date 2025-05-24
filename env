@@ -1,0 +1,24 @@
+
+# NG_APP_CTP_PROJECT_KEY=commerce-store-111
+# NG_APP_CTP_CLIENT_SECRET=1I-2RJTjarfTw6UNafTc_hxTNwDfXdlO
+# NG_APP_CTP_CLIENT_ID=VP0XVHqJox5z5V9kqqLSKRpf
+# NG_APP_CTP_AUTH_URL=https://auth.europe-west1.gcp.commercetools.com
+# NG_APP_CTP_API_URL=https://api.europe-west1.gcp.commercetools.com
+# NG_APP_CTP_SCOPES=manage_project:commerce-store-111 view_api_clients:commerce-store-111 manage_api_clients:commerce-store-111
+
+
+# NG_APP_CTP_PROJECT_KEY=commerce-project123
+# NG_APP_CTP_CLIENT_SECRET=1I-2RJTjarfTw6UNafTc_hxTNwDfXdlO
+# NG_APP_CTP_CLIENT_ID=VP0XVHqJox5z5V9kqqLSKRpf
+# NG_APP_CTP_AUTH_URL=https://auth.europe-west1.gcp.commercetools.com
+# NG_APP_CTP_API_URL=https://api.europe-west1.gcp.commercetools.com
+# NG_APP_CTP_SCOPES=manage_project:commerce-project123 view_api_clients:commerce-project123 manage_api_clients:commerce-project123
+
+
+# ADMIN
+NG_APP_CTP_PROJECT_KEY=commerce-store-111
+NG_APP_CTP_CLIENT_SECRET=QXjx4M_bjoFeZ8d8l6pBXwrjmD18-s26
+NG_APP_CTP_CLIENT_ID=5nvm1MHNaR8dXAGq-tEslX8F
+NG_APP_CTP_AUTH_URL=https://auth.europe-west1.gcp.commercetools.com
+NG_APP_CTP_API_URL=https://api.europe-west1.gcp.commercetools.com
+NG_APP_CTP_SCOPES=manage_project:commerce-store-111 manage_api_clients:commerce-store-111 view_api_clients:commerce-store-111

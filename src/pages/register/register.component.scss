@@ -1,0 +1,124 @@
+.register-container {
+  display: flex;
+  width: 100%;
+  border: 2px solid #b4b4b4;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.register-form {
+  width: 50%;
+  padding: 30px 40px;
+  box-sizing: border-box;
+}
+
+.register-form__header {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #3d3d3d;
+}
+
+.register-form__register {
+  margin-bottom: 3rem;
+}
+
+mat-error {
+  margin-top: 0;
+}
+
+.register-form__register-link {
+  text-decoration: underline;
+  // color: #282828;
+}
+
+// .register-form__label {
+//   color: #3d3d3d;
+//   font-size: 16px;
+//   margin-bottom: 0.4rem;
+//   display: block;
+// }
+
+.register-form__field {
+  margin-top: 0.5rem;
+  width: 100%;
+
+  &.email {
+    margin-top: 1rem;
+  }
+}
+
+.register-form__fieldset {
+  margin-top: 0.5rem;
+
+  &.address {
+    margin-top: 2rem;
+  }
+}
+
+.register-form__register-button {
+  width: 100%;
+  background-color: #282828;
+  color: #fff;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 1.5rem;
+  padding: 24px 16px;
+  margin-top: 2.2rem;
+}
+
+.register-form__forgot-password {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.register-form__forgot-password-link {
+  font-size: 0.875rem;
+  color: #282828;
+  text-decoration: underline;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.gradient {
+  width: 50%;
+  // height: 100%;
+  background: linear-gradient(135deg, #6fb1fc, #212d9b, #153164);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+  }
+
+  .register-form {
+    width: 100%;
+  }
+
+  .gradient {
+    display: none;
+    // height: 300px;
+  }
+
+  .register-form__header {
+    font-size: 24px;
+  }
+
+  .register-form__register-button {
+    font-size: 16px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .register-form {
+    padding: 0px 20px;
+  }
+
+  // .gradient {
+  //   height: 200px;
+  // }
+}
