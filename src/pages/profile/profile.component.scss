@@ -4,6 +4,7 @@
   padding: 1rem;
 
   &__section {
+    position: relative;
     margin-bottom: 3rem;
     padding: 1.5rem;
     background: #fff;
@@ -132,6 +133,17 @@
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+  }
+  &__address-delete {
+    background-color: #c62828;
+    color: #e8f5e9;
+  }
+  &__pass-btn {
+    position: absolute;
+    bottom: -30px;
+    right: -10px;
+    background-color: #c62828;
+    color: #e8f5e9;
   }
 
   &__default-btn {

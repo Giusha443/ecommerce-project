@@ -9,10 +9,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { minAgeValidator } from '../../utils/utils';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { PasswordChangeDialogComponent } from '../../components/password-change-dialog/password-change-dialog.component';
 
+const MIN_YEARS_TO_LOGIN = 13;
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
+  providers: [provideNativeDateAdapter()],
+
   imports: [
     MatIcon,
     ReactiveFormsModule,
@@ -21,6 +28,7 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatButtonModule,
     CommonModule,
+    MatDatepickerModule,
   ],
   styleUrls: ['./profile.component.scss'],
 })
@@ -28,6 +36,7 @@ export class ProfileComponent implements OnInit {
   public user: ProfileResponse | undefined;
   public editMode = false;
   public profileForm: FormGroup;
+  private countYears = MIN_YEARS_TO_LOGIN;
 
   constructor(
     private api: ApiService,
@@ -38,6 +47,7 @@ export class ProfileComponent implements OnInit {
       firstName: [this.user?.firstName || '', Validators.required],
       lastName: [this.user?.lastName || '', Validators.required],
       email: [this.user?.email || '', [Validators.required, Validators.email]],
+      dateOfBirth: ['', [Validators.required, minAgeValidator(this.countYears)]],
     });
   }
 
@@ -75,6 +85,10 @@ export class ProfileComponent implements OnInit {
           action: 'changeEmail',
           email: this.profileForm.value.email,
         },
+        {
+          action: 'setDateOfBirth',
+          dateOfBirth: '2015-10-21',
+        },
       ];
 
       this.api.updateUser(this.user.id, currentVersion, actions).subscribe({
@@ -107,11 +121,28 @@ export class ProfileComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-
       if (result) this.loadUserData();
     });
   }
+  public openPasswordChange(): void {
+    const dialogRef = this.dialog.open(PasswordChangeDialogComponent, {
+      data: {
+        user: this.user,
+      },
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res);
+    });
+  }
+  public deleteAddress(address?: AddressType): void {
+    if (!this.user) return;
+    if (address?.id) {
+      this.api.deleteAddress(this.user.id, address.id, this.user.version).subscribe(result => {
+        if (result) this.loadUserData();
+      });
+    }
+  }
+
   public trackByAddressId(): string {
     return Math.random().toString();
   }

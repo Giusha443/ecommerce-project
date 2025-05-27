@@ -20,6 +20,19 @@
         <input matInput placeholder="Email" formControlName="email" class="profile__input" />
       </mat-form-field>
 
+      <mat-form-field appearance="outline" class="register-form__field">
+        <mat-label>Date of birth</mat-label>
+        <input
+          matInput
+          formControlName="dateOfBirth"
+          type="date"
+          min="1990-01-01"
+          max="2025-12-31"
+          [matDatepicker]="picker" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
       <button
         mat-raised-button
         color="primary"
@@ -46,6 +59,9 @@
         </div>
       </div>
     </ng-template>
+    <button mat-raised-button color="primary" class="profile__pass-btn" (click)="openPasswordChange()">
+      Change password
+    </button>
   </section>
 
   <section class="profile__section profile__section--addresses">
@@ -68,6 +84,9 @@
           <div class="profile__address-actions">
             <button mat-icon-button (click)="openAddressEdit(address)" class="profile__address-edit">
               <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteAddress(address)" class="profile__address-delete">
+              <mat-icon>delete</mat-icon>
             </button>
           </div>
         </div>

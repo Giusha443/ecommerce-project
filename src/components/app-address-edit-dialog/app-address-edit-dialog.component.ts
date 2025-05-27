@@ -48,10 +48,10 @@ export class AddressEditDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { address: AddressType; user: ProfileResponse }
   ) {
     this.addressForm = this.fb.group({
-      streetName: [this.data.address.streetName || '', [Validators.required]],
-      city: [this.data.address.city || '', [Validators.required]],
-      postalCode: [this.data.address.postalCode || '', [Validators.required, postalCodeValidator('country')]],
-      country: [this.data.address.country || '', [Validators.required]],
+      streetName: [this.data.address?.streetName || '', [Validators.required]],
+      city: [this.data.address?.city || '', [Validators.required]],
+      postalCode: [this.data.address?.postalCode || '', [Validators.required, postalCodeValidator('country')]],
+      country: [this.data.address?.country || '', [Validators.required]],
     });
   }
 

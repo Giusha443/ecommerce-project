@@ -21,6 +21,7 @@ export class ApiService {
   public readonly getCustomersTokenUrl = `${environment.host}/oauth/${environment.projectKey}/customers/token`;
   public readonly refreshTokenUrl = `${environment.host}/oauth/token`;
   public readonly getProfileUrl = `${environment.apiUrl}/${environment.projectKey}/me`;
+  public readonly changePasswordProfileUrl = `${environment.apiUrl}/${environment.projectKey}/me/password `;
 
   constructor(private http: HttpClient) {}
 
@@ -105,7 +106,20 @@ export class ApiService {
         })
       );
   }
-
+  public changePassword(params: {
+    version: string;
+    currentPassword: string;
+    newPassword: string;
+  }): Observable<ProfileResponse | null> {
+    return this.http
+      .post<ProfileResponse>(this.changePasswordProfileUrl, params, { headers: { 'Content-Type': 'application/json' } })
+      .pipe(
+        catchError(error => {
+          console.error('Update user error:', error);
+          return of(null);
+        })
+      );
+  }
   public setDefaultAddress(
     customerId: string,
     type: 'billing' | 'shipping',
@@ -175,6 +189,28 @@ export class ApiService {
       .pipe(
         catchError(error => {
           console.error('Update address error:', error);
+          return of(null);
+        })
+      );
+  }
+  public deleteAddress(customerId: string, addressId: string, version: number): Observable<ProfileResponse | null> {
+    return this.http
+      .post<ProfileResponse>(
+        `${this.customersUrl}/${customerId}`,
+        {
+          version,
+          actions: [
+            {
+              action: 'removeAddress',
+              addressId,
+            },
+          ],
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .pipe(
+        catchError(error => {
+          console.error('Remove address error:', error);
           return of(null);
         })
       );
