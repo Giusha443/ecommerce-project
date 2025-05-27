@@ -17,7 +17,7 @@ import { minAgeValidator, postalCodeValidator } from '../../utils/utils';
 import { AuthService } from '../../services/auth.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-interface Country {
+export interface Country {
   code: string;
   name: string;
 }

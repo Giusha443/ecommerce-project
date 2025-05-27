@@ -1,0 +1,102 @@
+<div class="profile">
+  <section class="profile__section profile__section--personal">
+    <div class="profile__header">
+      <h2 class="profile__title">Personal Information</h2>
+      <button class="profile__edit-toggle" mat-icon-button (click)="toggleEditMode()">
+        <mat-icon>{{ editMode ? 'close' : 'edit' }}</mat-icon>
+      </button>
+    </div>
+
+    <form *ngIf="editMode; else viewMode" [formGroup]="profileForm" class="profile__form">
+      <mat-form-field class="profile__field">
+        <input matInput placeholder="First Name" formControlName="firstName" class="profile__input" />
+      </mat-form-field>
+
+      <mat-form-field class="profile__field">
+        <input matInput placeholder="Last Name" formControlName="lastName" class="profile__input" />
+      </mat-form-field>
+
+      <mat-form-field class="profile__field">
+        <input matInput placeholder="Email" formControlName="email" class="profile__input" />
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="profile__save-btn"
+        (click)="saveProfile()"
+        [disabled]="!profileForm.valid">
+        Save Changes
+      </button>
+    </form>
+
+    <ng-template #viewMode>
+      <div class="profile__grid">
+        <div class="profile__item">
+          <span class="profile__label">First Name:</span>
+          <span class="profile__value">{{ user?.firstName }}</span>
+        </div>
+        <div class="profile__item">
+          <span class="profile__label">Last Name:</span>
+          <span class="profile__value">{{ user?.lastName }}</span>
+        </div>
+        <div class="profile__item">
+          <span class="profile__label">Email:</span>
+          <span class="profile__value">{{ user?.email }}</span>
+        </div>
+      </div>
+    </ng-template>
+  </section>
+
+  <section class="profile__section profile__section--addresses">
+    <div class="profile__header">
+      <h2 class="profile__title">Addresses</h2>
+      <button mat-raised-button color="primary" class="profile__add-btn" (click)="openAddressEdit()">
+        Add Address
+      </button>
+    </div>
+
+    <div class="profile__address-grid">
+      <div
+        *ngFor="let address of user?.addresses; trackBy: trackByAddressId"
+        class="profile__address-card"
+        [class.profile__address-card--default]="
+          address?.id === user?.defaultBillingAddressId || address?.id === user?.defaultShippingAddressId
+        ">
+        <div class="profile__address-header">
+          <h3 class="profile__address-title">{{ address?.streetName }}</h3>
+          <div class="profile__address-actions">
+            <button mat-icon-button (click)="openAddressEdit(address)" class="profile__address-edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile__address-details">
+          <p class="profile__address-text">{{ address?.city }}, {{ address?.postalCode }}</p>
+          <p class="profile__address-text">{{ address?.country }}</p>
+        </div>
+
+        <div class="profile__address-markers">
+          <span *ngIf="address?.id === user?.defaultBillingAddressId" class="profile__marker profile__marker--billing">
+            Default Billing
+          </span>
+          <span
+            *ngIf="address?.id === user?.defaultShippingAddressId"
+            class="profile__marker profile__marker--shipping">
+            Default Shipping
+          </span>
+        </div>
+
+        <div class="profile__address-buttons">
+          <button mat-stroked-button class="profile__default-btn" (click)="setDefaultAddress('billing', address.id)">
+            Set as Billing
+          </button>
+          <button mat-stroked-button class="profile__default-btn" (click)="setDefaultAddress('shipping', address.id)">
+            Set as Shipping
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

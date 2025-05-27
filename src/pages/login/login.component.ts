@@ -62,6 +62,8 @@ export class LoginComponent {
     this.authService.login(email, password).subscribe({
       next: response => {
         console.log('Login response received', response);
+        this.authService.isAuthenticatedPrivate$.next(true);
+
         this.snackBar.open('Login successful!', 'X', { duration: 3000 });
         // No need to navigate here - the AuthService handles it
       },
