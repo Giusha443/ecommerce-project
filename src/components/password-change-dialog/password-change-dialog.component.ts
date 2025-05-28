@@ -20,8 +20,9 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 const MIN_LENGTH_VALIDATE_PASSWORD = 8;
 
 @Component({
@@ -56,6 +57,7 @@ export class PasswordChangeDialogComponent {
     private fb: FormBuilder,
     private api: ApiService,
     public dialogRef: MatDialogRef<AddressEditDialogComponent>,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: { user: ProfileResponse }
   ) {
     this.passwordForm = this.fb.group({
@@ -76,9 +78,19 @@ export class PasswordChangeDialogComponent {
     if (this.data.user) {
       const version = this.data.user.version;
       const passwordData = this.passwordForm.value;
-      console.log(passwordData, version);
 
-      this.api.changePassword({ ...passwordData, version }).subscribe(() => this.dialogRef.close(true));
+      this.api
+        .changePassword({ ...passwordData, version })
+        .pipe(
+          catchError(err => {
+            this.showError('Password not changed');
+            return throwError(() => err);
+          })
+        )
+        .subscribe(() => {
+          this.showSuccess('Password changed');
+          this.dialogRef.close(true);
+        });
     }
   }
 
@@ -92,5 +104,18 @@ export class PasswordChangeDialogComponent {
 
   public get passwordPatternError(): boolean {
     return this.passwordForm.get('newPassword')?.hasError('pattern') ?? false;
+  }
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 2000,
+      panelClass: ['error-snackbar'],
+    });
+  }
+
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 2000,
+      panelClass: ['success-snackbar'],
+    });
   }
 }

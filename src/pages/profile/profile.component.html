@@ -22,15 +22,7 @@
 
       <mat-form-field appearance="outline" class="register-form__field">
         <mat-label>Date of birth</mat-label>
-        <input
-          matInput
-          formControlName="dateOfBirth"
-          type="date"
-          min="1990-01-01"
-          max="2025-12-31"
-          [matDatepicker]="picker" />
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        <input matInput formControlName="dateOfBirth" type="date" min="1990-01-01" max="2025-12-31" />
       </mat-form-field>
 
       <button
@@ -56,6 +48,10 @@
         <div class="profile__item">
           <span class="profile__label">Email:</span>
           <span class="profile__value">{{ user?.email }}</span>
+        </div>
+        <div class="profile__item">
+          <span class="profile__label">Date of Birth:</span>
+          <span class="profile__value">{{ user?.dateOfBirth }}</span>
         </div>
       </div>
     </ng-template>

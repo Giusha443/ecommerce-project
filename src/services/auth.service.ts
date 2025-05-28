@@ -95,8 +95,9 @@ export class AuthService {
 
   public logout(): void {
     this.store.clearTokens();
-    this.isAuthenticated$.next(false);
     this.isAuthenticatedPrivate$.next(false);
     this.router.navigate(['main']);
+    this.fetchNewClientCredentials();
+    this.isAuthenticated$.next(false);
   }
 }

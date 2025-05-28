@@ -51,7 +51,7 @@ export interface ProfileResponse {
   firstName: string;
   lastName: string;
   password: string;
-
+  dateOfBirth: string;
   addresses: AddressType[];
   defaultBillingAddressId: string;
   defaultShippingAddressId: string;

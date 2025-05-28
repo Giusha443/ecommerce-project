@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 .profile {
   max-width: 1200px;
   margin: 2rem auto;
@@ -150,4 +151,12 @@
     flex: 1;
     min-width: 150px;
   }
+}
+
+.success-snackbar {
+  background-color: #2e7d32;
+}
+
+.error-snackbar {
+  background-color: #c62828;
 }

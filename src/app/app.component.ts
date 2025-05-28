@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    console.log('app');
     this.auth.isAuth$.subscribe();
     // this.initializeAuthState();
   }
