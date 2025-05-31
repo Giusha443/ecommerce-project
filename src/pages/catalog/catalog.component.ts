@@ -29,7 +29,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public currentPage = 1;
   public itemsPerPage = 20;
   public totalPages = 0;
-  public sortBy = 'name.en asc';
+  public sortBy = 'name.en-US asc';
   public showFilters = false;
   public searchQuery = '';
   public activeFiltersCount = 0;
@@ -37,8 +37,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   // Sort options
   public sortOptions = [
-    { value: 'name.en asc', label: 'Name A-Z' },
-    { value: 'name.en desc', label: 'Name Z-A' },
+    { value: 'name.en-US asc', label: 'Name A-Z' },
+    { value: 'name.en-US desc', label: 'Name Z-A' },
     { value: 'price asc', label: 'Price Low to High' },
     { value: 'price desc', label: 'Price High to Low' },
     { value: 'createdAt desc', label: 'Newest First' },

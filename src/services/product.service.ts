@@ -39,18 +39,9 @@ export class ProductService {
     this.loadingSubject.next(true);
 
     let httpParams = new HttpParams();
-    // .set('limit', (params.limit || 20).toString())
-    // .set('offset', (params.offset || 0).toString())
-    // .set('staged', 'false')
-    // .set('priceCurrency', 'USD')
-    // .set('facet', 'variants.attributes.brand')
-    // .set('facet', 'variants.attributes.color.key')
-    // .set('facet', 'variants.attributes.size')
-    // .set('facet', 'categories.id')
-    // .set('facet', 'variants.price.centAmount');
 
     if (params.search) {
-      httpParams = httpParams.set('text.en', params.search);
+      httpParams = httpParams.set('name.en-US', params.search);
     }
 
     if (params.sort) {
