@@ -68,24 +68,25 @@ export interface EnhancedProductResponse {
   count: number;
   total: number;
   results: ProductCard[];
-  facets?: {
-    [key: string]: {
+  facets?: Record<
+    string,
+    {
       type: string;
       dataType: string;
       missing: number;
       total: number;
       other: number;
-      terms: Array<{
+      terms: {
         term: string;
         count: number;
-      }>;
-    };
-  };
+      }[];
+    }
+  >;
 }
 
 // Utility functions for price formatting
 export class PriceFormatter {
-  static formatPrice(centAmount: number, currencyCode: string, fractionDigits: number = 2): string {
+  static formatPrice(centAmount: number, currencyCode: string, fractionDigits = 2): string {
     const amount = centAmount / Math.pow(10, fractionDigits);
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -93,7 +94,7 @@ export class PriceFormatter {
     }).format(amount);
   }
 
-  static createPriceValue(centAmount: number, currencyCode: string, fractionDigits: number = 2): PriceValue {
+  static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = 2): PriceValue {
     return {
       centAmount,
       currencyCode,

@@ -63,7 +63,7 @@ export class ProductService {
     );
   }
 
-  public searchProducts(query: string, limit: number = 20): Observable<ProductCard[]> {
+  public searchProducts(query: string, limit = 20): Observable<ProductCard[]> {
     return this.getProducts({ search: query, limit }).pipe(map(response => response.results));
   }
 

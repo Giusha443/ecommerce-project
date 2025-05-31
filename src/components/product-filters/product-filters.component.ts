@@ -558,7 +558,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
 
   public getColorValue(colorName: string): string {
     // Map common color names to hex values
-    const colorMap: { [key: string]: string } = {
+    const colorMap: Record<string, string> = {
       red: '#ff0000',
       blue: '#0000ff',
       green: '#00ff00',
