@@ -16,6 +16,15 @@ import {
   FilterOption,
 } from '../models/product.model';
 
+const categorYID = {
+  'Desktop processor': '626a7a37-2aed-4319-9917-4ca2dd7cd481',
+  'Mobile processor': 'a0aba9ce-2bd2-4d05-9bdc-f7a31394898c',
+};
+const productTypeID = {
+  CPU: 'f11c0cfb-9064-4620-a61b-7749637258ab',
+  Memory: '34c47124-b50a-489f-85d3-f0455feb1da7',
+  Components: '3fd8ee84-2a63-46cf-946b-7e2893e0728f',
+};
 @Injectable({
   providedIn: 'root',
 })
@@ -52,9 +61,14 @@ export class ProductService {
     if (params.filters) {
       httpParams = this.applyFilters(httpParams, params.filters);
     }
+    console.log('getProducts', params);
 
     return this.http.get<any>(this.productsUrl, { params: httpParams }).pipe(
-      map(response => this.transformResponse(response)),
+      map(response => {
+        console.log(response);
+
+        return this.transformResponse(response);
+      }),
       catchError(error => {
         console.error('Error fetching products:', error);
         this.loadingSubject.next(false);
@@ -64,6 +78,8 @@ export class ProductService {
   }
 
   public searchProducts(query: string, limit = 20): Observable<ProductCard[]> {
+    console.log('searchProducts', query);
+
     return this.getProducts({ search: query, limit }).pipe(map(response => response.results));
   }
 
@@ -92,6 +108,7 @@ export class ProductService {
 
   private applyFilters(params: HttpParams, filters: ProductFilters): HttpParams {
     const filterExpressions: string[] = [];
+    console.log('applyFilters', params, filters);
 
     if (filters.priceRange) {
       const { min, max } = filters.priceRange;
@@ -108,20 +125,28 @@ export class ProductService {
       filterExpressions.push(`variants.attributes.color.key:${colorFilter}`);
     }
 
-    if (filters.sizes && filters.sizes.length > 0) {
-      const sizeFilter = filters.sizes.map(size => `"${size}"`).join(',');
-      filterExpressions.push(`variants.attributes.size:${sizeFilter}`);
+    if (filters.types?.length) {
+      filters.types.forEach(cat => {
+        const typeId = productTypeID[cat as keyof typeof productTypeID];
+        if (typeId) {
+          filterExpressions.push(`productType.id:"${typeId}"`);
+        }
+      });
     }
-
-    if (filters.categories && filters.categories.length > 0) {
-      const categoryFilter = filters.categories.map(cat => `"${cat}"`).join(',');
-      filterExpressions.push(`categories.id:${categoryFilter}`);
+    if (filters.categories?.length) {
+      filters.categories.forEach(cat => {
+        const categoryId = categorYID[cat as keyof typeof categorYID];
+        if (categoryId) {
+          filterExpressions.push(`categories.id:"${categoryId}"`);
+        }
+      });
     }
 
     if (filterExpressions.length > 0) {
-      params = params.set('filter', filterExpressions.join(' and '));
+      filterExpressions.forEach(filter => {
+        params = params.append('filter', filter);
+      });
     }
-
     return params;
   }
 

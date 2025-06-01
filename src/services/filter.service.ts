@@ -12,7 +12,7 @@ export class FilterService {
     priceRange: undefined,
     brands: [],
     colors: [],
-    sizes: [],
+    types: [],
     categories: [],
     searchQuery: '',
   };
@@ -31,6 +31,8 @@ export class FilterService {
     const currentFilters = this.filtersSubject.value;
     const newFilters = { ...currentFilters, ...filters };
     this.filtersSubject.next(newFilters);
+    console.log(newFilters);
+
     this.updateActiveFiltersCount(newFilters);
   }
 
@@ -92,30 +94,23 @@ export class FilterService {
     }
   }
 
-  public addSize(size: string): void {
+  public addType(size: string): void {
     const currentFilters = this.filtersSubject.value;
-    const sizes = [...(currentFilters.sizes || [])];
+    const sizes = [...(currentFilters.types || [])];
     if (!sizes.includes(size)) {
       sizes.push(size);
-      this.updateFilters({ sizes });
+      this.updateFilters({ types: sizes });
     }
   }
 
   public removeSize(size: string): void {
     const currentFilters = this.filtersSubject.value;
-    const sizes = (currentFilters.sizes || []).filter(s => s !== size);
-    this.updateFilters({ sizes });
+    const sizes = (currentFilters.types || []).filter(s => s !== size);
+    this.updateFilters({ types: sizes });
   }
 
-  public toggleSize(size: string): void {
-    const currentFilters = this.filtersSubject.value;
-    const sizes = currentFilters.sizes || [];
-
-    if (sizes.includes(size)) {
-      this.removeSize(size);
-    } else {
-      this.addSize(size);
-    }
+  public toggleType(size: string): void {
+    this.updateFilters({ types: [size] });
   }
 
   public addCategory(category: string): void {
@@ -167,8 +162,8 @@ export class FilterService {
       case 'colors':
         newFilters.colors = [];
         break;
-      case 'sizes':
-        newFilters.sizes = [];
+      case 'types':
+        newFilters.types = [];
         break;
       case 'categories':
         newFilters.categories = [];
@@ -202,8 +197,8 @@ export class FilterService {
       activeFilters.push(...filters.colors.map(color => `Color: ${color}`));
     }
 
-    if (filters.sizes && filters.sizes.length > 0) {
-      activeFilters.push(...filters.sizes.map(size => `Size: ${size}`));
+    if (filters.types && filters.types.length > 0) {
+      activeFilters.push(...filters.types.map(size => `Size: ${size}`));
     }
 
     if (filters.categories && filters.categories.length > 0) {
@@ -223,7 +218,7 @@ export class FilterService {
     if (filters.priceRange) count++;
     if (filters.brands && filters.brands.length > 0) count += filters.brands.length;
     if (filters.colors && filters.colors.length > 0) count += filters.colors.length;
-    if (filters.sizes && filters.sizes.length > 0) count += filters.sizes.length;
+    if (filters.types && filters.types.length > 0) count += filters.types.length;
     if (filters.categories && filters.categories.length > 0) count += filters.categories.length;
     if (filters.searchQuery && filters.searchQuery.trim()) count++;
 

@@ -104,32 +104,33 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         </div>
       </div>
 
+      <div class="filter-group" *ngIf="!hasApiFilters">
+        <h4 class="filter-group-title">Types</h4>
+        <div class="radio-options">
+          <label *ngFor="let type of commonTypes" class="radio-option">
+            <input
+              type="radio"
+              name="productType"
+              [value]="type"
+              [checked]="currentFilters.types?.includes(type) || false"
+              (change)="toggleType(type)"
+              class="radio-input" />
+            <span class="radio-label">{{ type }}</span>
+          </label>
+        </div>
+      </div>
       <!-- Manual Filter Groups (for cases where API doesn't provide facets) -->
       <div class="filter-group" *ngIf="!hasApiFilters">
         <h4 class="filter-group-title">Brands</h4>
         <div class="checkbox-options">
-          <label *ngFor="let brand of commonBrands" class="checkbox-option">
+          <label *ngFor="let brand of commonCategoty" class="checkbox-option">
             <input
               type="checkbox"
               [checked]="currentFilters.brands?.includes(brand) || false"
-              (change)="toggleBrand(brand)"
+              (change)="toggleCategory(brand)"
               class="checkbox-input" />
             <span class="checkbox-label">{{ brand }}</span>
           </label>
-        </div>
-      </div>
-
-      <div class="filter-group" *ngIf="!hasApiFilters">
-        <h4 class="filter-group-title">Sizes</h4>
-        <div class="size-options">
-          <button
-            *ngFor="let size of commonSizes"
-            class="size-option"
-            [class.selected]="currentFilters.sizes?.includes(size) || false"
-            (click)="toggleSize(size)"
-            type="button">
-            {{ size }}
-          </button>
         </div>
       </div>
     </div>
@@ -429,7 +430,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
     priceRange: undefined,
     brands: [],
     colors: [],
-    sizes: [],
+    types: [],
     categories: [],
     searchQuery: '',
   };
@@ -445,8 +446,10 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   public hasApiFilters = false;
 
   // Fallback options when API doesn't provide facets
+  public commonCategoty = ['Desktop processor', 'Mobile processor'];
+
   public commonBrands = ['Nike', 'Adidas', 'Puma', 'Under Armour', 'Reebok', 'New Balance'];
-  public commonSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  public commonTypes = ['Memory', 'CPU', 'Components'];
 
   constructor(
     private filterService: FilterService,
@@ -497,6 +500,8 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   }
 
   public updatePriceRange(): void {
+    console.log('price', this.priceRange.min, this.priceRange.max);
+
     if (this.priceRange.min !== null && this.priceRange.max !== null) {
       if (this.priceRange.min <= this.priceRange.max) {
         this.filterService.setPriceRange(this.priceRange.min, this.priceRange.max);
@@ -507,15 +512,15 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   }
 
   public toggleBrand(brand: string): void {
-    this.filterService.toggleBrand(brand);
+    this.filterService.toggleCategory(brand);
   }
 
   public toggleColor(color: string): void {
     this.filterService.toggleColor(color);
   }
 
-  public toggleSize(size: string): void {
-    this.filterService.toggleSize(size);
+  public toggleType(size: string): void {
+    this.filterService.toggleType(size);
   }
 
   public toggleCategory(category: string): void {
@@ -530,7 +535,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
     } else if (lowerGroupName.includes('color')) {
       this.toggleColor(value);
     } else if (lowerGroupName.includes('size')) {
-      this.toggleSize(value);
+      this.toggleType(value);
     } else if (lowerGroupName.includes('categor')) {
       this.toggleCategory(value);
     }
@@ -548,7 +553,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
     } else if (lowerGroupName.includes('color')) {
       return this.currentFilters.colors?.includes(value) || false;
     } else if (lowerGroupName.includes('size')) {
-      return this.currentFilters.sizes?.includes(value) || false;
+      return this.currentFilters.types?.includes(value) || false;
     } else if (lowerGroupName.includes('categor')) {
       return this.currentFilters.categories?.includes(value) || false;
     }

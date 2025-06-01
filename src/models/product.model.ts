@@ -36,9 +36,10 @@ export interface ProductFilters {
   };
   brands?: string[];
   colors?: string[];
-  sizes?: string[];
+  types?: string[];
   categories?: string[];
   searchQuery?: string;
+  produstType?: string[];
 }
 
 export interface FilterOption {
