@@ -16,6 +16,7 @@ export function intercept(req: HttpRequest<unknown>, next: HttpHandlerFn): Obser
   let modifiedReq = req.clone({});
   if (
     req.url !== api.authUrl &&
+    req.url !== api.introspectUrl &&
     req.url !== api.anonymousTokenUrl &&
     req.url !== api.refreshTokenUrl &&
     req.url !== api.getCustomersTokenUrl

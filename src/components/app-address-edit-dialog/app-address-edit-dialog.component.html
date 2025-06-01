@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>
+  {{ data.address ? 'Edit Address' : 'New Address' }}
+</h2>
+<mat-dialog-content>
+  <form class="app-address-edit-form" [formGroup]="addressForm">
+    <mat-form-field>
+      <mat-label>Street</mat-label>
+      <input matInput formControlName="streetName" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>City</mat-label>
+      <input matInput formControlName="city" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Postal code</mat-label>
+      <input matInput formControlName="postalCode" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="register-form__field">
+      <mat-label>Country</mat-label>
+      <mat-select formControlName="country">
+        @for (data of countries; track data) {
+          <mat-option [value]="data.code">{{ data.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close mat-raised-button color="primary">Cancel</button>
+  <button mat-raised-button color="primary" (click)="saveAddress()" [disabled]="!addressForm.valid">Save</button>
+</mat-dialog-actions>

@@ -1,0 +1,164 @@
+@use '@angular/material' as mat;
+.profile {
+  // max-width: 1200px;
+  // margin: 2rem auto;
+  padding: 1rem;
+
+  &__section {
+    position: relative;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  &__form {
+    display: grid;
+    gap: 1rem;
+    max-width: 600px;
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__input {
+    width: 100%;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-rows: repeat(auto-fit, 1fr);
+    gap: 1.5rem;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  &__label {
+    font-weight: 500;
+    color: #666;
+  }
+
+  &__value {
+    color: #333;
+  }
+
+  &__save-btn {
+    justify-self: start;
+  }
+
+  &__add-btn {
+    margin-left: auto;
+  }
+
+  &__address-grid {
+    // display: grid;
+    display: flex;
+    flex-direction: column;
+    // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  &__address-card {
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+    &--default {
+      border: 2px solid #3f51b5;
+      background-color: #f5f6ff;
+    }
+  }
+
+  &__address-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__address-title {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  &__address-details {
+    margin-bottom: 1rem;
+  }
+
+  &__address-text {
+    margin: 0.5rem 0;
+  }
+
+  &__address-markers {
+    margin-top: 1rem;
+  }
+
+  &__marker {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+
+    &--billing {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    &--shipping {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+  }
+
+  &__address-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  &__address-delete {
+    background-color: #c62828;
+    color: #e8f5e9;
+  }
+  &__pass-btn {
+    position: absolute;
+    bottom: -30px;
+    right: -10px;
+    background-color: #c62828;
+    color: #e8f5e9;
+  }
+
+  &__default-btn {
+    flex: 1;
+    min-width: 150px;
+  }
+}
+
+.success-snackbar {
+  background-color: #2e7d32;
+}
+
+.error-snackbar {
+  background-color: #c62828;
+}

@@ -13,8 +13,8 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './header-icons.component.scss',
 })
 export class HeaderIconsComponent {
-  public isAuthenticated$: BehaviorSubject<boolean>;
+  public isAuthenticatedPrivate$: BehaviorSubject<boolean>;
   constructor(private auth: AuthService) {
-    this.isAuthenticated$ = this.auth.isAuthenticated$;
+    this.isAuthenticatedPrivate$ = this.auth.isAuthenticated$;
   }
 }

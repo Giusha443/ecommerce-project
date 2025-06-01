@@ -33,6 +33,35 @@ export interface ProductResponse {
   }[];
 }
 
+export type AddressType = Record<'id' | 'city' | 'country' | 'postalCode' | 'streetName', string>;
+export interface ProfileResponse {
+  id: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  lastModifiedBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  createdBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  dateOfBirth: string;
+  addresses: AddressType[];
+  defaultBillingAddressId: string;
+  defaultShippingAddressId: string;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+  isEmailVerified: boolean;
+  stores: [];
+  authenticationMode: string;
+}
+
 interface ProductData {
   categories: {
     id: string;
@@ -115,7 +144,7 @@ export interface CustomerProps {
 
 export interface Introspect {
   active: boolean;
-  scope: string;
-  exp: number;
-  client_id: string;
+  scope?: string;
+  exp?: number;
+  client_id?: string;
 }
