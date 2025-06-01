@@ -3,14 +3,14 @@
 .catalog {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  // padding: 0 20px;
 
   // Header Section
   &__header {
     padding: 32px 0;
     text-align: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    margin: -20px -20px 32px -20px;
+    // margin: -20px -20px 32px -20px;
     color: white;
     border-radius: 0 0 16px 16px;
   }

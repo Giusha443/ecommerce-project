@@ -13,6 +13,9 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
 import { ProductCard, ProductFilters } from '../../models/product.model';
 
+const ITEMS_PER_PAGE = 10;
+const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
+
 @Component({
   selector: 'app-catalog',
   standalone: true,
@@ -27,7 +30,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public loading = false;
   public totalProducts = 0;
   public currentPage = 1;
-  public itemsPerPage = 20;
+  public itemsPerPage = ITEMS_PER_PAGE;
   public totalPages = 0;
   public sortBy = 'name.en-US asc';
   public showFilters = false;
@@ -84,7 +87,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
     // Subscribe to filter changes and reload products
     this.filterService.filters$
-      .pipe(takeUntil(this.destroy$), debounceTime(300), distinctUntilChanged())
+      .pipe(takeUntil(this.destroy$), debounceTime(TIMEOUT_BEFORE_SEARCH_REQUEST), distinctUntilChanged())
       .subscribe(() => {
         this.currentPage = 1;
         this.loadProducts();
@@ -142,10 +145,10 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.filterService.clearFilters();
   }
 
-  public getPaginationPages(): number[] {
+  public get getPaginationPages(): number[] {
     const pages: number[] = [];
-    const start = Math.max(1, this.currentPage - 2);
-    const end = Math.min(this.totalPages, this.currentPage + 2);
+    const start = Math.max(1, this.currentPage - 1);
+    const end = Math.min(this.totalPages, this.currentPage + 1);
 
     for (let i = start; i <= end; i++) {
       pages.push(i);
@@ -154,7 +157,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
     return pages;
   }
 
-  public getResultsText(): string {
+  public get getResultsText(): string {
     if (this.totalProducts === 0) return 'No products found';
     const start = (this.currentPage - 1) * this.itemsPerPage + 1;
     const end = Math.min(this.currentPage * this.itemsPerPage, this.totalProducts);

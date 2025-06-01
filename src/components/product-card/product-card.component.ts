@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProductCard } from '../../models/product.model';
 
+const PRODUCT_DESCRIPTION_LENGTH_IN_CHARS = 80;
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -25,7 +26,7 @@ import { ProductCard } from '../../models/product.model';
 
       <div class="product-card__content">
         <h3 class="product-card__name">{{ product.name }}</h3>
-        <p class="product-card__description">{{ getShortDescription() }}</p>
+        <p class="product-card__description">{{ getShortDescription }}</p>
 
         <div class="product-card__price">
           <span
@@ -38,13 +39,12 @@ import { ProductCard } from '../../models/product.model';
           </span>
         </div>
 
-        <div class="product-card__attributes" *ngIf="getVisibleAttributes().length > 0">
-          <span
-            class="product-card__attribute"
-            *ngFor="let attr of getVisibleAttributes()"
-            [class]="'product-card__attribute--' + attr.type">
-            {{ attr.name }}: {{ getAttributeDisplayValue(attr) }}
-          </span>
+        <div class="product-card__attributes" *ngIf="getVisibleAttributes.length > 0">
+          @for (attr of getVisibleAttributes; track $index) {
+            <span class="product-card__attribute" [class]="'product-card__attribute--' + attr.type">
+              {{ attr.name }}: {{ getAttributeDisplayValue(attr) }}
+            </span>
+          }
         </div>
       </div>
 
@@ -61,23 +61,23 @@ import { ProductCard } from '../../models/product.model';
   styleUrls: ['./product-card.component.scss'],
 })
 export class ProductCardComponent {
-  @Input() product!: ProductCard;
-  @Output() cardClick = new EventEmitter<ProductCard>();
-  @Output() viewDetails = new EventEmitter<ProductCard>();
+  @Input() public product!: ProductCard;
+  @Output() public cardClick = new EventEmitter<ProductCard>();
+  @Output() public viewDetails = new EventEmitter<ProductCard>();
 
   public onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    // img.src = '/assets/placeholder-product.jpg';
+    img.src = './assets/placeholder-product.jpg';
   }
 
-  public getShortDescription(): string {
+  public get getShortDescription(): string {
     if (!this.product.description) return '';
-    return this.product.description.length > 100
-      ? this.product.description.substring(0, 100) + '...'
+    return this.product.description.length > PRODUCT_DESCRIPTION_LENGTH_IN_CHARS
+      ? this.product.description.substring(0, PRODUCT_DESCRIPTION_LENGTH_IN_CHARS) + '...'
       : this.product.description;
   }
 
-  public getVisibleAttributes(): any[] {
+  public get getVisibleAttributes(): any[] {
     return this.product.attributes
       .filter(attr => ['brand', 'color', 'size'].includes(attr.name.toLowerCase()))
       .slice(0, 3);

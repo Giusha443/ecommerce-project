@@ -28,13 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'catalog',
-    loadComponent: () => {
-      console.log('Loading catalog component...');
-      return import('../pages/catalog/catalog.component').then(c => {
-        console.log('Catalog component loaded:', c);
-        return c.CatalogComponent;
-      });
-    },
+    loadComponent: () => import('../pages/catalog/catalog.component').then(c => c.CatalogComponent),
     title: `Catalog - ${APP_TITLE}`,
   },
   { path: '', redirectTo: 'main', pathMatch: 'full' },
