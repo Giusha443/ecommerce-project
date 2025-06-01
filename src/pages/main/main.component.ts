@@ -92,7 +92,7 @@ export class MainComponent implements OnInit {
     private storageService: StorageService,
     private router: Router
   ) {
-    this.isAuthenticatedPrivate$ = this.authService.isAuthenticatedPrivate$;
+    this.isAuthenticatedPrivate$ = this.authService.isAuthenticated$;
   }
 
   public ngOnInit(): void {

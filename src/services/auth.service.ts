@@ -11,16 +11,14 @@ import { environment } from '../environments/environment.development';
   providedIn: 'root',
 })
 export class AuthService {
-  public isAuthenticated$: BehaviorSubject<boolean>;
-  public isAuthenticatedPrivate$ = new BehaviorSubject<boolean>(false);
-  public isAuth$ = this.isAuthenticatedPrivate$.asObservable();
+  public isAuthenticated$ = new BehaviorSubject<boolean>(false);
+  public isAuth$ = this.isAuthenticated$.asObservable();
 
   constructor(
     private api: ApiService,
     private store: StorageService,
     private router: Router
   ) {
-    this.isAuthenticated$ = new BehaviorSubject(false);
     this.initializeAuth();
   }
   private initializeAuth(): void {
@@ -33,7 +31,7 @@ export class AuthService {
 
     this.api.introspectToken(accessToken).subscribe({
       next: res => this.handleAuthResponse(res, refreshToken),
-      error: () => this.isAuthenticatedPrivate$.next(false),
+      error: () => this.isAuthenticated$.next(false),
     });
   }
 
@@ -43,28 +41,28 @@ export class AuthService {
       return;
     }
     const isAuthorized = !!introspection.scope && accessVerificationCustomer(introspection.scope);
-    this.isAuthenticatedPrivate$.next(isAuthorized);
+    this.isAuthenticated$.next(isAuthorized);
   }
 
   private handleTokenRefresh(refreshToken?: string): void {
     if (!refreshToken) {
-      this.isAuthenticatedPrivate$.next(false);
+      this.isAuthenticated$.next(false);
       return;
     }
 
     this.api.refreshToken(refreshToken).subscribe({
       next: tokens => {
         this.store.setTokens({ accessToken: tokens.access_token, refreshToken: tokens.refresh_token });
-        this.isAuthenticatedPrivate$.next(true);
+        this.isAuthenticated$.next(true);
       },
-      error: () => this.isAuthenticatedPrivate$.next(false),
+      error: () => this.isAuthenticated$.next(false),
     });
   }
 
   private fetchNewClientCredentials(): void {
     this.api.getClientCredentialsToken(`manage_project:${environment.projectKey}`).subscribe({
       next: tokens => this.store.setTokens({ accessToken: tokens.access_token, refreshToken: tokens.refresh_token }),
-      error: () => this.isAuthenticatedPrivate$.next(false),
+      error: () => this.isAuthenticated$.next(false),
     });
   }
 
@@ -83,10 +81,7 @@ export class AuthService {
 
   public checkLoginStatus(): boolean {
     try {
-      if (this.isAuthenticatedPrivate$.getValue()) {
-        this.isAuthenticated$.next(true);
-        return true;
-      }
+      return this.isAuthenticated$.getValue();
     } catch (error) {
       console.error('Error checking login status:', error);
     }
@@ -95,9 +90,8 @@ export class AuthService {
 
   public logout(): void {
     this.store.clearTokens();
-    this.isAuthenticatedPrivate$.next(false);
+    this.isAuthenticated$.next(false);
     this.router.navigate(['main']);
     this.fetchNewClientCredentials();
-    this.isAuthenticated$.next(false);
   }
 }

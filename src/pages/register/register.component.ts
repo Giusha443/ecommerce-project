@@ -213,7 +213,7 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe(data => {
         this.storage.setTokens({ accessToken: data.access_token, refreshToken: data.refresh_token });
-        this.auth.isAuthenticatedPrivate$.next(true);
+        this.auth.isAuthenticated$.next(true);
         this.router.navigate(['']);
         this.showSuccess('Login successful (stubbed)!');
       });

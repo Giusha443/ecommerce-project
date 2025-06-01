@@ -15,6 +15,6 @@ import { AsyncPipe } from '@angular/common';
 export class HeaderIconsComponent {
   public isAuthenticatedPrivate$: BehaviorSubject<boolean>;
   constructor(private auth: AuthService) {
-    this.isAuthenticatedPrivate$ = this.auth.isAuthenticatedPrivate$;
+    this.isAuthenticatedPrivate$ = this.auth.isAuthenticated$;
   }
 }

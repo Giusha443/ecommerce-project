@@ -9,20 +9,26 @@
 
     <form *ngIf="editMode; else viewMode" [formGroup]="profileForm" class="profile__form">
       <mat-form-field class="profile__field">
-        <input matInput placeholder="First Name" formControlName="firstName" class="profile__input" />
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="firstName" class="profile__input" />
       </mat-form-field>
 
       <mat-form-field class="profile__field">
-        <input matInput placeholder="Last Name" formControlName="lastName" class="profile__input" />
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="lastName" class="profile__input" />
       </mat-form-field>
 
       <mat-form-field class="profile__field">
-        <input matInput placeholder="Email" formControlName="email" class="profile__input" />
+        <mat-label>E-mail</mat-label>
+        <input matInput formControlName="email" class="profile__input" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="register-form__field">
         <mat-label>Date of birth</mat-label>
-        <input matInput formControlName="dateOfBirth" type="date" min="1990-01-01" max="2025-12-31" />
+        <input matInput formControlName="dateOfBirth" type="date" min="1900-01-01" max="2025-12-31" />
+        <!-- [matDatepicker]="picker" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker> -->
       </mat-form-field>
 
       <button
@@ -76,7 +82,7 @@
           address?.id === user?.defaultBillingAddressId || address?.id === user?.defaultShippingAddressId
         ">
         <div class="profile__address-header">
-          <h3 class="profile__address-title">{{ address?.streetName }}</h3>
+          <h3 class="profile__address-title">Address: {{ address?.streetName }}</h3>
           <div class="profile__address-actions">
             <button mat-icon-button (click)="openAddressEdit(address)" class="profile__address-edit">
               <mat-icon>edit</mat-icon>
@@ -88,8 +94,8 @@
         </div>
 
         <div class="profile__address-details">
-          <p class="profile__address-text">{{ address?.city }}, {{ address?.postalCode }}</p>
-          <p class="profile__address-text">{{ address?.country }}</p>
+          <p class="profile__address-text">City: {{ address?.city }}, Postalcode: {{ address?.postalCode }}</p>
+          <p class="profile__address-text">Country: {{ address?.country }}</p>
         </div>
 
         <div class="profile__address-markers">

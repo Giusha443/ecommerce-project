@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticatedPrivate$.getValue()) {
+  if (authService.isAuthenticated$.getValue()) {
     return true;
   }
   router.navigate(['login']);
@@ -27,7 +27,7 @@ export const loginGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticatedPrivate$.getValue()) {
+  if (authService.isAuthenticated$.getValue()) {
     router.navigate(['main']);
     return false;
   }
@@ -41,7 +41,7 @@ export const loginGuard: CanActivateFn = () => {
 export const loginGuardAlt: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  return authService.isAuthenticatedPrivate$.pipe(
+  return authService.isAuthenticated$.pipe(
     skip(1),
     tap(isAuthenticated => {
       if (isAuthenticated) {
