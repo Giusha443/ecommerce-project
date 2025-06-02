@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
-  MatDialogContainer,
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
@@ -13,7 +12,6 @@ import { ApiService } from '../../services/api.service';
 import { AddressEditDialogComponent } from '../app-address-edit-dialog/app-address-edit-dialog.component';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
@@ -21,7 +19,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterLink } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 const MIN_LENGTH_VALIDATE_PASSWORD = 8;
 
@@ -36,12 +33,9 @@ const MIN_LENGTH_VALIDATE_PASSWORD = 8;
     MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
-    RouterLink,
     MatSelectModule,
-    MatCheckbox,
     MatExpansionModule,
     MatDatepickerModule,
-    MatDialogContainer,
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
