@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, RedirectCommand, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-
-import { filter, map, skip, take, tap } from 'rxjs';
-import { StorageService,ProductService } from '../services/storage.service';
+import { filter, map, take } from 'rxjs';
+import { StorageService } from '../services/storage.service';
+import { ProductService } from '../services/product.service';
 
 /**
  * Login guard to prevent authenticated users from accessing login page
