@@ -15,131 +15,158 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
   imports: [CommonModule, FormsModule],
   template: `
     <div class="filters-container" [class.mobile-open]="isOpen">
-      <!-- Filters Header -->
-      <div class="filters-header">
-        <h3 class="filters-title">Filters</h3>
-        <div class="filters-actions">
-          <span *ngIf="activeFiltersCount > 0" class="active-count"> {{ activeFiltersCount }} active </span>
-          <button *ngIf="activeFiltersCount > 0" (click)="clearAllFilters()" class="clear-all-btn" type="button">
-            Clear All
-          </button>
-          <button class="close-btn mobile-only" (click)="closeFilters()" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-      </div>
+      <!-- Mobile backdrop -->
+      <div class="mobile-backdrop" [class.active]="isOpen" (click)="closeFilters()"></div>
 
-      <!-- Active Filters -->
-      <div *ngIf="activeFiltersList.length > 0" class="active-filters">
-        <h4 class="active-filters-title">Active Filters:</h4>
-        <div class="active-filters-list">
-          @for (filter of activeFiltersList; track $index) {
-            <span class="active-filter-tag">
+      <!-- Filters content -->
+      <div class="filters-content">
+        <!-- Filters Header -->
+        <div class="filters-header">
+          <h3 class="filters-title">Filters</h3>
+          <div class="filters-actions">
+            <span *ngIf="activeFiltersCount > 0" class="active-count"> {{ activeFiltersCount }} active </span>
+            <button *ngIf="activeFiltersCount > 0" (click)="clearAllFilters()" class="clear-all-btn" type="button">
+              Clear All
+            </button>
+            <button class="close-btn mobile-only" (click)="closeFilters()" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Filters -->
+        <div *ngIf="activeFiltersList.length > 0" class="active-filters">
+          <h4 class="active-filters-title">Active Filters:</h4>
+          <div class="active-filters-list">
+            <span *ngFor="let filter of activeFiltersList" class="active-filter-tag">
               {{ filter }}
               <button (click)="removeActiveFilter(filter)" class="remove-filter-btn" type="button">×</button>
             </span>
-          }
-        </div>
-      </div>
-
-      <!-- Price Range Filter -->
-      <div class="filter-group">
-        <h4 class="filter-group-title">Price Range</h4>
-        <div class="price-range-inputs">
-          <div class="price-input-group">
-            <label for="minPrice">Min</label>
-            <input
-              id="minPrice"
-              type="number"
-              [(ngModel)]="priceRange.min"
-              (blur)="updatePriceRange()"
-              placeholder="0"
-              min="0"
-              class="price-input" />
-          </div>
-          <div class="price-separator">-</div>
-          <div class="price-input-group">
-            <label for="maxPrice">Max</label>
-            <input
-              id="maxPrice"
-              type="number"
-              [(ngModel)]="priceRange.max"
-              (blur)="updatePriceRange()"
-              placeholder="1000"
-              min="0"
-              class="price-input" />
           </div>
         </div>
-      </div>
 
-      <!-- Dynamic Filter Groups -->
-      <div *ngFor="let group of availableFilters; trackBy: trackByFilterGroup" class="filter-group">
-        <h4 class="filter-group-title">{{ group.name }}</h4>
-
-        <!-- Color Filters
-        <div *ngIf="group.type === 'color'" class="color-options">
-          <div
-            *ngFor="let option of group.options; trackBy: trackByFilterOption"
-            class="color-option"
-            [class.selected]="isColorSelected(option.value)"
-            (click)="toggleColor(option.value)">
-            <div class="color-swatch" [style.background-color]="getColorValue(option.value)"></div>
-            <span class="color-label">{{ option.label }}</span>
-            <span class="option-count">({{ option.count }})</span>
+        <!-- Price Range Filter -->
+        <div class="filter-group">
+          <h4 class="filter-group-title">Price Range</h4>
+          <div class="price-range-inputs">
+            <div class="price-input-group">
+              <label for="minPrice">Min</label>
+              <input
+                id="minPrice"
+                type="number"
+                [(ngModel)]="priceRange.min"
+                (blur)="updatePriceRange()"
+                placeholder="0"
+                min="0"
+                class="price-input" />
+            </div>
+            <div class="price-separator">-</div>
+            <div class="price-input-group">
+              <label for="maxPrice">Max</label>
+              <input
+                id="maxPrice"
+                type="number"
+                [(ngModel)]="priceRange.max"
+                (blur)="updatePriceRange()"
+                placeholder="1000"
+                min="0"
+                class="price-input" />
+            </div>
           </div>
-        </div> -->
-
-        <!-- Checkbox Filters -->
-        <div *ngIf="group.type === 'checkbox'" class="checkbox-options">
-          <label *ngFor="let option of group.options; trackBy: trackByFilterOption" class="checkbox-option">
-            <input
-              type="checkbox"
-              [checked]="isOptionSelected(group.name, option.value)"
-              (change)="toggleOption(group.name, option.value)"
-              class="checkbox-input" />
-            <span class="checkbox-label">{{ option.label }}</span>
-            <span class="option-count">({{ option.count }})</span>
-          </label>
         </div>
-      </div>
 
-      <div class="filter-group" *ngIf="!hasApiFilters">
-        <h4 class="filter-group-title">Types</h4>
-        <div class="radio-options">
-          <label *ngFor="let type of commonTypes" class="radio-option">
-            <input
-              type="radio"
-              name="productType"
-              [value]="type"
-              [checked]="currentFilters.types?.includes(type) || false"
-              (change)="toggleType(type)"
-              class="radio-input" />
-            <span class="radio-label">{{ type }}</span>
-          </label>
+        <!-- Dynamic Filter Groups -->
+        <div *ngFor="let group of availableFilters; trackBy: trackByFilterGroup" class="filter-group">
+          <h4 class="filter-group-title">{{ group.name }}</h4>
+
+          <!-- Color Filters -->
+          <div *ngIf="group.type === 'color'" class="color-options">
+            <div
+              *ngFor="let option of group.options; trackBy: trackByFilterOption"
+              class="color-option"
+              [class.selected]="isColorSelected(option.value)"
+              (click)="toggleColor(option.value)">
+              <div class="color-swatch" [style.background-color]="getColorValue(option.value)"></div>
+              <span class="color-label">{{ option.label }}</span>
+              <span class="option-count">({{ option.count }})</span>
+            </div>
+          </div>
+
+          <!-- Checkbox Filters -->
+          <div *ngIf="group.type === 'checkbox'" class="checkbox-options">
+            <label *ngFor="let option of group.options; trackBy: trackByFilterOption" class="checkbox-option">
+              <input
+                type="checkbox"
+                [checked]="isOptionSelected(group.name, option.value)"
+                (change)="toggleOption(group.name, option.value)"
+                class="checkbox-input" />
+              <span class="checkbox-label">{{ option.label }}</span>
+              <span class="option-count">({{ option.count }})</span>
+            </label>
+          </div>
         </div>
-      </div>
-      <!-- Manual Filter Groups (for cases where API doesn't provide facets) -->
-      <div class="filter-group" *ngIf="!hasApiFilters">
-        <h4 class="filter-group-title">Brands</h4>
-        <div class="checkbox-options">
-          <label *ngFor="let brand of commonCategoty" class="checkbox-option">
-            <input
-              type="checkbox"
-              [checked]="currentFilters.brands?.includes(brand) || false"
-              (change)="toggleCategory(brand)"
-              class="checkbox-input" />
-            <span class="checkbox-label">{{ brand }}</span>
-          </label>
+
+        <div class="filter-group" *ngIf="!hasApiFilters">
+          <h4 class="filter-group-title">Types</h4>
+          <div class="radio-options">
+            <label *ngFor="let type of commonTypes" class="radio-option">
+              <input
+                type="radio"
+                name="productType"
+                [value]="type"
+                [checked]="currentFilters.types?.includes(type) || false"
+                (change)="toggleType(type)"
+                class="radio-input" />
+              <span class="radio-label">{{ type }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Manual Filter Groups (for cases where API doesn't provide facets) -->
+        <div class="filter-group" *ngIf="!hasApiFilters">
+          <h4 class="filter-group-title">Brands</h4>
+          <div class="checkbox-options">
+            <label *ngFor="let brand of commonCategoty" class="checkbox-option">
+              <input
+                type="checkbox"
+                [checked]="currentFilters.brands?.includes(brand) || false"
+                (change)="toggleCategory(brand)"
+                class="checkbox-input" />
+              <span class="checkbox-label">{{ brand }}</span>
+            </label>
+          </div>
         </div>
       </div>
     </div>
   `,
   styles: [
     `
+      /* Mobile backdrop */
+      .mobile-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .mobile-backdrop.active {
+        opacity: 1;
+      }
+
       .filters-container {
+        position: relative;
+      }
+
+      .filters-content {
         background: white;
         border-radius: 8px;
         padding: 24px;
@@ -206,6 +233,10 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         width: 20px;
         height: 20px;
         stroke: #666;
+      }
+
+      .mobile-only {
+        display: none;
       }
 
       .active-filters {
@@ -366,6 +397,28 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         font-size: 14px;
       }
 
+      .radio-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 4px 0;
+      }
+
+      .radio-input {
+        margin: 0;
+      }
+
+      .radio-label {
+        font-size: 14px;
+      }
+
       .size-options {
         display: flex;
         flex-wrap: wrap;
@@ -394,6 +447,10 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
 
       /* Mobile Styles */
       @media (max-width: 768px) {
+        .mobile-backdrop {
+          display: block;
+        }
+
         .filters-container {
           position: fixed;
           top: 0;
@@ -401,14 +458,20 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
           right: 0;
           bottom: 0;
           z-index: 1000;
-          max-height: none;
-          border-radius: 0;
           transform: translateX(-100%);
           transition: transform 0.3s ease;
         }
 
         .filters-container.mobile-open {
           transform: translateX(0);
+        }
+
+        .filters-content {
+          height: 100vh;
+          max-height: 100vh;
+          border-radius: 0;
+          position: relative;
+          z-index: 1001;
         }
 
         .mobile-only {
@@ -449,8 +512,6 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
 
   // Fallback options when API doesn't provide facets
   public commonCategoty = ['Desktop processor', 'Mobile processor'];
-
-  public commonBrands = ['Nike', 'Adidas', 'Puma', 'Under Armour', 'Reebok', 'New Balance'];
   public commonTypes = ['Memory', 'CPU', 'Components'];
 
   constructor(

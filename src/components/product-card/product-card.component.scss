@@ -1,25 +1,24 @@
-// src/app/components/product-card/product-card.component.scss
-
 .product-card {
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   cursor: pointer;
-  text-decoration: none;
   color: inherit;
   height: 100%;
   position: relative;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 
     .product-card__image {
-      transform: scale(1.05);
+      transform: scale(1.08);
     }
 
     .product-card__overlay {
@@ -27,72 +26,68 @@
     }
 
     .product-card__button--primary {
-      background-color: #2563eb;
-      transform: translateY(-2px);
+      background-color: #1d4ed8;
+      transform: translateY(-1px);
     }
   }
 
   &:focus {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
+    outline: 2px solid #2563eb;
+    outline-offset: 4px;
   }
 
-  // Image container
+  // Image Section
   &__image-container {
     position: relative;
     width: 100%;
-    height: 240px;
+    height: 260px;
     overflow: hidden;
-    background-color: #f8fafc;
+    background-color: #f1f5f9;
   }
 
   &__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
   }
 
   &__overlay {
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.35));
+    border-bottom-left-radius: 12px;
     opacity: 0;
     transition: opacity 0.3s ease;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding: 12px;
   }
 
   &__discount-badge {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
+    background: #dc2626;
+    background: linear-gradient(135deg, #f87171, #dc2626);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
   }
 
-  // Content area
+  // Content Section
   &__content {
     padding: 20px;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
 
   &__name {
     font-size: 18px;
     font-weight: 600;
-    color: #1f2937;
-    margin: 0 0 8px 0;
+    color: #111827;
+    margin-bottom: 8px;
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -103,21 +98,20 @@
   &__description {
     font-size: 14px;
     color: #6b7280;
-    margin: 0 0 16px 0;
+    margin-bottom: 16px;
     line-height: 1.5;
-    flex-grow: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  // Price section
+  // Price Section
   &__price {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-top: auto;
   }
 
   &__price-current {
@@ -129,4 +123,43 @@
       color: #ef4444;
     }
   }
+
+  &__price-original {
+    font-size: 16px;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+
+  // Optional action button
+  &__button--primary {
+    margin-top: 16px;
+    padding: 10px 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      transform 0.2s ease;
+  }
+  &__button--primary:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+  }
 }
+.product-card__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+// .product-card__actions:hover {
+//   // cursor: pointer;
+//   cursor: pointer;
+// }
+// .product-card__button.product-card__button--primary:hover {
+//   background-color: #2563eb;
+//   transform: translateY(-1px);
+// }

@@ -101,22 +101,40 @@ export interface EnhancedProductResponse {
 }
 
 // Utility functions for price formatting
+// Add this to your product.model.ts file - Updated PriceFormatter class
+
 export class PriceFormatter {
-  public static formatPrice(centAmount: number, currencyCode: string, fractionDigits = TWO_DIGITS): string {
-    const CENTS = 10;
-    const amount = centAmount / Math.pow(CENTS, fractionDigits);
+  static formatPrice(centAmount: number, currencyCode: string, fractionDigits = 2): string {
+    const amount = centAmount / Math.pow(10, fractionDigits);
+
+    // Special formatting for Belarusian Ruble
+    if (currencyCode === 'BYN') {
+      return new Intl.NumberFormat('be-BY', {
+        style: 'currency',
+        currency: 'BYN',
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits,
+      }).format(amount);
+    }
+
+    // Default formatting for other currencies
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currencyCode,
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
     }).format(amount);
   }
 
-  public static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = TWO_DIGITS): PriceValue {
+  public static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = 2): PriceValue {
+    // Default to BYN if no currency provided
+    const currency = currencyCode || 'BYN';
+
     return {
       centAmount,
-      currencyCode,
+      currencyCode: currency,
       fractionDigits,
-      formatted: this.formatPrice(centAmount, currencyCode, fractionDigits),
+      formatted: this.formatPrice(centAmount, currency, fractionDigits),
     };
   }
 }

@@ -53,7 +53,7 @@ export class ProductService {
     let httpParams = new HttpParams();
 
     if (params.search) {
-      httpParams = httpParams.set('name.en-US', params.search);
+      httpParams = httpParams.set('text.en-US', params.search);
     }
 
     if (params.sort) {
