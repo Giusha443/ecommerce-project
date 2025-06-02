@@ -29,3 +29,6 @@ export function postalCodeValidator(keyCountry: string): ValidatorFn {
       : { postCodeValid: { incalidCode: true } };
   };
 }
+export function accessVerificationCustomer(scope: string): boolean {
+  return /customer_id:([a-f0-9-]+)/.test(scope);
+}

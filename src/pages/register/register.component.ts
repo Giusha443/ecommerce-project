@@ -17,7 +17,11 @@ import { minAgeValidator, postalCodeValidator } from '../../utils/utils';
 import { AuthService } from '../../services/auth.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-interface Country {
+import { formatDate } from '@angular/common';
+
+import { Inject, LOCALE_ID } from '@angular/core';
+
+export interface Country {
   code: string;
   name: string;
 }
@@ -26,6 +30,7 @@ interface CustomerData {
   password: string;
   firstName: string;
   lastName: string;
+  dateOfBirth: string;
   addresses: {
     country: string;
     city: string;
@@ -78,7 +83,8 @@ export class RegisterComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private storage: StorageService
+    private storage: StorageService,
+    @Inject(LOCALE_ID) public locale: string
   ) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.pattern(/^\p{L}*$/u)]],
@@ -129,11 +135,13 @@ export class RegisterComponent implements OnInit {
   }
   public onSubmit(): void {
     const formData = this.registerForm.value;
+
     const customerData: CustomerData = {
       email: formData.email,
       password: formData.password,
       firstName: formData.firstName,
       lastName: formData.lastName,
+      dateOfBirth: formatDate(formData.dateOfBirth, 'yyyy-MM-dd', this.locale),
       addresses: [
         {
           country: formData.country,
@@ -205,7 +213,7 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe(data => {
         this.storage.setTokens({ accessToken: data.access_token, refreshToken: data.refresh_token });
-        this.auth.isAuthenticatedPrivate$.next(true);
+        this.auth.isAuthenticated$.next(true);
         this.router.navigate(['']);
         this.showSuccess('Login successful (stubbed)!');
       });
