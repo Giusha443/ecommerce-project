@@ -36,6 +36,7 @@ export interface ProductResponse {
 }
 
 export type AddressType = Record<'id' | 'city' | 'country' | 'postalCode' | 'streetName', string>;
+
 export interface ProfileResponse {
   id: string;
   version: number;
@@ -66,6 +67,7 @@ export interface ProfileResponse {
 
 export interface ProductData {
   id: string;
+  key: string;
   categories: {
     id: string;
     typeId: string;
