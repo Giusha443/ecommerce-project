@@ -1,3 +1,5 @@
+import { Attribute } from '../models/product.model';
+
 export interface TokenResponse {
   access_token: string;
   expires_in: number;
@@ -33,7 +35,9 @@ export interface ProductResponse {
   }[];
 }
 
-interface ProductData {
+export interface ProductData {
+  id: string;
+  key: string;
   categories: {
     id: string;
     typeId: string;
@@ -47,7 +51,7 @@ interface ProductData {
 }
 
 interface ProductVariant {
-  attributes: unknown[];
+  attributes: Attribute[];
   id: number;
   images?: {
     dimensions: {

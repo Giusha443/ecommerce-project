@@ -1,10 +1,10 @@
 // src/app/services/product.service.ts
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, BehaviorSubject, map, catchError, of } from 'rxjs';
 import { environment } from '../environments/environment.development';
-import { ProductResponse } from './api-response.model';
+import { ProductData } from './api-response.model';
 import {
   ProductCard,
   ProductFilters,
@@ -14,6 +14,7 @@ import {
   ProductAttribute,
   FilterGroup,
   FilterOption,
+  Product,
 } from '../models/product.model';
 
 const categorYID = {
@@ -25,6 +26,8 @@ const productTypeID = {
   Memory: '34c47124-b50a-489f-85d3-f0455feb1da7',
   Components: '3fd8ee84-2a63-46cf-946b-7e2893e0728f',
 };
+const ITEMS_PER_PAGE = 20;
+const ONEHUNDRED = 100;
 @Injectable({
   providedIn: 'root',
 })
@@ -63,10 +66,9 @@ export class ProductService {
     }
     console.log('getProducts', params);
 
-    return this.http.get<any>(this.productsUrl, { params: httpParams }).pipe(
+    return this.http.get<unknown>(this.productsUrl, { params: httpParams }).pipe(
       map(response => {
         console.log(response);
-
         return this.transformResponse(response);
       }),
       catchError(error => {
@@ -77,16 +79,25 @@ export class ProductService {
     );
   }
 
-  public searchProducts(query: string, limit = 20): Observable<ProductCard[]> {
+  public searchProducts(query: string, limit = ITEMS_PER_PAGE): Observable<ProductCard[]> {
     console.log('searchProducts', query);
 
     return this.getProducts({ search: query, limit }).pipe(map(response => response.results));
   }
 
-  public getProductById(id: string): Observable<ProductCard | null> {
+  public checkProductProjectionExistById(id: string): Observable<boolean | HttpResponse<Response>> {
     const url = `${environment.apiUrl}/${environment.projectKey}/product-projections/${id}`;
-    return this.http.get<any>(url).pipe(
-      map(response => this.transformProduct(response)),
+    return this.http.head<Response>(url, { observe: 'response' }).pipe(
+      catchError(() => {
+        return of(false);
+      })
+    );
+  }
+
+  public getProductById(id: string): Observable<Product | null> {
+    const url = `${environment.apiUrl}/${environment.projectKey}/product-projections/${id}`;
+    return this.http.get<ProductData>(url).pipe(
+      map(response => this.transformDataToProduct(response)),
       catchError(error => {
         console.error('Error fetching product:', error);
         return of(null);
@@ -112,7 +123,7 @@ export class ProductService {
 
     if (filters.priceRange) {
       const { min, max } = filters.priceRange;
-      filterExpressions.push(`variants.price.centAmount:range(${min * 100} to ${max * 100})`);
+      filterExpressions.push(`variants.price.centAmount:range(${min * ONEHUNDRED} to ${max * ONEHUNDRED})`);
     }
 
     if (filters.brands && filters.brands.length > 0) {
@@ -198,6 +209,27 @@ export class ProductService {
       price,
       slug,
       attributes,
+    };
+  }
+
+  private transformDataToProduct(data: ProductData): Product {
+    const masterVariant = data.masterVariant;
+    const name = data.name?.['en-US'] || 'Unnamed product';
+    const description = data.description?.['en-US'] || 'no description given';
+
+    const images = masterVariant.images?.length ? masterVariant.images?.map(image => image.url) : [];
+    const price = this.transformPrice(masterVariant);
+    const attributes = masterVariant.attributes ? masterVariant.attributes : [];
+    const slug = data.slug?.['en-US'];
+
+    return {
+      id: data.id,
+      name,
+      description,
+      attributes,
+      slug,
+      price,
+      images,
     };
   }
 

@@ -3,7 +3,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ProductCard } from '../../models/product.model';
+import { ProductAttribute, ProductCard } from '../../models/product.model';
 
 const PRODUCT_DESCRIPTION_LENGTH_IN_CHARS = 80;
 @Component({
@@ -11,7 +11,7 @@ const PRODUCT_DESCRIPTION_LENGTH_IN_CHARS = 80;
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <article class="product-card" [routerLink]="['/product', product.slug]">
+    <article class="product-card" [routerLink]="['/product', product.id]">
       <div class="product-card__image-container">
         <img
           class="product-card__image"
@@ -41,7 +41,7 @@ const PRODUCT_DESCRIPTION_LENGTH_IN_CHARS = 80;
 
         <div class="product-card__attributes" *ngIf="getVisibleAttributes.length > 0">
           @for (attr of getVisibleAttributes; track $index) {
-            <span class="product-card__attribute" [class]="'product-card__attribute--' + attr.type">
+            <span [class]="'product-card__attribute--' + attr.type">
               {{ attr.name }}: {{ getAttributeDisplayValue(attr) }}
             </span>
           }
@@ -77,13 +77,13 @@ export class ProductCardComponent {
       : this.product.description;
   }
 
-  public get getVisibleAttributes(): any[] {
+  public get getVisibleAttributes(): ProductAttribute[] {
     return this.product.attributes
       .filter(attr => ['brand', 'color', 'size'].includes(attr.name.toLowerCase()))
-      .slice(0, 3);
+      .slice(0, 1 + 1 + 1);
   }
 
-  public getAttributeDisplayValue(attr: any): string {
+  public getAttributeDisplayValue(attr: ProductAttribute): string {
     if (Array.isArray(attr.value)) {
       return attr.value.join(', ');
     }

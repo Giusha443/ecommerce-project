@@ -1,4 +1,19 @@
 // src/app/models/product.model.ts
+const TWO_DIGITS = 2;
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  images: string[];
+  price: ProductPrice;
+  slug: string;
+  attributes: Attribute[];
+}
+
+export interface Attribute {
+  name: string;
+  value: string | number | { key: string; label: string };
+}
 
 export interface ProductCard {
   id: string;
@@ -87,15 +102,16 @@ export interface EnhancedProductResponse {
 
 // Utility functions for price formatting
 export class PriceFormatter {
-  static formatPrice(centAmount: number, currencyCode: string, fractionDigits = 2): string {
-    const amount = centAmount / Math.pow(10, fractionDigits);
+  public static formatPrice(centAmount: number, currencyCode: string, fractionDigits = TWO_DIGITS): string {
+    const CENTS = 10;
+    const amount = centAmount / Math.pow(CENTS, fractionDigits);
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currencyCode,
     }).format(amount);
   }
 
-  static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = 2): PriceValue {
+  public static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = TWO_DIGITS): PriceValue {
     return {
       centAmount,
       currencyCode,

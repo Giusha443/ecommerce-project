@@ -4,14 +4,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged, combineLatest } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { ProductService } from '../../services/product.service';
 import { FilterService } from '../../services/filter.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
-import { ProductCard, ProductFilters } from '../../models/product.model';
+import { ProductCard } from '../../models/product.model';
 
 const ITEMS_PER_PAGE = 10;
 const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
@@ -130,11 +130,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public onProductClick(product: ProductCard): void {
-    this.router.navigate(['/product', product.slug]);
+    this.router.navigate(['/product', product.id]);
   }
 
   public onViewDetails(product: ProductCard): void {
-    this.router.navigate(['/product', product.slug]);
+    this.router.navigate(['/product', product.id]);
   }
 
   public toggleFilters(): void {
