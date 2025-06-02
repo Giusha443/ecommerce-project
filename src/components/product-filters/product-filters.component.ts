@@ -22,7 +22,7 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
       <div class="filters-content">
         <!-- Filters Header -->
         <div class="filters-header">
-          <h3 class="filters-title">Filters</h3>
+          <!-- <h3 class="filters-title">Filters</h3> -->
           <div class="filters-actions">
             <span *ngIf="activeFiltersCount > 0" class="active-count"> {{ activeFiltersCount }} active </span>
             <button *ngIf="activeFiltersCount > 0" (click)="clearAllFilters()" class="clear-all-btn" type="button">
@@ -173,23 +173,15 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         height: fit-content;
         max-height: calc(100vh - 200px);
-        overflow-y: auto;
       }
 
       .filters-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #e1e5e9;
-      }
-
-      .filters-title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
+        // margin-bottom: 20px;
+        // padding-bottom: 16px;
+        // border-bottom: 1px solid #e1e5e9;
       }
 
       .filters-actions {
@@ -315,7 +307,7 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
 
       .price-input {
         width: 100%;
-        padding: 8px 12px;
+        padding: 8px 8px;
         border: 1px solid #e1e5e9;
         border-radius: 4px;
         font-size: 14px;

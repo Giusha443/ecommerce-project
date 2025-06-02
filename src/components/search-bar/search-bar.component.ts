@@ -137,7 +137,7 @@ const DEBOUNCE_DELAY = 300;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         z-index: 1000;
         max-height: 200px;
-        overflow-y: auto;
+        // overflow-y: auto;
       }
 
       .suggestion-item {
