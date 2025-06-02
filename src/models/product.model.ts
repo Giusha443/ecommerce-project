@@ -1,4 +1,19 @@
 // src/app/models/product.model.ts
+const TWO_DIGITS = 2;
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  images: string[];
+  price: ProductPrice;
+  slug: string;
+  attributes: Attribute[];
+}
+
+export interface Attribute {
+  name: string;
+  value: string | number | { key: string; label: string };
+}
 
 export interface ProductCard {
   id: string;
@@ -111,7 +126,7 @@ export class PriceFormatter {
     }).format(amount);
   }
 
-  static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = 2): PriceValue {
+  public static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = 2): PriceValue {
     // Default to BYN if no currency provided
     const currency = currencyCode || 'BYN';
 

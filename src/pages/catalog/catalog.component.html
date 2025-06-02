@@ -11,7 +11,7 @@
     <!-- Search Bar -->
     <div class="catalog__search">
       <app-search-bar [placeholder]="'Search products...'" [initialValue]="searchQuery"
-        (search)="onSearch($event)"></app-search-bar>
+        (searchQuerry)="onSearch($event)"></app-search-bar>
     </div>
   </header>
 
@@ -172,4 +172,5 @@
 </div>
 
 <!-- Mobile Filter Overlay -->
-<div class="catalog__overlay" [class.catalog__overlay--visible]="showFilters" (click)="toggleFilters()"></div>
+<div class="catalog__overlay" tabindex="0" (keyup.esc)="toggleFilters()" [class.catalog__overlay--visible]="showFilters"
+  (click)="toggleFilters()"></div>

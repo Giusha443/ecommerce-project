@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 
+const DEBOUNCE_DELAY = 300;
 @Component({
   selector: 'app-search-bar',
   standalone: true,
@@ -44,8 +45,10 @@ import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
       </div>
       <div *ngIf="showSuggestions && suggestions.length > 0" class="suggestions">
         <div
+          tabindex="0"
           *ngFor="let suggestion of suggestions; trackBy: trackBySuggestion"
           (click)="selectSuggestion(suggestion)"
+          (keyup.esc)="selectSuggestion(suggestion)"
           class="suggestion-item">
           {{ suggestion }}
         </div>
@@ -164,16 +167,14 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  @Input() placeholder = 'Search products...';
-  @Input() suggestions: string[] = [];
-  @Input() showSuggestions = false;
-  @Input() initialValue = ''; // Add this input property
-  @Output() search = new EventEmitter<string>();
-  @Output() clear = new EventEmitter<void>();
+  @Input() public placeholder = 'Search products...';
+  @Input() public suggestions: string[] = [];
+  @Input() public showSuggestions = false;
+  @Input() public initialValue = ''; // Add this input property
+  @Output() public searchQuerry = new EventEmitter<string>();
+  @Output() public clear = new EventEmitter<void>();
 
   public searchQuery = '';
-
-  constructor() {}
 
   public ngOnInit(): void {
     // Set initial value if provided
@@ -182,9 +183,11 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     }
 
     // Debounce search input
-    this.searchSubject.pipe(takeUntil(this.destroy$), debounceTime(300), distinctUntilChanged()).subscribe(query => {
-      this.search.emit(query);
-    });
+    this.searchSubject
+      .pipe(takeUntil(this.destroy$), debounceTime(DEBOUNCE_DELAY), distinctUntilChanged())
+      .subscribe(query => {
+        this.searchQuerry.emit(query);
+      });
   }
 
   public ngOnDestroy(): void {
@@ -198,13 +201,13 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
   public clearSearch(): void {
     this.searchQuery = '';
-    this.search.emit('');
+    this.searchQuerry.emit('');
     this.clear.emit();
   }
 
   public selectSuggestion(suggestion: string): void {
     this.searchQuery = suggestion;
-    this.search.emit(suggestion);
+    this.searchQuerry.emit(suggestion);
   }
 
   public trackBySuggestion(index: number, suggestion: string): string {

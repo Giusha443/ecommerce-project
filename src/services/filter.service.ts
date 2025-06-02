@@ -1,7 +1,7 @@
 // src/app/services/filter.service.ts
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ProductFilters } from '../models/product.model';
 
 @Injectable({
