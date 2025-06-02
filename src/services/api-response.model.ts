@@ -1,3 +1,5 @@
+import { Attribute } from '../models/product.model';
+
 export interface TokenResponse {
   access_token: string;
   expires_in: number;
@@ -32,6 +34,7 @@ export interface ProductResponse {
     lastModifiedAt: string;
   }[];
 }
+
 
 export type AddressType = Record<'id' | 'city' | 'country' | 'postalCode' | 'streetName', string>;
 export interface ProfileResponse {
@@ -76,7 +79,7 @@ interface ProductData {
 }
 
 interface ProductVariant {
-  attributes: unknown[];
+  attributes: Attribute[];
   id: number;
   images?: {
     dimensions: {

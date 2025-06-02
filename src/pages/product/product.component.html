@@ -1,0 +1,65 @@
+<main>
+  <h1 class='hidden'>Product page</h1>
+
+  <div class='product__breadcrumbs'>breadcrumbs > product > type?</div>
+
+  <section class="product">
+    <div class='product__images'>
+      <aside class='images__thumbs'>
+        @for (pic of productPictures; track $index) {
+        <div class="image__contaner" (click)="selectPicture($index)" (keyup.enter)="selectPicture($index)" tabindex="0">
+          <img class="image" [src]="pic" [alt]="productSlug" loading="lazy" />
+        </div>
+        }
+      </aside>
+      <div>
+        <img class="image__big" [src]="selectedPicture" [alt]="productSlug" loading="lazy" />
+      </div>
+    </div>
+    <div class="product__attributes">
+      <header class="product__header">
+        <h2 class="product__title">{{productName}}</h2>
+        <div class="price__container">
+          <p class="product__price-discounted">{{productPriceDiscounted}}</p>
+          <p class="product__price" [class.discounted]='hasDiscount'>{{productPrice}}</p>
+          <p class="product__price-divider"></p>
+          <p class="product__reviews">stars? (3 reviews)</p>
+        </div>
+        <div class="divider"></div>
+      </header>
+      <div class="product__stats">
+        @for (item of productAttributes; track $index) {
+        <div class='stats__item'>
+          <div class="product__attribute"> {{attributesMap.get(item.name)}}: </div>
+          @if (item.name === 'cpu-core-clock' || item.name === 'cpu-core-clock-boost') {
+          <div>{{item.value}} GHz</div>
+          }@else if (item.name === 'cpu-tdp') {
+          <div>{{item.value}} W</div>
+          } @else {
+          <div>{{item.value}}</div>
+          }
+        </div>
+        }
+      </div>
+      <div class="divider"></div>
+      <div class="product__buttons">
+        <button mat-button class="button count" type='button'>- 1 +</button>
+        <button mat-flat-button class="button add" type='button'>Add to Cart</button>
+      </div>
+      <button mat-button class="button buy" type='button'>Buy Now</button>
+    </div>
+  </section>
+  <article class="product__description">
+    <div class="description__title">
+      <h2>Description</h2>
+    </div>
+    <div class="description__text">{{productDescription}}</div>
+  </article>
+</main>
+
+<!-- @if (hasDiscount) {
+<div class="product-card__overlay">
+  <span class="product-card__discount-badge">Sale</span>
+</div>
+}
+<footer>{{id}}</footer> -->

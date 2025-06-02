@@ -1,8 +1,9 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, RedirectCommand, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+
 import { filter, map, skip, take, tap } from 'rxjs';
-import { StorageService } from '../services/storage.service';
+import { StorageService,ProductService } from '../services/storage.service';
 
 /**
  * Login guard to prevent authenticated users from accessing login page
@@ -38,15 +39,18 @@ export const loginGuard: CanActivateFn = () => {
  * Login guard to prevent authenticated users from accessing login page
  * Redirects to main page if user is already authenticated
  */
-export const loginGuardAlt: CanActivateFn = () => {
-  const authService = inject(AuthService);
+export const productGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const router = inject(Router);
-  return authService.isAuthenticated$.pipe(
-    skip(1),
-    tap(isAuthenticated => {
-      if (isAuthenticated) {
-        router.navigate(['main']);
+  const productService = inject(ProductService);
+  const id = route.paramMap.get('id');
+  return productService.checkProductProjectionExistById(id!).pipe(
+    map(can => {
+      if (can) {
+        return true;
       }
+      const targetOfCurrentNavigation = router.getCurrentNavigation()?.finalUrl;
+      const redirect = router.parseUrl('/notfound');
+      return new RedirectCommand(redirect, { browserUrl: targetOfCurrentNavigation });
     })
   );
 };

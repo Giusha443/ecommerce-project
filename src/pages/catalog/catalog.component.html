@@ -1,0 +1,176 @@
+<!-- src/app/pages/catalog/catalog.component.html -->
+
+<div class="catalog">
+  <!-- Header Section -->
+  <header class="catalog__header">
+    <div class="catalog__title-section">
+      <h1 class="catalog__title">Product Catalog</h1>
+      <p class="catalog__subtitle">Discover our amazing collection of products</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="catalog__search">
+      <app-search-bar [placeholder]="'Search products...'" [initialValue]="searchQuery"
+        (searchQuerry)="onSearch($event)"></app-search-bar>
+    </div>
+  </header>
+
+  <!-- Controls Section -->
+  <section class="catalog__controls">
+    <div class="catalog__controls-left">
+      <!-- Filter Toggle Button -->
+      <button class="catalog__filter-toggle" [class.catalog__filter-toggle--active]="showFilters"
+        (click)="toggleFilters()" type="button">
+        <svg class="catalog__filter-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+            clip-rule="evenodd" />
+        </svg>
+        Filters
+        <span class="catalog__filter-count" *ngIf="activeFiltersCount > 0">
+          {{ activeFiltersCount }}
+        </span>
+      </button>
+
+      <!-- Clear Filters Button -->
+      <button class="catalog__clear-filters" *ngIf="activeFiltersCount > 0" (click)="clearAllFilters()" type="button">
+        Clear All Filters
+      </button>
+    </div>
+
+    <div class="catalog__controls-right">
+      <!-- Results Count -->
+      <span class="catalog__results-count">
+        {{ getResultsText }}
+      </span>
+
+      <!-- Sort Dropdown -->
+      <div class="catalog__sort">
+        <label for="sort-select" class="catalog__sort-label">Sort by:</label>
+        <select id="sort-select" class="catalog__sort-select" [(ngModel)]="sortBy" (change)="onSortChange()">
+          @for (option of sortOptions; track $index) {
+          <option [value]="option.value">
+            {{ option.label }}
+          </option>
+          }
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="catalog__main">
+    <!-- Filters Sidebar -->
+    <aside class="catalog__filters" [class.catalog__filters--visible]="showFilters">
+      <div class="catalog__filters-header">
+        <h2 class="catalog__filters-title">Filters</h2>
+        <button class="catalog__filters-close" (click)="toggleFilters()" type="button" aria-label="Close filters">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="catalog__filters-content">
+        <app-product-filters></app-product-filters>
+      </div>
+    </aside>
+
+    <!-- Products Grid -->
+    <section class="catalog__products">
+      <!-- Loading State -->
+      <div class="catalog__loading" *ngIf="loading">
+        <div class="catalog__loading-spinner"></div>
+        <p class="catalog__loading-text">Loading products...</p>
+      </div>
+
+      <!-- No Results State -->
+      <div class="catalog__no-results" *ngIf="noResults && !loading">
+        <div class="catalog__no-results-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </div>
+        <h3 class="catalog__no-results-title">No products found</h3>
+        <p class="catalog__no-results-text">
+          Try adjusting your search terms or filters to find what you're looking for.
+        </p>
+        <button class="catalog__no-results-button" (click)="clearAllFilters()" type="button">Clear All Filters</button>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="catalog__products-grid" *ngIf="products.length > 0 && !loading">
+        <app-product-card *ngFor="let product of products; trackBy: trackByProductId" [product]="product"
+          (cardClick)="onProductClick($event)" (viewDetails)="onViewDetails($event)"></app-product-card>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="catalog__pagination" *ngIf="totalPages > 1 && !loading">
+        <div class="catalog__pagination-info">
+          <span class="catalog__pagination-text"> Page {{ currentPage }} of {{ totalPages }} </span>
+        </div>
+
+        <div class="catalog__pagination-controls">
+          <!-- Previous Button -->
+          <button class="catalog__pagination-button catalog__pagination-button--prev" [disabled]="currentPage === 1"
+            (click)="onPageChange(currentPage - 1)" type="button" aria-label="Previous page">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            Previous
+          </button>
+
+          <!-- Page Numbers -->
+          <div class="catalog__pagination-pages">
+            <!-- First page -->
+            <button *ngIf="currentPage > 3" class="catalog__pagination-page" (click)="onPageChange(1)" type="button">
+              1
+            </button>
+
+            <!-- Ellipsis -->
+            <span *ngIf="currentPage > 4" class="catalog__pagination-ellipsis">...</span>
+
+            <!-- Page numbers around current page -->
+            @for (page of getPaginationPages; track $index)
+            {
+            <button class="catalog__pagination-page" [class.catalog__pagination-page--current]="page === currentPage"
+              (click)="onPageChange(page)" type="button">
+              {{ page }}
+            </button>
+            }
+
+            <!-- Ellipsis -->
+            <span *ngIf="currentPage < totalPages - 3" class="catalog__pagination-ellipsis">...</span>
+
+            <!-- Last page -->
+            <button *ngIf="currentPage < totalPages - 2" class="catalog__pagination-page"
+              (click)="onPageChange(totalPages)" type="button">
+              {{ totalPages }}
+            </button>
+          </div>
+
+          <!-- Next Button -->
+          <button class="catalog__pagination-button catalog__pagination-button--next"
+            [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)" type="button"
+            aria-label="Next page">
+            Next
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </section>
+  </main>
+</div>
+
+<!-- Mobile Filter Overlay -->
+<div class="catalog__overlay" tabindex="0" (keyup.esc)="toggleFilters()" [class.catalog__overlay--visible]="showFilters"
+  (click)="toggleFilters()"></div>
