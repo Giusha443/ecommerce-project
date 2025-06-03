@@ -166,7 +166,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
     if (sort === 'name.en-US') {
       result += 'sort=name&';
     } else if (sort === 'createdAt') {
-      result += 'sort=create&';
+      result += 'sort=created&';
     } else {
       result += 'sort=price&';
     }
@@ -182,11 +182,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   public loadProducts(): void {
     const filters = this.filterService.getFilters();
-    const offset = (this.page ? this.page - 1 : this.currentPage - 1) * this.itemsPerPage;
+    const offset = (this.currentPage - 1) * this.itemsPerPage;
 
     // Enhanced sorting logic
     const sortParam = this.sortBy;
-    const urlString = this.parseFiltersToQueryString(filters.searchQuery, this.page, this.sortBy);
+    const urlString = this.parseFiltersToQueryString(filters.searchQuery, this.currentPage, this.sortBy);
 
     this.productService
       .getProducts({
