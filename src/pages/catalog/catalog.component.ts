@@ -162,7 +162,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public parseFiltersToQueryString(search: string | undefined, page: number | undefined, sortBy: string): string {
     let result = 'catalog?';
     const [sort, direction] = sortBy.split(' ');
-    result += `direction=${direction}`;
+    result += `direction=${direction}&`;
     if (sort === 'name.en-US') {
       result += 'sort=name&';
     } else if (sort === 'createdAt') {
