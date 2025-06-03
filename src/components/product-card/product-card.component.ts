@@ -4,12 +4,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProductAttribute, ProductCard } from '../../models/product.model';
+import { MatButton } from '@angular/material/button';
 
 const PRODUCT_DESCRIPTION_LENGTH_IN_CHARS = 80;
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MatButton],
   template: `
     <article class="product-card" [routerLink]="['/product', product.id]">
       <div class="product-card__image-container">
@@ -50,6 +51,7 @@ const PRODUCT_DESCRIPTION_LENGTH_IN_CHARS = 80;
 
       <div class="product-card__actions">
         <button
+          mat-flat-button
           class="product-card__button product-card__button--primary"
           (click)="onViewDetails($event)"
           type="button">

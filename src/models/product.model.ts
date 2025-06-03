@@ -1,5 +1,6 @@
 // src/app/models/product.model.ts
-const TWO_DIGITS = 2;
+export const TWO_DIGITS = 2;
+export const TEN = 10;
 export interface Product {
   id: string;
   name: string;
@@ -8,6 +9,11 @@ export interface Product {
   price: ProductPrice;
   slug: string;
   attributes: Attribute[];
+}
+
+export interface AttributeType {
+  name: string;
+  value: string;
 }
 
 export interface Attribute {
@@ -84,28 +90,31 @@ export interface EnhancedProductResponse {
   count: number;
   total: number;
   results: ProductCard[];
-  facets?: Record<
-    string,
-    {
-      type: string;
-      dataType: string;
-      missing: number;
-      total: number;
-      other: number;
-      terms: {
-        term: string;
-        count: number;
-      }[];
-    }
-  >;
+  facets?: Facets;
 }
 
+export type Facets = Record<
+  string,
+  {
+    type: string;
+    dataType: string;
+    missing: number;
+    total: number;
+    other: number;
+    terms: Term[];
+  }
+>;
+
+export interface Term {
+  term: string;
+  count: number;
+}
 // Utility functions for price formatting
 // Add this to your product.model.ts file - Updated PriceFormatter class
 
 export class PriceFormatter {
-  static formatPrice(centAmount: number, currencyCode: string, fractionDigits = 2): string {
-    const amount = centAmount / Math.pow(10, fractionDigits);
+  public static formatPrice(centAmount: number, currencyCode: string, fractionDigits = TWO_DIGITS): string {
+    const amount = centAmount / Math.pow(TEN, fractionDigits);
 
     // Special formatting for Belarusian Ruble
     if (currencyCode === 'BYN') {
@@ -126,7 +135,7 @@ export class PriceFormatter {
     }).format(amount);
   }
 
-  public static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = 2): PriceValue {
+  public static createPriceValue(centAmount: number, currencyCode: string, fractionDigits = TWO_DIGITS): PriceValue {
     // Default to BYN if no currency provided
     const currency = currencyCode || 'BYN';
 
