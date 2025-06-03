@@ -41,10 +41,12 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         <div *ngIf="activeFiltersList.length > 0" class="active-filters">
           <h4 class="active-filters-title">Active Filters:</h4>
           <div class="active-filters-list">
-            <span *ngFor="let filter of activeFiltersList" class="active-filter-tag">
-              {{ filter }}
-              <button (click)="removeActiveFilter(filter)" class="remove-filter-btn" type="button">×</button>
-            </span>
+            @for (filter of activeFiltersList; track $index) {
+              <span class="active-filter-tag">
+                {{ filter }}
+                <button (click)="removeActiveFilter(filter)" class="remove-filter-btn" type="button">×</button>
+              </span>
+            }
           </div>
         </div>
 

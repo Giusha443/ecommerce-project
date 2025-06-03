@@ -42,7 +42,7 @@ export class ProductService {
 
   private productsSubject = new BehaviorSubject<ProductCard[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  private totalSubject = new BehaviorSubject<number>(0);
+  public totalSubject = new BehaviorSubject<number>(0);
   private filtersSubject = new BehaviorSubject<FilterGroup[]>([]);
 
   public products$ = this.productsSubject.asObservable();
