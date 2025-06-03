@@ -13,7 +13,7 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
 import { ProductCard } from '../../models/product.model';
 
-const ITEMS_PER_PAGE = 10;
+export const ITEMS_PER_PAGE = 4;
 const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
 
 @Component({
@@ -37,6 +37,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public searchQuery = '';
   public activeFiltersCount = 0;
   public noResults = false;
+
+  // Items per page options
+  public perPageValues = [
+    { value: '2', label: '2' },
+    { value: '3', label: '3' },
+    { value: '4', label: '4' },
+    { value: '6', label: '6' },
+    { value: '8', label: '8' },
+    { value: '10', label: '10' },
+    { value: '20', label: '20' },
+  ];
 
   // Sort options
   public sortOptions = [
@@ -146,6 +157,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
     // Filter service subscription will handle the reload
   }
 
+  public onPerPageChange(): void {
+    this.resetToFirstPage();
+    this.loadProducts();
+  }
+
   public onSortChange(): void {
     console.log('Sort changed to:', this.sortBy);
     this.resetToFirstPage();
@@ -188,12 +204,15 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   // Enhanced pagination logic
   public get getPaginationPages(): number[] {
+    const maxNumber = 7;
+    const THREE = 3;
+    const FOUR = 4;
     const pages: number[] = [];
     const totalPages = this.totalPages;
     const currentPage = this.currentPage;
 
-    if (totalPages <= 7) {
-      // Show all pages if total is 7 or less
+    if (totalPages < maxNumber) {
+      // Show all pages if total is less then maxNumber
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
@@ -201,12 +220,12 @@ export class CatalogComponent implements OnInit, OnDestroy {
       // Always show first page
       pages.push(1);
 
-      if (currentPage > 4) {
-        pages.push(-1); // Ellipsis indicator
+      if (currentPage > FOUR) {
+        pages.push(0); // Ellipsis indicator
       }
 
       // Show pages around current page
-      const start = Math.max(2, currentPage - 1);
+      const start = Math.max(1 + 1, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
 
       for (let i = start; i <= end; i++) {
@@ -215,8 +234,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (currentPage < totalPages - 3) {
-        pages.push(-1); // Ellipsis indicator
+      if (currentPage <= totalPages - THREE) {
+        pages.push(0); // Ellipsis indicator
       }
 
       // Always show last page
@@ -224,7 +243,6 @@ export class CatalogComponent implements OnInit, OnDestroy {
         pages.push(totalPages);
       }
     }
-
     return pages;
   }
 
@@ -268,7 +286,9 @@ export class CatalogComponent implements OnInit, OnDestroy {
       this.onPageChange(this.currentPage + 1);
     }
   }
-
+  public infinite(value: number): boolean {
+    return !Number.isFinite(value);
+  }
   public get canGoToPrevious(): boolean {
     return this.currentPage > 1;
   }

@@ -16,7 +16,7 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
   template: `
     <div class="filters-container" [class.mobile-open]="isOpen">
       <!-- Mobile backdrop -->
-      <div class="mobile-backdrop" [class.active]="isOpen" (click)="closeFilters()"></div>
+      <!-- <div class="mobile-backdrop" [class.active]="isOpen" (click)="closeFilters()"></div> -->
 
       <!-- Filters content -->
       <div class="filters-content">
@@ -28,12 +28,12 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
             <button *ngIf="activeFiltersCount > 0" (click)="clearAllFilters()" class="clear-all-btn" type="button">
               Clear All
             </button>
-            <button class="close-btn mobile-only" (click)="closeFilters()" type="button">
+            <!-- <button class="close-btn mobile-only" (click)="closeFilters()" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
-            </button>
+            </button> -->
           </div>
         </div>
 
@@ -78,13 +78,15 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
           </div>
         </div>
 
-        <!-- Dynamic Filter Groups -->
+        <!-- UNUSED? Dynamic Filter Groups -->
         <div *ngFor="let group of availableFilters; trackBy: trackByFilterGroup" class="filter-group">
           <h4 class="filter-group-title">{{ group.name }}</h4>
 
           <!-- Color Filters -->
           <div *ngIf="group.type === 'color'" class="color-options">
             <div
+              tabindex="0"
+              (keyup.enter)="toggleColor(option.value)"
               *ngFor="let option of group.options; trackBy: trackByFilterOption"
               class="color-option"
               [class.selected]="isColorSelected(option.value)"
@@ -112,16 +114,18 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         <div class="filter-group" *ngIf="!hasApiFilters">
           <h4 class="filter-group-title">Types</h4>
           <div class="radio-options">
-            <label *ngFor="let type of commonTypes" class="radio-option">
-              <input
-                type="radio"
-                name="productType"
-                [value]="type"
-                [checked]="currentFilters.types?.includes(type) || false"
-                (change)="toggleType(type)"
-                class="radio-input" />
-              <span class="radio-label">{{ type }}</span>
-            </label>
+            @for (type of commonTypes; track $index) {
+              <label class="radio-option">
+                <input
+                  type="radio"
+                  name="productType"
+                  [value]="type"
+                  [checked]="currentFilters.types?.includes(type) || false"
+                  (change)="toggleType(type)"
+                  class="radio-input" />
+                <span class="radio-label">{{ type }}</span>
+              </label>
+            }
           </div>
         </div>
 
@@ -129,14 +133,16 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         <div class="filter-group" *ngIf="!hasApiFilters">
           <h4 class="filter-group-title">Brands</h4>
           <div class="checkbox-options">
-            <label *ngFor="let brand of commonCategoty" class="checkbox-option">
-              <input
-                type="checkbox"
-                [checked]="currentFilters.brands?.includes(brand) || false"
-                (change)="toggleCategory(brand)"
-                class="checkbox-input" />
-              <span class="checkbox-label">{{ brand }}</span>
-            </label>
+            @for (brand of commonCategoty; track $index) {
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  [checked]="currentFilters.brands?.includes(brand) || false"
+                  (change)="toggleCategory(brand)"
+                  class="checkbox-input" />
+                <span class="checkbox-label">{{ brand }}</span>
+              </label>
+            }
           </div>
         </div>
       </div>
@@ -172,7 +178,7 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         padding: 24px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         height: fit-content;
-        max-height: calc(100vh - 200px);
+        // max-height: calc(100vh - 200px);
       }
 
       .filters-header {
@@ -439,18 +445,18 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
 
       /* Mobile Styles */
       @media (max-width: 768px) {
-        .mobile-backdrop {
-          display: block;
-        }
+        // .mobile-backdrop {
+        //   display: block;
+        // }
 
         .filters-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 1000;
-          transform: translateX(-100%);
+          // position: fixed;
+          // top: 0;
+          // left: 0;
+          // right: 0;
+          // bottom: 0;
+          // z-index: 1000;
+          // transform: translateX(-100%);
           transition: transform 0.3s ease;
         }
 
@@ -480,8 +486,8 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
 export class ProductFiltersComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  @Input() isOpen = false;
-  @Output() close = new EventEmitter<void>();
+  @Input() public isOpen = false;
+  @Output() public closeEvent = new EventEmitter<void>();
 
   public currentFilters: ProductFilters = {
     priceRange: undefined,
@@ -493,8 +499,8 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   };
 
   public priceRange = {
-    min: null as number | null,
-    max: null as number | null,
+    min: 0,
+    max: 0,
   };
 
   public activeFiltersCount = 0;
@@ -549,15 +555,15 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
       this.priceRange.min = this.currentFilters.priceRange.min;
       this.priceRange.max = this.currentFilters.priceRange.max;
     } else {
-      this.priceRange.min = null;
-      this.priceRange.max = null;
+      this.priceRange.min = 0;
+      this.priceRange.max = 0;
     }
   }
 
   public updatePriceRange(): void {
     console.log('price', this.priceRange.min, this.priceRange.max);
 
-    if (this.priceRange.min !== null && this.priceRange.max !== null) {
+    if (this.priceRange.min !== 0 && this.priceRange.max !== 0) {
       if (this.priceRange.min <= this.priceRange.max) {
         this.filterService.setPriceRange(this.priceRange.min, this.priceRange.max);
       }
@@ -670,7 +676,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   }
 
   public closeFilters(): void {
-    this.close.emit();
+    this.closeEvent.emit();
   }
 
   public trackByFilterGroup(index: number, group: FilterGroup): string {

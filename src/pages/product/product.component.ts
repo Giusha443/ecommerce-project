@@ -50,7 +50,7 @@ export class ProductComponent implements OnInit {
     private title: Title,
     private productService: ProductService,
     private router: Router
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     this.productService.getProductById(this.id).subscribe(product => {

@@ -114,7 +114,7 @@ export class FilterService {
   }
 
   public addCategory(category: string): void {
-    const currentFilters = this.filtersSubject.value;
+    const currentFilters = this.filtersSubject.getValue();
     const categories = [...(currentFilters.categories || [])];
     if (!categories.includes(category)) {
       categories.push(category);
@@ -123,14 +123,15 @@ export class FilterService {
   }
 
   public removeCategory(category: string): void {
-    const currentFilters = this.filtersSubject.value;
+    const currentFilters = this.filtersSubject.getValue();
     const categories = (currentFilters.categories || []).filter(c => c !== category);
     this.updateFilters({ categories });
   }
 
   public toggleCategory(category: string): void {
-    const currentFilters = this.filtersSubject.value;
+    const currentFilters = this.filtersSubject.getValue();
     const categories = currentFilters.categories || [];
+    console.log('categories', categories);
 
     if (categories.includes(category)) {
       this.removeCategory(category);
@@ -149,7 +150,7 @@ export class FilterService {
   }
 
   public clearSpecificFilter(filterType: keyof ProductFilters): void {
-    const currentFilters = this.filtersSubject.value;
+    const currentFilters = this.filtersSubject.getValue();
     const newFilters = { ...currentFilters };
 
     switch (filterType) {
@@ -178,11 +179,11 @@ export class FilterService {
   }
 
   public hasActiveFilters(): boolean {
-    return this.activeFiltersCountSubject.value > 0;
+    return this.activeFiltersCountSubject.getValue() > 0;
   }
 
   public getActiveFiltersList(): string[] {
-    const filters = this.filtersSubject.value;
+    const filters = this.filtersSubject.getValue();
     const activeFilters: string[] = [];
 
     if (filters.priceRange) {
