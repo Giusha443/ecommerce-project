@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AppAddressEditDialogComponent } from './app-address-edit-dialog.component';
+import { AddressEditDialogComponent } from './app-address-edit-dialog.component';
 
 describe('AppAddressEditDialogComponent', () => {
-  let component: AppAddressEditDialogComponent;
-  let fixture: ComponentFixture<AppAddressEditDialogComponent>;
+  let component: AddressEditDialogComponent;
+  let fixture: ComponentFixture<AddressEditDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppAddressEditDialogComponent],
+      imports: [AddressEditDialogComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AppAddressEditDialogComponent);
+    fixture = TestBed.createComponent(AddressEditDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

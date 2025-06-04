@@ -52,8 +52,12 @@
 
       <!-- Items rep page selector Dropdown -->
       <div class="catalog__sort">
-        <label for="sort-select" class="catalog__sort-label">Per Page:</label>
-        <select id="sort-select" class="catalog__sort-select" [(ngModel)]="itemsPerPage" (change)="onPerPageChange()">
+        <label for="perpage-select" class="catalog__sort-label">Per Page:</label>
+        <select
+          id="perpage-select"
+          class="catalog__sort-select"
+          [(ngModel)]="itemsPerPage"
+          (change)="onPerPageChange()">
           @for (value of perPageValues; track $index) {
             <option [value]="value.value">
               {{ value.label }}

@@ -1,7 +1,7 @@
 // src/app/pages/catalog/catalog.component.ts
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, Input, numberAttribute } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -24,6 +24,11 @@ const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
   styleUrls: ['./catalog.component.scss'],
 })
 export class CatalogComponent implements OnInit, OnDestroy {
+  @Input({ transform: numberAttribute }) private page?: number;
+  @Input() private sort?: string;
+  @Input({ transform: numberAttribute }) private ipp?: number;
+  @Input() private direction?: string;
+  @Input() private search?: string;
   private destroy$ = new Subject<void>();
 
   public products: ProductCard[] = [];
@@ -62,11 +67,13 @@ export class CatalogComponent implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     private filterService: FilterService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   public ngOnInit(): void {
     this.initializeSubscriptions();
+    this.initialiseQuery();
     this.loadProducts();
   }
 
@@ -112,9 +119,65 @@ export class CatalogComponent implements OnInit, OnDestroy {
       )
       .subscribe(filters => {
         this.searchQuery = filters.searchQuery || '';
-        this.resetToFirstPage();
         this.loadProducts();
       });
+  }
+
+  public initialiseQuery(): void {
+    const sortParams = new Map([
+      ['nameasc', 'name.en-US asc'],
+      ['namedesc', 'name.en-US desc'],
+      ['priceasc', 'price asc'],
+      ['pricedesc', 'price desc'],
+      ['createdasc', 'createdAt asc'],
+      ['createddesc', 'createdAt desc'],
+    ]);
+
+    if (this.page) {
+      if (this.page > this.totalPages && this.totalPages > 0) {
+        this.router.navigate(['/notfound'], { skipLocationChange: true });
+      }
+      this.currentPage = this.page;
+    } else {
+      this.resetToFirstPage();
+    }
+
+    if (this.sort && this.direction) {
+      const sortstring = sortParams.get(this.sort + this.direction);
+      if (sortstring) {
+        this.sortBy = sortstring;
+      }
+    }
+
+    if (this.ipp) {
+      this.itemsPerPage = this.ipp;
+    }
+
+    if (this.search) {
+      this.searchQuery = this.search;
+      this.filterService.updateFilters({ searchQuery: this.searchQuery });
+    }
+  }
+
+  public parseFiltersToQueryString(search: string | undefined, page: number | undefined, sortBy: string): string {
+    let result = 'catalog?';
+    const [sort, direction] = sortBy.split(' ');
+    result += `direction=${direction}&`;
+    if (sort === 'name.en-US') {
+      result += 'sort=name&';
+    } else if (sort === 'createdAt') {
+      result += 'sort=created&';
+    } else {
+      result += 'sort=price&';
+    }
+    if (search) {
+      result += `search=${search}&`;
+    }
+    if (page) {
+      result += `page=${page}&`;
+    }
+    result += `ipp=${this.itemsPerPage}`;
+    return result;
   }
 
   public loadProducts(): void {
@@ -122,14 +185,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
     const offset = (this.currentPage - 1) * this.itemsPerPage;
 
     // Enhanced sorting logic
-    let sortParam = this.sortBy;
-
-    // Adjust sort parameter format based on your API requirements
-    if (this.sortBy === 'price desc') {
-      sortParam = 'price desc';
-    } else if (this.sortBy === 'price asc') {
-      sortParam = 'price asc';
-    }
+    const sortParam = this.sortBy;
+    const urlString = this.parseFiltersToQueryString(filters.searchQuery, this.currentPage, this.sortBy);
 
     this.productService
       .getProducts({
@@ -143,6 +200,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           // Success handling if needed
+          this.location.replaceState(urlString);
         },
         error: error => {
           console.error('Error loading products:', error);
@@ -169,6 +227,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public onPageChange(page: number): void {
+    this.page = undefined;
     if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
       this.currentPage = page;
       this.loadProducts();
@@ -286,9 +345,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
       this.onPageChange(this.currentPage + 1);
     }
   }
-  public infinite(value: number): boolean {
-    return !Number.isFinite(value);
-  }
+
   public get canGoToPrevious(): boolean {
     return this.currentPage > 1;
   }
