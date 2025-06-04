@@ -5,6 +5,8 @@ import { ProductService } from '../../services/product.service';
 import { Attribute, Product } from '../../models/product.model';
 import { Router } from '@angular/router';
 import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalImagesComponent } from '../../components/modal-images/modal-images.component';
 
 @Component({
   selector: 'app-product',
@@ -49,7 +51,8 @@ export class ProductComponent implements OnInit {
   constructor(
     private title: Title,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   public ngOnInit(): void {
@@ -62,6 +65,16 @@ export class ProductComponent implements OnInit {
         this.hasDiscount = this.product().price.hasDiscount;
         this.productSlug = this.product().slug;
       }
+    });
+  }
+  public openModal(): void {
+    const dialogRef = this.dialog.open(ModalImagesComponent, {
+      data: { images: this.product().images },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
     });
   }
 
