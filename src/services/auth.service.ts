@@ -78,6 +78,17 @@ export class AuthService {
       })
     );
   }
+  public changePasswordWithLogin(email: string, password: string): Observable<TokenResponse> {
+    return this.api.getCustomerToken({ email, password }).pipe(
+      tap(response => {
+        this.store.setTokens({
+          accessToken: response.access_token,
+          refreshToken: response.refresh_token || '',
+        });
+        this.isAuthenticated$.next(true);
+      })
+    );
+  }
 
   public checkLoginStatus(): boolean {
     try {
