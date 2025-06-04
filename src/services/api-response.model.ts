@@ -13,26 +13,21 @@ export interface ProductResponse {
   offset: number;
   count: number;
   total: number;
-  results: {
-    id: string;
-    masterData: {
-      current: ProductData;
-      hasStagedChanges: boolean;
-      published: boolean;
-      staged: ProductData;
-    };
-    productType: {
-      id: string;
-      typeId: string;
-    };
-    taxCategory?: {
-      id: string;
-      typeId: string;
-    };
-    version: number;
-    createdAt: string;
-    lastModifiedAt: string;
-  }[];
+  results: ProductData[];
+  facets?: Record<
+    string,
+    {
+      type: string;
+      dataType: string;
+      missing: number;
+      total: number;
+      other: number;
+      terms: {
+        term: string;
+        count: number;
+      }[];
+    }
+  >;
 }
 
 export type AddressType = Record<'id' | 'city' | 'country' | 'postalCode' | 'streetName', string>;
@@ -77,10 +72,10 @@ export interface ProductData {
   name: Record<string, string>;
   slug: Record<string, string>;
   variants: ProductVariant[];
-  searchKeywords: Record<string, unknown>;
+  searchKeywords?: Record<string, unknown>;
 }
 
-interface ProductVariant {
+export interface ProductVariant {
   attributes: Attribute[];
   id: number;
   images?: {
@@ -98,6 +93,14 @@ interface ProductVariant {
       currencyCode: string;
     };
     id: string;
+    discounted: {
+      value: {
+        type: string;
+        fractionDigits: number;
+        centAmount: number;
+        currencyCode: string;
+      };
+    };
   }[];
   sku?: string;
 }

@@ -1,7 +1,7 @@
 // src/app/pages/catalog/catalog.component.ts
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, Input, numberAttribute } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -13,7 +13,7 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
 import { ProductCard } from '../../models/product.model';
 
-const ITEMS_PER_PAGE = 10;
+export const ITEMS_PER_PAGE = 4;
 const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
 
 @Component({
@@ -24,6 +24,11 @@ const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
   styleUrls: ['./catalog.component.scss'],
 })
 export class CatalogComponent implements OnInit, OnDestroy {
+  @Input({ transform: numberAttribute }) private page?: number;
+  @Input() private sort?: string;
+  @Input({ transform: numberAttribute }) private ipp?: number;
+  @Input() private direction?: string;
+  @Input() private search?: string;
   private destroy$ = new Subject<void>();
 
   public products: ProductCard[] = [];
@@ -38,6 +43,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public activeFiltersCount = 0;
   public noResults = false;
 
+  // Items per page options
+  public perPageValues = [
+    { value: '2', label: '2' },
+    { value: '3', label: '3' },
+    { value: '4', label: '4' },
+    { value: '6', label: '6' },
+    { value: '8', label: '8' },
+    { value: '10', label: '10' },
+    { value: '20', label: '20' },
+  ];
+
   // Sort options
   public sortOptions = [
     { value: 'name.en-US asc', label: 'Name A-Z' },
@@ -51,11 +67,13 @@ export class CatalogComponent implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     private filterService: FilterService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   public ngOnInit(): void {
     this.initializeSubscriptions();
+    this.initialiseQuery();
     this.loadProducts();
   }
 
@@ -101,9 +119,65 @@ export class CatalogComponent implements OnInit, OnDestroy {
       )
       .subscribe(filters => {
         this.searchQuery = filters.searchQuery || '';
-        this.resetToFirstPage();
         this.loadProducts();
       });
+  }
+
+  public initialiseQuery(): void {
+    const sortParams = new Map([
+      ['nameasc', 'name.en-US asc'],
+      ['namedesc', 'name.en-US desc'],
+      ['priceasc', 'price asc'],
+      ['pricedesc', 'price desc'],
+      ['createdasc', 'createdAt asc'],
+      ['createddesc', 'createdAt desc'],
+    ]);
+
+    if (this.page) {
+      if (this.page > this.totalPages && this.totalPages > 0) {
+        this.router.navigate(['/notfound'], { skipLocationChange: true });
+      }
+      this.currentPage = this.page;
+    } else {
+      this.resetToFirstPage();
+    }
+
+    if (this.sort && this.direction) {
+      const sortstring = sortParams.get(this.sort + this.direction);
+      if (sortstring) {
+        this.sortBy = sortstring;
+      }
+    }
+
+    if (this.ipp) {
+      this.itemsPerPage = this.ipp;
+    }
+
+    if (this.search) {
+      this.searchQuery = this.search;
+      this.filterService.updateFilters({ searchQuery: this.searchQuery });
+    }
+  }
+
+  public parseFiltersToQueryString(search: string | undefined, page: number | undefined, sortBy: string): string {
+    let result = 'catalog?';
+    const [sort, direction] = sortBy.split(' ');
+    result += `direction=${direction}&`;
+    if (sort === 'name.en-US') {
+      result += 'sort=name&';
+    } else if (sort === 'createdAt') {
+      result += 'sort=created&';
+    } else {
+      result += 'sort=price&';
+    }
+    if (search) {
+      result += `search=${search}&`;
+    }
+    if (page) {
+      result += `page=${page}&`;
+    }
+    result += `ipp=${this.itemsPerPage}`;
+    return result;
   }
 
   public loadProducts(): void {
@@ -111,14 +185,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
     const offset = (this.currentPage - 1) * this.itemsPerPage;
 
     // Enhanced sorting logic
-    let sortParam = this.sortBy;
-
-    // Adjust sort parameter format based on your API requirements
-    if (this.sortBy === 'price desc') {
-      sortParam = 'price desc';
-    } else if (this.sortBy === 'price asc') {
-      sortParam = 'price asc';
-    }
+    const sortParam = this.sortBy;
+    const urlString = this.parseFiltersToQueryString(filters.searchQuery, this.currentPage, this.sortBy);
 
     this.productService
       .getProducts({
@@ -132,6 +200,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           // Success handling if needed
+          this.location.replaceState(urlString);
         },
         error: error => {
           console.error('Error loading products:', error);
@@ -146,6 +215,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
     // Filter service subscription will handle the reload
   }
 
+  public onPerPageChange(): void {
+    this.resetToFirstPage();
+    this.loadProducts();
+  }
+
   public onSortChange(): void {
     console.log('Sort changed to:', this.sortBy);
     this.resetToFirstPage();
@@ -153,6 +227,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public onPageChange(page: number): void {
+    this.page = undefined;
     if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
       this.currentPage = page;
       this.loadProducts();
@@ -188,12 +263,15 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   // Enhanced pagination logic
   public get getPaginationPages(): number[] {
+    const maxNumber = 7;
+    const THREE = 3;
+    const FOUR = 4;
     const pages: number[] = [];
     const totalPages = this.totalPages;
     const currentPage = this.currentPage;
 
-    if (totalPages <= 7) {
-      // Show all pages if total is 7 or less
+    if (totalPages < maxNumber) {
+      // Show all pages if total is less then maxNumber
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
@@ -201,12 +279,12 @@ export class CatalogComponent implements OnInit, OnDestroy {
       // Always show first page
       pages.push(1);
 
-      if (currentPage > 4) {
-        pages.push(-1); // Ellipsis indicator
+      if (currentPage > FOUR) {
+        pages.push(0); // Ellipsis indicator
       }
 
       // Show pages around current page
-      const start = Math.max(2, currentPage - 1);
+      const start = Math.max(1 + 1, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
 
       for (let i = start; i <= end; i++) {
@@ -215,8 +293,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (currentPage < totalPages - 3) {
-        pages.push(-1); // Ellipsis indicator
+      if (currentPage <= totalPages - THREE) {
+        pages.push(0); // Ellipsis indicator
       }
 
       // Always show last page
@@ -224,7 +302,6 @@ export class CatalogComponent implements OnInit, OnDestroy {
         pages.push(totalPages);
       }
     }
-
     return pages;
   }
 

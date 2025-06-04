@@ -155,10 +155,19 @@
   }
 }
 
-.success-snackbar {
-  background-color: #2e7d32;
-}
-
 .error-snackbar {
-  background-color: #c62828;
+  @include mat.snack-bar-overrides(
+    (
+      button-color: rgb(255, 255, 255),
+      container-color: red,
+    )
+  );
+}
+.success-snackbar {
+  @include mat.snack-bar-overrides(
+    (
+      button-color: rgb(255, 255, 255),
+      container-color: #2e7d32,
+    )
+  );
 }

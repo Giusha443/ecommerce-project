@@ -67,6 +67,7 @@
 
     @media (max-width: 768px) {
       justify-content: space-between;
+      flex-wrap: wrap;
     }
   }
 
@@ -196,7 +197,7 @@
       z-index: 1000;
       transform: translateX(-100%);
       transition: transform 0.3s ease;
-      overflow-y: auto;
+      // overflow-y: auto;
       border-radius: 0;
 
       &--visible {
@@ -475,6 +476,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -492,6 +494,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

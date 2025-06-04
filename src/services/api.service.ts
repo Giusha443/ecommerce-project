@@ -111,14 +111,9 @@ export class ApiService {
     currentPassword: string;
     newPassword: string;
   }): Observable<ProfileResponse | null> {
-    return this.http
-      .post<ProfileResponse>(this.changePasswordProfileUrl, params, { headers: { 'Content-Type': 'application/json' } })
-      .pipe(
-        catchError(error => {
-          console.error('Update user error:', error);
-          return of(null);
-        })
-      );
+    return this.http.post<ProfileResponse>(this.changePasswordProfileUrl, params, {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
   public setDefaultAddress(
     customerId: string,

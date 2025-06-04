@@ -16,24 +16,24 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
   template: `
     <div class="filters-container" [class.mobile-open]="isOpen">
       <!-- Mobile backdrop -->
-      <div class="mobile-backdrop" [class.active]="isOpen" (click)="closeFilters()"></div>
+      <!-- <div class="mobile-backdrop" [class.active]="isOpen" (click)="closeFilters()"></div> -->
 
       <!-- Filters content -->
       <div class="filters-content">
         <!-- Filters Header -->
         <div class="filters-header">
-          <h3 class="filters-title">Filters</h3>
+          <!-- <h3 class="filters-title">Filters</h3> -->
           <div class="filters-actions">
             <span *ngIf="activeFiltersCount > 0" class="active-count"> {{ activeFiltersCount }} active </span>
             <button *ngIf="activeFiltersCount > 0" (click)="clearAllFilters()" class="clear-all-btn" type="button">
               Clear All
             </button>
-            <button class="close-btn mobile-only" (click)="closeFilters()" type="button">
+            <!-- <button class="close-btn mobile-only" (click)="closeFilters()" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
-            </button>
+            </button> -->
           </div>
         </div>
 
@@ -41,10 +41,12 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         <div *ngIf="activeFiltersList.length > 0" class="active-filters">
           <h4 class="active-filters-title">Active Filters:</h4>
           <div class="active-filters-list">
-            <span *ngFor="let filter of activeFiltersList" class="active-filter-tag">
-              {{ filter }}
-              <button (click)="removeActiveFilter(filter)" class="remove-filter-btn" type="button">×</button>
-            </span>
+            @for (filter of activeFiltersList; track $index) {
+              <span class="active-filter-tag">
+                {{ filter }}
+                <button (click)="removeActiveFilter(filter)" class="remove-filter-btn" type="button">×</button>
+              </span>
+            }
           </div>
         </div>
 
@@ -78,13 +80,15 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
           </div>
         </div>
 
-        <!-- Dynamic Filter Groups -->
+        <!-- UNUSED? Dynamic Filter Groups -->
         <div *ngFor="let group of availableFilters; trackBy: trackByFilterGroup" class="filter-group">
           <h4 class="filter-group-title">{{ group.name }}</h4>
 
           <!-- Color Filters -->
           <div *ngIf="group.type === 'color'" class="color-options">
             <div
+              tabindex="0"
+              (keyup.enter)="toggleColor(option.value)"
               *ngFor="let option of group.options; trackBy: trackByFilterOption"
               class="color-option"
               [class.selected]="isColorSelected(option.value)"
@@ -112,16 +116,18 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         <div class="filter-group" *ngIf="!hasApiFilters">
           <h4 class="filter-group-title">Types</h4>
           <div class="radio-options">
-            <label *ngFor="let type of commonTypes" class="radio-option">
-              <input
-                type="radio"
-                name="productType"
-                [value]="type"
-                [checked]="currentFilters.types?.includes(type) || false"
-                (change)="toggleType(type)"
-                class="radio-input" />
-              <span class="radio-label">{{ type }}</span>
-            </label>
+            @for (type of commonTypes; track $index) {
+              <label class="radio-option">
+                <input
+                  type="radio"
+                  name="productType"
+                  [value]="type"
+                  [checked]="currentFilters.types?.includes(type) || false"
+                  (change)="toggleType(type)"
+                  class="radio-input" />
+                <span class="radio-label">{{ type }}</span>
+              </label>
+            }
           </div>
         </div>
 
@@ -129,14 +135,16 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         <div class="filter-group" *ngIf="!hasApiFilters">
           <h4 class="filter-group-title">Brands</h4>
           <div class="checkbox-options">
-            <label *ngFor="let brand of commonCategoty" class="checkbox-option">
-              <input
-                type="checkbox"
-                [checked]="currentFilters.brands?.includes(brand) || false"
-                (change)="toggleCategory(brand)"
-                class="checkbox-input" />
-              <span class="checkbox-label">{{ brand }}</span>
-            </label>
+            @for (brand of commonCategoty; track $index) {
+              <label class="checkbox-option">
+                <input
+                  type="checkbox"
+                  [checked]="currentFilters.brands?.includes(brand) || false"
+                  (change)="toggleCategory(brand)"
+                  class="checkbox-input" />
+                <span class="checkbox-label">{{ brand }}</span>
+              </label>
+            }
           </div>
         </div>
       </div>
@@ -172,24 +180,16 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         padding: 24px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         height: fit-content;
-        max-height: calc(100vh - 200px);
-        overflow-y: auto;
+        // max-height: calc(100vh - 200px);
       }
 
       .filters-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #e1e5e9;
-      }
-
-      .filters-title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
+        // margin-bottom: 20px;
+        // padding-bottom: 16px;
+        // border-bottom: 1px solid #e1e5e9;
       }
 
       .filters-actions {
@@ -315,7 +315,7 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
 
       .price-input {
         width: 100%;
-        padding: 8px 12px;
+        padding: 8px 8px;
         border: 1px solid #e1e5e9;
         border-radius: 4px;
         font-size: 14px;
@@ -447,18 +447,18 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
 
       /* Mobile Styles */
       @media (max-width: 768px) {
-        .mobile-backdrop {
-          display: block;
-        }
+        // .mobile-backdrop {
+        //   display: block;
+        // }
 
         .filters-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 1000;
-          transform: translateX(-100%);
+          // position: fixed;
+          // top: 0;
+          // left: 0;
+          // right: 0;
+          // bottom: 0;
+          // z-index: 1000;
+          // transform: translateX(-100%);
           transition: transform 0.3s ease;
         }
 
@@ -488,8 +488,8 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
 export class ProductFiltersComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  @Input() isOpen = false;
-  @Output() close = new EventEmitter<void>();
+  @Input() public isOpen = false;
+  @Output() public closeEvent = new EventEmitter<void>();
 
   public currentFilters: ProductFilters = {
     priceRange: undefined,
@@ -678,7 +678,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   }
 
   public closeFilters(): void {
-    this.close.emit();
+    this.closeEvent.emit();
   }
 
   public trackByFilterGroup(index: number, group: FilterGroup): string {

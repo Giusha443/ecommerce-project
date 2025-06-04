@@ -29,9 +29,9 @@
           type="date"
           min="1900-01-01"
           max="2025-12-31"
-          [matDatepicker]="picker" />
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+           />
+        <!-- <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker> -->
         <mat-error *ngIf="dateOfBirthRequiredError">Day of birth is required.</mat-error>
         <mat-error *ngIf="dateOfBirthMinAgeError">You must be over 13 years old.</mat-error>
       </mat-form-field>

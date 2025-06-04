@@ -20,6 +20,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
+import { StorageService } from '../../services/storage.service';
 const MIN_LENGTH_VALIDATE_PASSWORD = 8;
 
 @Component({
@@ -50,6 +52,8 @@ export class PasswordChangeDialogComponent {
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
+    private auth: AuthService,
+    private storage: StorageService,
     public dialogRef: MatDialogRef<AddressEditDialogComponent>,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: { user: ProfileResponse }
@@ -83,7 +87,10 @@ export class PasswordChangeDialogComponent {
         )
         .subscribe(() => {
           this.showSuccess('Password changed');
-          this.dialogRef.close(true);
+          this.auth.changePasswordWithLogin(this.data.user?.email || '', passwordData.newPassword).subscribe({
+            next: () => this.dialogRef.close(true),
+            error: () => this.showError('Token refresh failed'),
+          });
         });
     }
   }
