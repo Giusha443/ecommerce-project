@@ -10,7 +10,9 @@
 
     <!-- Search Bar -->
     <div class="catalog__search">
-      <app-search-bar [placeholder]="'Search products...'" [initialValue]="searchQuery"
+      <app-search-bar
+        [placeholder]="'Search products...'"
+        [initialValue]="searchQuery"
         (searchQuerry)="onSearch($event)"></app-search-bar>
     </div>
   </header>
@@ -19,10 +21,14 @@
   <section class="catalog__controls">
     <div class="catalog__controls-left">
       <!-- Filter Toggle Button -->
-      <button class="catalog__filter-toggle" [class.catalog__filter-toggle--active]="showFilters"
-        (click)="toggleFilters()" type="button">
+      <button
+        class="catalog__filter-toggle"
+        [class.catalog__filter-toggle--active]="showFilters"
+        (click)="toggleFilters()"
+        type="button">
         <svg class="catalog__filter-icon" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd"
+          <path
+            fill-rule="evenodd"
             d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
             clip-rule="evenodd" />
         </svg>
@@ -49,9 +55,9 @@
         <label for="sort-select" class="catalog__sort-label">Sort by:</label>
         <select id="sort-select" class="catalog__sort-select" [(ngModel)]="sortBy" (change)="onSortChange()">
           @for (option of sortOptions; track $index) {
-          <option [value]="option.value">
-            {{ option.label }}
-          </option>
+            <option [value]="option.value">
+              {{ option.label }}
+            </option>
           }
         </select>
       </div>
@@ -66,7 +72,8 @@
         <h2 class="catalog__filters-title">Filters</h2>
         <button class="catalog__filters-close" (click)="toggleFilters()" type="button" aria-label="Close filters">
           <svg viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
+            <path
+              fill-rule="evenodd"
               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
               clip-rule="evenodd" />
           </svg>
@@ -103,8 +110,11 @@
 
       <!-- Products Grid -->
       <div class="catalog__products-grid" *ngIf="products.length > 0 && !loading">
-        <app-product-card *ngFor="let product of products; trackBy: trackByProductId" [product]="product"
-          (cardClick)="onProductClick($event)" (viewDetails)="onViewDetails($event)"></app-product-card>
+        <app-product-card
+          *ngFor="let product of products; trackBy: trackByProductId"
+          [product]="product"
+          (cardClick)="onProductClick($event)"
+          (viewDetails)="onViewDetails($event)"></app-product-card>
       </div>
 
       <!-- Pagination -->
@@ -115,10 +125,15 @@
 
         <div class="catalog__pagination-controls">
           <!-- Previous Button -->
-          <button class="catalog__pagination-button catalog__pagination-button--prev" [disabled]="currentPage === 1"
-            (click)="onPageChange(currentPage - 1)" type="button" aria-label="Previous page">
+          <button
+            class="catalog__pagination-button catalog__pagination-button--prev"
+            [disabled]="currentPage === 1"
+            (click)="onPageChange(currentPage - 1)"
+            type="button"
+            aria-label="Previous page">
             <svg viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
+              <path
+                fill-rule="evenodd"
                 d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                 clip-rule="evenodd" />
             </svg>
@@ -136,31 +151,40 @@
             <span *ngIf="currentPage > 4" class="catalog__pagination-ellipsis">...</span>
 
             <!-- Page numbers around current page -->
-            @for (page of getPaginationPages; track $index)
-            {
-            <button class="catalog__pagination-page" [class.catalog__pagination-page--current]="page === currentPage"
-              (click)="onPageChange(page)" type="button">
-              {{ page }}
-            </button>
+            @for (page of getPaginationPages; track $index) {
+              <button
+                class="catalog__pagination-page"
+                [class.catalog__pagination-page--current]="page === currentPage"
+                (click)="onPageChange(page)"
+                type="button">
+                {{ page }}
+              </button>
             }
 
             <!-- Ellipsis -->
             <span *ngIf="currentPage < totalPages - 3" class="catalog__pagination-ellipsis">...</span>
 
             <!-- Last page -->
-            <button *ngIf="currentPage < totalPages - 2" class="catalog__pagination-page"
-              (click)="onPageChange(totalPages)" type="button">
+            <button
+              *ngIf="currentPage < totalPages - 2"
+              class="catalog__pagination-page"
+              (click)="onPageChange(totalPages)"
+              type="button">
               {{ totalPages }}
             </button>
           </div>
 
           <!-- Next Button -->
-          <button class="catalog__pagination-button catalog__pagination-button--next"
-            [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)" type="button"
+          <button
+            class="catalog__pagination-button catalog__pagination-button--next"
+            [disabled]="currentPage === totalPages"
+            (click)="onPageChange(currentPage + 1)"
+            type="button"
             aria-label="Next page">
             Next
             <svg viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
+              <path
+                fill-rule="evenodd"
                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                 clip-rule="evenodd" />
             </svg>
@@ -172,5 +196,9 @@
 </div>
 
 <!-- Mobile Filter Overlay -->
-<div class="catalog__overlay" tabindex="0" (keyup.esc)="toggleFilters()" [class.catalog__overlay--visible]="showFilters"
+<div
+  class="catalog__overlay"
+  tabindex="0"
+  (keyup.esc)="toggleFilters()"
+  [class.catalog__overlay--visible]="showFilters"
   (click)="toggleFilters()"></div>

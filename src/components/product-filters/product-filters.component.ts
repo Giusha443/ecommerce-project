@@ -180,7 +180,7 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         padding-bottom: 16px;
         border-bottom: 1px solid #e1e5e9;
       }
