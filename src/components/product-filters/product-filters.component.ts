@@ -41,10 +41,12 @@ import { ProductFilters, FilterGroup, FilterOption } from '../../models/product.
         <div *ngIf="activeFiltersList.length > 0" class="active-filters">
           <h4 class="active-filters-title">Active Filters:</h4>
           <div class="active-filters-list">
-            <span *ngFor="let filter of activeFiltersList" class="active-filter-tag">
-              {{ filter }}
-              <button (click)="removeActiveFilter(filter)" class="remove-filter-btn" type="button">×</button>
-            </span>
+            @for (filter of activeFiltersList; track $index) {
+              <span class="active-filter-tag">
+                {{ filter }}
+                <button (click)="removeActiveFilter(filter)" class="remove-filter-btn" type="button">×</button>
+              </span>
+            }
           </div>
         </div>
 
@@ -499,8 +501,8 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   };
 
   public priceRange = {
-    min: 0,
-    max: 0,
+    min: null as number | null,
+    max: null as number | null,
   };
 
   public activeFiltersCount = 0;
@@ -555,15 +557,15 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
       this.priceRange.min = this.currentFilters.priceRange.min;
       this.priceRange.max = this.currentFilters.priceRange.max;
     } else {
-      this.priceRange.min = 0;
-      this.priceRange.max = 0;
+      this.priceRange.min = null;
+      this.priceRange.max = null;
     }
   }
 
   public updatePriceRange(): void {
     console.log('price', this.priceRange.min, this.priceRange.max);
 
-    if (this.priceRange.min !== 0 && this.priceRange.max !== 0) {
+    if (this.priceRange.min !== null && this.priceRange.max !== null) {
       if (this.priceRange.min <= this.priceRange.max) {
         this.filterService.setPriceRange(this.priceRange.min, this.priceRange.max);
       }

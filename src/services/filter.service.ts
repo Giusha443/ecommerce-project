@@ -24,11 +24,11 @@ export class FilterService {
   public activeFiltersCount$ = this.activeFiltersCountSubject.asObservable();
 
   public getFilters(): ProductFilters {
-    return this.filtersSubject.value;
+    return this.filtersSubject.getValue();
   }
 
   public updateFilters(filters: Partial<ProductFilters>): void {
-    const currentFilters = this.filtersSubject.value;
+    const currentFilters = this.filtersSubject.getValue();
     const newFilters = { ...currentFilters, ...filters };
     this.filtersSubject.next(newFilters);
     console.log(newFilters);
