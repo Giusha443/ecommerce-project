@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 const MIN_LENGTH_VALIDATE_PASSWORD = 8;
 
 @Component({
@@ -50,6 +51,7 @@ export class PasswordChangeDialogComponent {
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
+    private auth: AuthService,
     public dialogRef: MatDialogRef<AddressEditDialogComponent>,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: { user: ProfileResponse }
@@ -81,7 +83,10 @@ export class PasswordChangeDialogComponent {
             return throwError(() => err);
           })
         )
-        .subscribe(() => {
+        .subscribe(val => {
+          console.log(val);
+          console.log(this.auth.isAuthenticated$);
+
           this.showSuccess('Password changed');
           this.dialogRef.close(true);
         });

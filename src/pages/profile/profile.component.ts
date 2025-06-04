@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from '../../services/api.service';
@@ -22,7 +22,7 @@ const MIN_YEARS_TO_LOGIN = 13;
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   providers: [provideNativeDateAdapter()],
-
+  encapsulation: ViewEncapsulation.None,
   imports: [
     MatIcon,
     ReactiveFormsModule,
