@@ -5,10 +5,19 @@ import { ProductService } from '../../services/product.service';
 import { Attribute, Product } from '../../models/product.model';
 import { Router } from '@angular/router';
 import { MatButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
+// Интерфейс для breadcrumb элементов
+interface BreadcrumbItem {
+  label: string;
+  route?: string;
+  isActive?: boolean;
+}
 
 @Component({
   selector: 'app-product',
-  imports: [MatButton],
+  imports: [MatButton, RouterLink, CommonModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
 })
@@ -31,6 +40,7 @@ export class ProductComponent implements OnInit {
     slug: '',
     attributes: [],
   });
+
   public readonly attributesMap = new Map([
     ['cpu-cores', 'Number of cores'],
     ['cpu-threads', 'Number of threads'],
@@ -45,6 +55,7 @@ export class ProductComponent implements OnInit {
   public selectedPicture = '';
   public hasDiscount = false;
   public productSlug = '';
+  public breadcrumbs: BreadcrumbItem[] = [];
 
   constructor(
     private title: Title,
@@ -61,8 +72,39 @@ export class ProductComponent implements OnInit {
         this.selectedPicture = this.product().images[0];
         this.hasDiscount = this.product().price.hasDiscount;
         this.productSlug = this.product().slug;
+
+        // Построение breadcrumbs
+        this.buildBreadcrumbs();
       }
     });
+  }
+
+  private buildBreadcrumbs(): void {
+    this.breadcrumbs = [
+      {
+        label: 'Main',
+        route: '/main',
+      },
+      {
+        label: 'Catalog',
+        route: '/catalog',
+      },
+      {
+        label: 'Processors',
+        route: '/catalog/processors',
+      },
+      {
+        label: this.productName,
+        isActive: true,
+      },
+    ];
+  }
+
+  // Метод для навигации к определенному breadcrumb
+  public navigateTo(route?: string): void {
+    if (route) {
+      this.router.navigate([route]);
+    }
   }
 
   public get productName(): string {
