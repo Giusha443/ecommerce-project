@@ -34,7 +34,15 @@
         }
       </aside>
       <div>
-        <img class="image__big" [src]="selectedPicture" [alt]="productSlug" loading="lazy" />
+        <img
+          (click)="openModal()"
+          (keydown.enter)="openModal()"
+          (keydown.space)="openModal()"
+          class="image__big"
+          [src]="selectedPicture"
+          [alt]="productSlug"
+          tabindex="0"
+          loading="lazy" />
       </div>
     </div>
     <div class="product__attributes">

@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalImagesComponent } from '../../components/modal-images/modal-images.component';
 
 // Интерфейс для breadcrumb элементов
 interface BreadcrumbItem {
@@ -60,7 +62,8 @@ export class ProductComponent implements OnInit {
   constructor(
     private title: Title,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   public ngOnInit(): void {
@@ -76,6 +79,16 @@ export class ProductComponent implements OnInit {
         // Построение breadcrumbs
         this.buildBreadcrumbs();
       }
+    });
+  }
+  public openModal(): void {
+    const dialogRef = this.dialog.open(ModalImagesComponent, {
+      data: { images: this.product().images },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
     });
   }
 

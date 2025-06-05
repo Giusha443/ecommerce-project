@@ -1,0 +1,24 @@
+<mat-dialog-content>
+  <div class="modal__header">
+    <button mat-icon-button themed class="header-icon__link" (click)="onNoClick()">
+      <mat-icon title="My profile">close</mat-icon>
+    </button>
+  </div>
+  <div class="modal__image">
+    <img class="image__big" [src]="currentImage" alt="image" tabindex="0" loading="lazy" />
+  </div>
+  <div class="modal__list-image">
+    @for (image of images; track $index) {
+      <img
+        class="image__small"
+        [src]="image"
+        alt="image"
+        tabindex="0"
+        loading="lazy"
+        (click)="onChoseImage($index)"
+        (keydown.enter)="onChoseImage($index)"
+        (keydown.space)="onChoseImage($index)" />
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions> </mat-dialog-actions>

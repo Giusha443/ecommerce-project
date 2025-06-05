@@ -1,0 +1,28 @@
+.modal__header {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 5px;
+}
+
+.image__big {
+  width: 100%;
+}
+
+.modal__list-image {
+  display: flex;
+  padding: 5px;
+  height: 160px;
+  gap: 10px;
+  overflow-x: auto;
+}
+.image__small {
+  display: inline-block;
+  width: 140px;
+  height: 140px;
+
+  cursor: pointer;
+}
+
+.mat-mdc-dialog-content {
+  max-height: none;
+}
