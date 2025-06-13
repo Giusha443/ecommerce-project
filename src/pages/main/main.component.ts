@@ -24,27 +24,29 @@ const TRUNCATION_LENGTH = 10;
         <mat-card-content>
           <p>
             Authentication Status:
-            <strong class="status" [class.autheduser]="isAuthenticated$ | async">
-              {{ (isAuthenticated$ | async) ? 'Authenticated' : 'Not Authenticated' }}
+            <strong class="status" [class.autheduser]="isAuthenticatedPrivate$ | async">
+              {{ (isAuthenticatedPrivate$ | async) ? 'Authenticated' : 'Not Authenticated' }}
             </strong>
           </p>
 
           <mat-divider class="my-3"></mat-divider>
 
-          <div *ngIf="isAuthenticated$ | async">
+          <div *ngIf="isAuthenticatedPrivate$ | async">
             <p>You have successfully logged in and were redirected to the main page.</p>
             <p>Token Info (truncated):</p>
             <pre>{{ tokenPreview }}</pre>
           </div>
 
-          <div *ngIf="(isAuthenticated$ | async) === false">
+          <div *ngIf="(isAuthenticatedPrivate$ | async) === false">
             <p>You should be redirected to login page soon...</p>
           </div>
         </mat-card-content>
 
         <mat-card-actions>
           <button mat-raised-button color="primary" (click)="checkAuthStatus()">Check Auth Status</button>
-          <button mat-raised-button color="warn" (click)="logout()" *ngIf="isAuthenticated$ | async">Logout</button>
+          <button mat-raised-button color="warn" (click)="logout()" *ngIf="isAuthenticatedPrivate$ | async">
+            Logout
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -83,14 +85,14 @@ const TRUNCATION_LENGTH = 10;
   ],
 })
 export class MainComponent implements OnInit {
-  public isAuthenticated$: BehaviorSubject<boolean>;
+  public isAuthenticatedPrivate$: BehaviorSubject<boolean>;
   public tokenPreview = '';
   constructor(
     private authService: AuthService,
     private storageService: StorageService,
     private router: Router
   ) {
-    this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.isAuthenticatedPrivate$ = this.authService.isAuthenticated$;
   }
 
   public ngOnInit(): void {

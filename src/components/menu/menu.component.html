@@ -6,7 +6,7 @@
 
 <mat-menu #menu="matMenu" class="app-menu">
   @for (item of menuItems; track $index) {
-    <button mat-menu-item [routerLink]="['item.route']" routerLinkActive="active">
+    <button mat-menu-item [routerLink]="[item.route]" routerLinkActive="active">
       <!-- <mat-icon>{{ item.item }}</mat-icon> -->
       <span>{{ item.item }}</span>
     </button>

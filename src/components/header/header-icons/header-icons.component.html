@@ -1,5 +1,5 @@
-@if (isAuthenticated$ | async) {
-  <button mat-icon-button themed class="header-icon__link" routerLink="/profile">
+@if (isAuthenticatedPrivate$ | async) {
+  <button mat-icon-button themed class="header-icon__link" routerLink="profile">
     <mat-icon title="My profile">account_circle</mat-icon>
   </button>
   <button mat-icon-button class="header-icon__link" routerLink="logout">

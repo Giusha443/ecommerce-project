@@ -1,3 +1,5 @@
+import { Attribute } from '../models/product.model';
+
 export interface TokenResponse {
   access_token: string;
   expires_in: number;
@@ -11,29 +13,56 @@ export interface ProductResponse {
   offset: number;
   count: number;
   total: number;
-  results: {
-    id: string;
-    masterData: {
-      current: ProductData;
-      hasStagedChanges: boolean;
-      published: boolean;
-      staged: ProductData;
-    };
-    productType: {
-      id: string;
-      typeId: string;
-    };
-    taxCategory?: {
-      id: string;
-      typeId: string;
-    };
-    version: number;
-    createdAt: string;
-    lastModifiedAt: string;
-  }[];
+  results: ProductData[];
+  facets?: Record<
+    string,
+    {
+      type: string;
+      dataType: string;
+      missing: number;
+      total: number;
+      other: number;
+      terms: {
+        term: string;
+        count: number;
+      }[];
+    }
+  >;
 }
 
-interface ProductData {
+export type AddressType = Record<'id' | 'city' | 'country' | 'postalCode' | 'streetName', string>;
+
+export interface ProfileResponse {
+  id: string;
+  version: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  lastModifiedBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  createdBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  dateOfBirth: string;
+  addresses: AddressType[];
+  defaultBillingAddressId: string;
+  defaultShippingAddressId: string;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+  isEmailVerified: boolean;
+  stores: [];
+  authenticationMode: string;
+}
+
+export interface ProductData {
+  id: string;
+  key: string;
   categories: {
     id: string;
     typeId: string;
@@ -43,11 +72,11 @@ interface ProductData {
   name: Record<string, string>;
   slug: Record<string, string>;
   variants: ProductVariant[];
-  searchKeywords: Record<string, unknown>;
+  searchKeywords?: Record<string, unknown>;
 }
 
-interface ProductVariant {
-  attributes: unknown[];
+export interface ProductVariant {
+  attributes: Attribute[];
   id: number;
   images?: {
     dimensions: {
@@ -64,6 +93,14 @@ interface ProductVariant {
       currencyCode: string;
     };
     id: string;
+    discounted: {
+      value: {
+        type: string;
+        fractionDigits: number;
+        centAmount: number;
+        currencyCode: string;
+      };
+    };
   }[];
   sku?: string;
 }
@@ -115,7 +152,7 @@ export interface CustomerProps {
 
 export interface Introspect {
   active: boolean;
-  scope: string;
-  exp: number;
-  client_id: string;
+  scope?: string;
+  exp?: number;
+  client_id?: string;
 }
