@@ -8,7 +8,7 @@ import { MatButton, MatButtonModule, MatFabAnchor, MatFabButton, MatIconButton }
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink } from '@angular/router';
 import { MenuItemComponent } from '../../components/menu/menu-item/menu-item.component';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { catchError, throwError } from 'rxjs';
@@ -193,7 +193,7 @@ export class CartComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.codeForm = this.fb.group({
-      code: ['', Validators.required],
+      code: [''],
     });
   }
 
@@ -279,6 +279,7 @@ export class CartComponent implements OnInit {
     this._cart = value;
     if (value) {
       this.dataSource = value.lineItems.map(item => this.mapLineItemToTableItem(item));
+      this.isApplayPromo = value?.discountCodes[0]?.discountCode ? true : false;
     }
   }
   public applyCode(): void {

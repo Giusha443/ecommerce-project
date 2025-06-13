@@ -10,13 +10,13 @@
       @if (dataSource.length > 0) {
         <table mat-table [dataSource]="dataSource" class="cart__list mat-elevation-z8">
           <ng-container matColumnDef="image">
-            <th mat-header-cell *matHeaderCellDef>Image</th>
+            <th mat-header-cell *matHeaderCellDef>Product</th>
             <td mat-cell *matCellDef="let item">
               <img [src]="item.image" alt="Product image" class="cart__image" />
             </td>
           </ng-container>
           <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let item">{{ item.title }}</td>
           </ng-container>
           <ng-container matColumnDef="price">
@@ -70,9 +70,14 @@
 
   <div class="cart__output-wrap">
     <div class="cart__prices">
+      <h3 class="cart__prices-title">Total price:</h3>
       @if (cart) {
         <div class="cart__total">
-          <h3>Total: {{ formatPrice(cart.totalPrice) }}</h3>
+          <h4>
+            <span class="cart__price-total">
+              {{ formatPrice(cart.totalPrice) }}
+            </span>
+          </h4>
         </div>
       }
     </div>

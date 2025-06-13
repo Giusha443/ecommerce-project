@@ -504,7 +504,6 @@
 .blink {
   animation-name: blinker;
   animation-iteration-count: infinite;
-  // animation-timing-function: cubic-bezier(1, 2, 2, 1);
   animation-duration: 1s;
 }
 
@@ -527,7 +526,11 @@
   bottom: 15%;
   right: 5%;
   height: 35px;
+  transition: all 1s 1s linear;
 }
 .promo__link:hover {
   animation: none;
+}
+.hidden {
+  transform: scale(0);
 }

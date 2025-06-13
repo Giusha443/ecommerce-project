@@ -53,7 +53,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public searchQuery = '';
   public activeFiltersCount = 0;
   public noResults = false;
-  public isCopiedDiscount = false;
+  public isCopiedDiscount = '';
   // Items per page options
   public perPageValues = [
     { value: '2', label: '2' },
@@ -74,6 +74,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
     { value: 'createdAt desc', label: 'Newest First' },
     { value: 'createdAt asc', label: 'Oldest First' },
   ];
+  public isButtonHidden = false;
 
   constructor(
     private productService: ProductService,
@@ -81,7 +82,9 @@ export class CatalogComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private api: ApiService
-  ) {}
+  ) {
+    this.isCopiedDiscount = this.api.discount$.value;
+  }
 
   public ngOnInit(): void {
     this.initializeSubscriptions();
@@ -133,6 +136,9 @@ export class CatalogComponent implements OnInit, OnDestroy {
         this.searchQuery = filters.searchQuery || '';
         this.loadProducts();
       });
+    if (this.isCopiedDiscount) {
+      this.isButtonHidden = true;
+    }
   }
 
   public initialiseQuery(): void {
@@ -367,6 +373,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
   public copyDiscount(): void {
     this.api.discount$.next('super_discaunt');
-    this.isCopiedDiscount = true;
+    this.isCopiedDiscount = 'super_discaunt';
+    navigator.clipboard.writeText('super_discaunt');
+    setTimeout(() => {
+      this.isButtonHidden = true;
+      // eslint-disable-next-line no-magic-numbers
+    }, 2000);
   }
 }
