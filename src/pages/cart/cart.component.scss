@@ -1,0 +1,127 @@
+@use '@angular/material' as mat;
+
+.cart__title {
+  padding: 0 20px;
+  margin: 0;
+}
+.cart__content h4 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+.cart__content {
+  display: flex;
+  justify-content: space-around;
+}
+
+.cart__title-manage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+.mat-mdc-table {
+  width: 100%;
+  max-height: 500px;
+  overflow: auto;
+}
+.cart__list-wrap {
+  max-height: 700px;
+  overflow: auto;
+}
+.cart__list {
+  list-style-type: none;
+  min-width: auto;
+  width: 700px;
+}
+.cart__list td {
+  padding: 10px;
+}
+.cart__list th {
+  background-color: #a6a6a6;
+}
+.cart__item {
+  cursor: pointer;
+}
+.cart__item:hover {
+  background-color: #efefef;
+}
+
+.cart__prices {
+  min-width: 300px;
+  width: 100%;
+  background-color: #a6a6a6;
+  height: 200px;
+  padding: 20px;
+}
+.cart__image {
+  width: 130px;
+  height: 130px;
+  border-radius: 10px;
+}
+.cart__message {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  padding-bottom: 10px;
+}
+@media (max-width: 1030px) {
+  .cart__list {
+    width: 500px;
+  }
+}
+
+@media (max-width: 980px) {
+  .cart__content {
+    padding: 0 20px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .cart__list {
+    width: 100%;
+  }
+  .cart__prices {
+    width: 100%;
+  }
+}
+.cart__output-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.cart__discont-input {
+  width: 100%;
+}
+.cart__discont-button-wrap {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 10px;
+}
+.cart__discont-button {
+  background-color: #4772ff;
+  color: rgb(255, 255, 255);
+}
+.cart__discont-button:hover {
+  background-color: #95aeff;
+}
+
+.error-snackbar {
+  @include mat.snack-bar-overrides(
+    (
+      button-color: rgb(255, 255, 255),
+      container-color: red,
+    )
+  );
+}
+.success-snackbar {
+  @include mat.snack-bar-overrides(
+    (
+      button-color: rgb(255, 255, 255),
+      container-color: #2e7d32,
+    )
+  );
+}

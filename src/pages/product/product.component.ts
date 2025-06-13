@@ -9,6 +9,9 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalImagesComponent } from '../../components/modal-images/modal-images.component';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { Cart } from '../cart/cart.component';
 
 // Интерфейс для breadcrumb элементов
 interface BreadcrumbItem {
@@ -63,7 +66,9 @@ export class ProductComponent implements OnInit {
     private title: Title,
     private productService: ProductService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private api: ApiService,
+    private auth: AuthService
   ) {}
 
   public ngOnInit(): void {
@@ -112,7 +117,25 @@ export class ProductComponent implements OnInit {
       },
     ];
   }
-
+  public addToCart(): void {
+    if (!this.auth.isAuthenticated$.getValue()) {
+      return;
+    }
+    this.api.getCarts().subscribe(result => {
+      const cart = result?.results?.[0];
+      if (cart) {
+        this.api.updateCart(cart.id, this.id, cart.version).subscribe(console.log);
+      } else {
+        this.createCart();
+      }
+    });
+  }
+  public createCart(): void {
+    this.api.createCart().subscribe(response => {
+      const cart = response as Cart;
+      this.api.updateCart(cart.id, this.id, cart.version).subscribe(console.log);
+    });
+  }
   // Метод для навигации к определенному breadcrumb
   public navigateTo(route?: string): void {
     if (route) {

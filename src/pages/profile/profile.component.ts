@@ -62,6 +62,8 @@ export class ProfileComponent implements OnInit {
 
   private loadUserData(): void {
     this.api.getProfile().subscribe(user => {
+      console.log(user);
+
       this.user = user;
       this.profileForm.patchValue(user);
     });

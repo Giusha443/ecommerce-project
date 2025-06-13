@@ -211,6 +211,19 @@
         </nav>
       }
     </section>
+    <button mat-fab extended class="promo__link blink" (click)="copyDiscount()">
+      <div>
+        @if (isCopiedDiscount) {
+          <mat-icon>check_circle_outline</mat-icon>
+          Discount copied!
+        } @else {
+          <div>
+            <mat-icon>discount</mat-icon>
+            Take a super discount
+          </div>
+        }
+      </div>
+    </button>
   </main>
 </div>
 

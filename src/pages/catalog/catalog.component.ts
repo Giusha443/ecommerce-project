@@ -12,6 +12,9 @@ import { ProductCardComponent } from '../../components/product-card/product-card
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
 import { ProductCard } from '../../models/product.model';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { ApiService } from '../../services/api.service';
 
 export const ITEMS_PER_PAGE = 4;
 const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
@@ -19,7 +22,15 @@ const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductCardComponent, SearchBarComponent, ProductFiltersComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ProductCardComponent,
+    SearchBarComponent,
+    ProductFiltersComponent,
+    MatFabButton,
+    MatIcon,
+  ],
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.scss'],
 })
@@ -42,7 +53,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public searchQuery = '';
   public activeFiltersCount = 0;
   public noResults = false;
-
+  public isCopiedDiscount = false;
   // Items per page options
   public perPageValues = [
     { value: '2', label: '2' },
@@ -68,7 +79,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private filterService: FilterService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private api: ApiService
   ) {}
 
   public ngOnInit(): void {
@@ -352,5 +364,9 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   public get canGoToNext(): boolean {
     return this.currentPage < this.totalPages;
+  }
+  public copyDiscount(): void {
+    this.api.discount$.next('super_discaunt');
+    this.isCopiedDiscount = true;
   }
 }

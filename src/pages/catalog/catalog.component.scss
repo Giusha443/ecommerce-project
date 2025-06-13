@@ -500,3 +500,34 @@
     transform: translateY(0);
   }
 }
+
+.blink {
+  animation-name: blinker;
+  animation-iteration-count: infinite;
+  // animation-timing-function: cubic-bezier(1, 2, 2, 1);
+  animation-duration: 1s;
+}
+
+@keyframes blinker {
+  from {
+    opacity: 0.6;
+    transform: scale(1, 1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1, 1.1);
+  }
+  to {
+    opacity: 0.6;
+    transform: scale(1, 1);
+  }
+}
+.promo__link {
+  position: fixed;
+  bottom: 15%;
+  right: 5%;
+  height: 35px;
+}
+.promo__link:hover {
+  animation: none;
+}
