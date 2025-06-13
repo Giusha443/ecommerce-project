@@ -43,6 +43,11 @@ export const routes: Routes = [
     loadComponent: () => import('../pages/product/product.component').then(p => p.ProductComponent),
     canActivate: [productGuard],
   },
+  {
+    path: 'about',
+    loadComponent: () => import('../components/about-us/about-us.component').then(c => c.AboutUsComponent),
+    title: `Catalog - ${APP_TITLE}`,
+  },
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   {
     path: 'notfound',
