@@ -1,7 +1,7 @@
 import { MenuItem } from '../models/types';
 
 export const MENU_ITEMS: MenuItem[] = [
-  { item: 'Catalog', route: 'catalog' },
-  { item: 'About Us', route: 'contact' },
-  { item: 'Cart', route: 'cart' },
+  { item: 'Catalog', route: '/catalog' },
+  { item: 'About Us', route: '/about' },
+  { item: 'Cart', route: '/cart' },
 ];
