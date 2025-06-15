@@ -38,6 +38,7 @@ export const routes: Routes = [
   {
     path: 'main',
     loadComponent: () => import('../pages/main/main.component').then(m => m.MainComponent),
+    title: `Main page - ${APP_TITLE} there is almost nothing here!`,
   },
   {
     path: 'logout',
