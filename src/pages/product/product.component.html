@@ -77,10 +77,9 @@
           <span>
             <a routerLink="/cart"> Cart </a>
           </span>
-          .
+          . You can change quiantity there if needed
         </p>
-        <p>You can change quiantity there if needed</p>
-        <!-- <button mat-flat-button class="button" type="button" disabled>product is in the Cart</button> -->
+        <button mat-flat-button class="button" type="button" (click)="removeFromCart()">Remove from Cart</button>
       } @else {
         <div class="product__buttons">
           <div class="quantity__buttons">

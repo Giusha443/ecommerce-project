@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalImagesComponent } from '../../components/modal-images/modal-images.component';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
-import { type Cart } from '../cart/cart.component';
+import { LineItem, type Cart } from '../cart/cart.component';
 import { MatIcon } from '@angular/material/icon';
 
 // constant to limit maximum quianity of items to add
@@ -67,6 +67,8 @@ export class ProductComponent implements OnInit {
   public breadcrumbs: BreadcrumbItem[] = [];
   public quantity = 1;
   public isInCart = false;
+  public cart!: Cart;
+  public itemIdInCart = '';
 
   constructor(
     private title: Title,
@@ -87,11 +89,12 @@ export class ProductComponent implements OnInit {
         this.productSlug = this.product().slug;
         this.api.getCarts().subscribe(result => {
           const cart = result?.results?.[0] as Cart;
-          if (cart.lineItems.length) {
-            const productId = this.product().id;
-            for (const item of cart.lineItems) {
-              console.log(item, productId);
-              if (item.productId === productId) {
+          if (cart) {
+            this.cart = cart;
+            if (cart.lineItems.length) {
+              const lineItem = this.getProductFromCart();
+              if (lineItem) {
+                this.itemIdInCart = lineItem.id;
                 this.isInCart = true;
               }
             }
@@ -136,14 +139,13 @@ export class ProductComponent implements OnInit {
   }
 
   public addToCart(): void {
-    // if (!this.auth.isAuthenticated$.getValue()) {
-    //   return;
-    // }
     this.api.getCarts().subscribe(result => {
       const cart = result?.results?.[0];
       this.isInCart = true;
       if (cart) {
-        this.api.updateCart(cart.id, this.id, cart.version, this.quantity).subscribe(console.log);
+        this.api.updateCart(cart.id, this.id, cart.version, this.quantity).subscribe(cart => {
+          this.setNewItemIdInCart(cart as Cart);
+        });
       } else {
         this.createCart();
       }
@@ -152,8 +154,31 @@ export class ProductComponent implements OnInit {
   public createCart(): void {
     this.api.createCart().subscribe(response => {
       const cart = response as Cart;
-      this.api.updateCart(cart.id, this.id, cart.version).subscribe(console.log);
+      this.cart = cart;
+      this.api.updateCart(cart.id, this.id, cart.version, this.quantity).subscribe(console.log);
     });
+  }
+
+  public removeFromCart(): void {
+    if (this.cart.id && this.cart.version) {
+      this.api.removeItemCart(this.cart.id, this.itemIdInCart, this.cart.version).subscribe(() => {
+        this.isInCart = false;
+        this.quantity = 1;
+      });
+    }
+  }
+
+  private getProductFromCart(): LineItem | undefined {
+    return this.cart.lineItems.find(item => item.productId === this.id);
+  }
+
+  private setNewItemIdInCart(cart: Cart): void {
+    this.cart = cart;
+    console.log(cart);
+    const newLineItem = this.getProductFromCart();
+    if (newLineItem) {
+      this.itemIdInCart = newLineItem.id;
+    }
   }
 
   // Метод для навигации к определенному breadcrumb
