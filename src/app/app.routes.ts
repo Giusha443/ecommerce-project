@@ -6,6 +6,11 @@ import { APP_TITLE } from '../constants/app.title';
 import { LogOutComponent } from '../components/log-out/log-out.component';
 
 export const routes: Routes = [
+  // {
+  //   path: 'about',
+  //   loadComponent: () => import('../pages/about-us/about-us.component').then(a => a.AboutUsComponent),
+  //   title: `About us! - ${APP_TITLE}`,
+  // },
   {
     path: 'login',
     loadComponent: () => import('../pages/login/login.component').then(l => l.LoginComponent),
