@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { ApiService } from '../../services/api.service';
-import { JsonPipe, NgClass } from '@angular/common';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatMenuItem, MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatButton, MatButtonModule, MatFabAnchor, MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink } from '@angular/router';
-import { MenuItemComponent } from '../../components/menu/menu-item/menu-item.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -155,9 +153,7 @@ interface ItemView {
   selector: 'app-cart',
   imports: [
     MatTableModule,
-    JsonPipe,
     MatIcon,
-    MatMenuItem,
     MatButton,
     MatIcon,
     MatButtonModule,
@@ -166,8 +162,6 @@ interface ItemView {
     MatDividerModule,
     MatIconModule,
     RouterLink,
-    MenuItemComponent,
-    NgClass,
     MatIconButton,
     MatIcon,
     MatMenuModule,

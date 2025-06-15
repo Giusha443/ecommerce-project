@@ -16,7 +16,7 @@ import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ApiService } from '../../services/api.service';
 
-export const ITEMS_PER_PAGE = 4;
+export const ITEMS_PER_PAGE = 6;
 const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
 
 @Component({
@@ -61,7 +61,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
     { value: '4', label: '4' },
     { value: '6', label: '6' },
     { value: '8', label: '8' },
-    { value: '10', label: '10' },
+    { value: '12', label: '12' },
     { value: '20', label: '20' },
   ];
 
