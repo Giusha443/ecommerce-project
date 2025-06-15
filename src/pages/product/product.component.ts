@@ -111,10 +111,7 @@ export class ProductComponent implements OnInit {
       data: { images: this.product().images },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-    });
+    dialogRef.afterClosed();
   }
 
   private buildBreadcrumbs(): void {
@@ -154,8 +151,9 @@ export class ProductComponent implements OnInit {
   public createCart(): void {
     this.api.createCart().subscribe(response => {
       const cart = response as Cart;
-      this.cart = cart;
-      this.api.updateCart(cart.id, this.id, cart.version, this.quantity).subscribe(console.log);
+      this.api.updateCart(cart.id, this.id, cart.version, this.quantity).subscribe(cart => {
+        this.setNewItemIdInCart(cart as Cart);
+      });
     });
   }
 
@@ -174,7 +172,6 @@ export class ProductComponent implements OnInit {
 
   private setNewItemIdInCart(cart: Cart): void {
     this.cart = cart;
-    console.log(cart);
     const newLineItem = this.getProductFromCart();
     if (newLineItem) {
       this.itemIdInCart = newLineItem.id;
