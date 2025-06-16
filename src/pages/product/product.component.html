@@ -71,11 +71,30 @@
         }
       </div>
       <div class="divider"></div>
-      <div class="product__buttons">
-        <button mat-button class="button count" type="button">- 1 +</button>
-        <button mat-flat-button class="button add" type="button" (click)="addToCart()">Add to Cart</button>
-      </div>
-      <button mat-button class="button buy" type="button">Buy Now</button>
+      @if (isInCart) {
+        <p>
+          Product is in the
+          <span>
+            <a routerLink="/cart"> Cart </a>
+          </span>
+          . You can change quiantity there if needed
+        </p>
+        <button mat-flat-button class="button" type="button" (click)="removeFromCart()">Remove from Cart</button>
+      } @else {
+        <div class="product__buttons">
+          <div class="quantity__buttons">
+            <button mat-icon-button (click)="minusItem()">
+              <mat-icon>remove</mat-icon>
+            </button>
+            {{ quantity }}
+            <button mat-icon-button (click)="plusItem()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <button mat-flat-button class="button add" type="button" (click)="addToCart()">Add to Cart</button>
+        </div>
+      }
+      <!-- <button mat-button class="button buy" type="button">Buy Now</button> -->
     </div>
   </section>
   <article class="product__description">

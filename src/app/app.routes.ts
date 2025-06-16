@@ -1,11 +1,16 @@
 import { Routes } from '@angular/router';
 import { NotFoundComponent } from '../pages/not-found/not-found.component';
 
-import { authGuard, loginGuard, profileGuard, productGuard, cartGuard } from '../guards/auth.guard';
+import { authGuard, loginGuard, profileGuard, productGuard } from '../guards/auth.guard';
 import { APP_TITLE } from '../constants/app.title';
 import { LogOutComponent } from '../components/log-out/log-out.component';
 
 export const routes: Routes = [
+  // {
+  //   path: 'about',
+  //   loadComponent: () => import('../pages/about-us/about-us.component').then(a => a.AboutUsComponent),
+  //   title: `About us! - ${APP_TITLE}`,
+  // },
   {
     path: 'login',
     loadComponent: () => import('../pages/login/login.component').then(l => l.LoginComponent),
@@ -27,12 +32,13 @@ export const routes: Routes = [
   {
     path: 'cart',
     loadComponent: () => import('../pages/cart/cart.component').then(l => l.CartComponent),
-    canActivate: [cartGuard],
+    // canActivate: [cartGuard],
     title: `Cart - ${APP_TITLE}`,
   },
   {
     path: 'main',
     loadComponent: () => import('../pages/main/main.component').then(m => m.MainComponent),
+    title: `Main page - ${APP_TITLE} there is almost nothing here!`,
   },
   {
     path: 'logout',
