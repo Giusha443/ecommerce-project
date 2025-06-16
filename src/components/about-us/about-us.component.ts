@@ -44,7 +44,7 @@ export class AboutUsComponent {
       role: 'Frontend Developer',
       bio: 'Graduated from BSU with a degree in mathematics and computer science.Constantly improves skills through RSSchool courses and practical projects. Analytical mind and attention to detail.Ability to work in a team.',
       photoUrl: './assets/pasha.jpg',
-      githubUrl: 'https://github.com/mikejohnson',
+      githubUrl: 'https://github.com/pashaby94',
       contributions: [
         'Developed integration with CommerceTools and backend services',
         'Implemented registration page',
