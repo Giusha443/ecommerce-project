@@ -26,7 +26,7 @@ export class AboutUsComponent {
       id: 1,
       name: 'Giorgi Jajanidze',
       role: 'Frontend Developer & Team Lead',
-      bio: '21 years old student,currently studying in TSU, Georgia on faculty Computer Science. have experience with backend languages ,now working 0n front-end side for 1.5 years.',
+      bio: '21 years old student, currently studying in TSU, Georgia on faculty Computer Science. have experience with backend languages , now working on front-end side for 1.5 years.',
       photoUrl: './assets/pfp.jpg',
       githubUrl: 'https://github.com/giusha443',
       contributions: [
@@ -42,7 +42,7 @@ export class AboutUsComponent {
       id: 2,
       name: 'Pavel Svenin',
       role: 'Frontend Developer',
-      bio: 'Graduated from BSU with a degree in mathematics and computer science.Constantly improves skills through RSSchool courses and practical projects. Analytical mind and attention to detail.Ability to work in a team.',
+      bio: 'Graduated from BSU with a degree in mathematics and computer science. Constantly improves skills through RSSchool courses and practical projects. Analytical mind and attention to detail. Ability to work in a team.',
       photoUrl: './assets/pasha.jpg',
       githubUrl: 'https://github.com/pashaby94',
       contributions: [
@@ -51,18 +51,19 @@ export class AboutUsComponent {
         'Implemented strict linter rules',
         'Implemented User profile page',
         'implemented Basket page',
-        'Fixed buts after code reviews',
+        'Fixed bugs after code reviews',
       ],
     },
     {
       id: 3,
       name: 'Denis Karev',
-      role: 'Frontedn developer',
+      role: 'Frontend developer',
       bio: 'Almost all life had jobs related to computers, so finally started education path in programming almost two years ago. Open minded. Has motivation and desire for learning.',
       photoUrl: './assets/denis.png',
       githubUrl: 'https://github.com/deniskarev',
       contributions: [
         'Developed tests',
+        'Implemented Header & Menu components',
         'Set up Angular routing and project management',
         'Implemented detailed product page',
         'configuration of the scripts',
@@ -78,7 +79,7 @@ export class AboutUsComponent {
     agile methodologies, conducted regular code reviews, and leveraged version control with Git 
     for seamless integration. Each team member brought unique expertise, from frontend development 
     and UI/UX design to backend architecture and testing. Our collaborative approach included 
-    daily standups, sprint planning, and continuous integration, ensuring high code quality 
+    daily stand-ups, sprint planning, and continuous integration, ensuring high code quality 
     and timely delivery of features.
   `;
 
