@@ -211,6 +211,17 @@
         </nav>
       }
     </section>
+    @if (isCopiedDiscount) {
+      <button mat-fab extended class="promo__link" [class.hidden]="isButtonHidden" (click)="copyDiscount()">
+        <mat-icon>check_circle_outline</mat-icon>
+        Discount copied!
+      </button>
+    } @else {
+      <button mat-fab extended class="promo__link blink" (click)="copyDiscount()">
+        <mat-icon>discount</mat-icon>
+        Take a super discount
+      </button>
+    }
   </main>
 </div>
 

@@ -8,12 +8,16 @@ import {
   ProfileResponse,
   TokenResponse,
 } from './api-response.model';
-import { catchError, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of } from 'rxjs';
 import { environment } from '../environments/environment.development';
+import { LineItem } from '../pages/cart/cart.component';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   public readonly authUrl = `${environment.host}/oauth/token`;
+  public readonly createCartUrl = `${environment.apiUrl}/${environment.projectKey}/carts`;
+  public readonly getCodesDiscoundUrl = `${environment.apiUrl}/${environment.projectKey}/discount-codes`;
+
   public readonly anonymousTokenUrl = `${environment.host}/oauth/${environment.projectKey}/anonymous/token`;
   public readonly productsUrl = `${environment.apiUrl}/${environment.projectKey}/products`;
   public readonly introspectUrl = `${environment.host}/oauth/introspect`;
@@ -22,7 +26,7 @@ export class ApiService {
   public readonly refreshTokenUrl = `${environment.host}/oauth/token`;
   public readonly getProfileUrl = `${environment.apiUrl}/${environment.projectKey}/me`;
   public readonly changePasswordProfileUrl = `${environment.apiUrl}/${environment.projectKey}/me/password `;
-
+  public discount$ = new BehaviorSubject<string>('');
   constructor(private http: HttpClient) {}
 
   public getClientCredentialsToken(scope: string, path?: string): Observable<TokenResponse> {
@@ -209,5 +213,151 @@ export class ApiService {
           return of(null);
         })
       );
+  }
+  public getCarts(): Observable<any> {
+    return this.http.get(this.createCartUrl);
+  }
+  public getCartById(id: string): Observable<any> {
+    return this.http.get(this.createCartUrl + `/${id}`);
+  }
+  public createCart(currency = 'BYN', country = 'BY'): Observable<object> {
+    return this.http.post(
+      this.createCartUrl,
+      JSON.stringify({
+        currency,
+        country,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+  public updateCart(
+    cartId: string,
+    productId: string,
+    version: number,
+    quantity = 1,
+    variantId = 1
+  ): Observable<object> {
+    return this.http.post(
+      this.createCartUrl + `/${cartId}`,
+      JSON.stringify({
+        version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId,
+            variantId,
+            quantity,
+          },
+        ],
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+  public removeItemCart(cartId: string, productId: string, version: number): Observable<object> {
+    return this.http.post(
+      this.createCartUrl + `/${cartId}`,
+      JSON.stringify({
+        version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: productId,
+          },
+        ],
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+  public changeQuantity(cartId: string, productId: string, version: number, quantity = 1): Observable<object> {
+    return this.http.post(
+      this.createCartUrl + `/${cartId}`,
+      JSON.stringify({
+        version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId: productId,
+            quantity,
+          },
+        ],
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+  public clearCart(cartId: string, listItem: LineItem[], version: number): Observable<object> {
+    const actions = listItem.map(item => {
+      return {
+        action: 'removeLineItem',
+        lineItemId: item.id,
+      };
+    });
+
+    return this.http.post(
+      this.createCartUrl + `/${cartId}`,
+      JSON.stringify({
+        version,
+        actions,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    );
+  }
+  public getCodeDiscount(): Observable<object> {
+    return this.http.get(this.getCodesDiscoundUrl);
+  }
+  public applyCode(cartId: string, code: string, version: number): Observable<object> {
+    return this.http.post(
+      this.createCartUrl + `/${cartId}`,
+      JSON.stringify({
+        version,
+        actions: [
+          {
+            action: 'addDiscountCode',
+            code: code,
+          },
+        ],
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+  public removeCode(cartId: string, discountCode: { typeId: string; id: string }, version: number): Observable<object> {
+    return this.http.post(
+      this.createCartUrl + `/${cartId}`,
+      JSON.stringify({
+        version,
+        actions: [
+          {
+            action: 'removeDiscountCode',
+            discountCode,
+          },
+        ],
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   }
 }
