@@ -5,4 +5,5 @@ export const MENU_ITEMS: MenuItem[] = [
   { item: 'Search', route: 'search' },
   { item: 'Contact Us', route: 'contact' },
   { item: 'Cart', route: 'cart' },
+  { item: 'About Us', route: 'about' },
 ];
