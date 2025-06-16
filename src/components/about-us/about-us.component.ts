@@ -19,7 +19,6 @@ interface TeamMember {
   styleUrls: ['./about-us.component.scss'],
 })
 export class AboutUsComponent {
-  rsSchoolLogoUrl = 'https://rs.school/images/rs_school_js.svg';
   rsSchoolWebsiteUrl = 'https://rs.school/';
 
   teamMembers: TeamMember[] = [
@@ -27,8 +26,8 @@ export class AboutUsComponent {
       id: 1,
       name: 'Giorgi Jajanidze',
       role: 'Frontend Developer & Team Lead',
-      bio: '22 years old student, have experience with backend languages ,now working in front-end side for 1.5 years.',
-      photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
+      bio: '21 years old student,currently studying in TSU, Georgia on faculty Computer Science. have experience with backend languages ,now working 0n front-end side for 1.5 years.',
+      photoUrl: './assets/pfp.jpg',
       githubUrl: 'https://github.com/giusha443',
       contributions: [
         'Developed the product catalog and search functionality',
@@ -43,8 +42,8 @@ export class AboutUsComponent {
       id: 2,
       name: 'Pavel Svenin',
       role: 'Frontend Developer',
-      bio: 'Full-stack developer with expertise in backend technologies and cloud infrastructure. Passionate about scalable architecture, API design, and automated deployment processes.',
-      photoUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
+      bio: 'Graduated from BSU with a degree in mathematics and computer science.Constantly improves skills through RSSchool courses and practical projects. Analytical mind and attention to detail.Ability to work in a team.',
+      photoUrl: './assets/pasha.jpg',
       githubUrl: 'https://github.com/mikejohnson',
       contributions: [
         'Developed integration with CommerceTools and backend services',
@@ -59,16 +58,16 @@ export class AboutUsComponent {
       id: 3,
       name: 'Denis Karev',
       role: 'Frontedn developer',
-      bio: 'Detail-oriented QA engineer with expertise in automated testing, quality assurance, and ensuring robust application performance across different platforms and devices.',
-      photoUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face',
+      bio: 'Almost all life had jobs related to computers, so finally started education path in programming almost two years ago. Open minded. Has motivation and desire for learning.',
+      photoUrl: './assets/denis.png',
       githubUrl: 'https://github.com/deniskarev',
       contributions: [
-        'Developed comprehensive testing strategies and test cases',
+        'Developed tests',
         'Set up Angular routing and project management',
         'Implemented detailed product page',
-        'configuration of the scripts for the project',
+        'configuration of the scripts',
         'Comprehensive README documentation',
-        'Identified and resolved critical bugs and performance issues',
+        'Identified and resolved critical bugs',
       ],
     },
   ];
