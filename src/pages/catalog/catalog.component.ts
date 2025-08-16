@@ -12,14 +12,25 @@ import { ProductCardComponent } from '../../components/product-card/product-card
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
 import { ProductCard } from '../../models/product.model';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { ApiService } from '../../services/api.service';
 
-export const ITEMS_PER_PAGE = 4;
+export const ITEMS_PER_PAGE = 6;
 const TIMEOUT_BEFORE_SEARCH_REQUEST = 300;
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductCardComponent, SearchBarComponent, ProductFiltersComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ProductCardComponent,
+    SearchBarComponent,
+    ProductFiltersComponent,
+    MatFabButton,
+    MatIcon,
+  ],
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.scss'],
 })
@@ -42,7 +53,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   public searchQuery = '';
   public activeFiltersCount = 0;
   public noResults = false;
-
+  public isCopiedDiscount = '';
   // Items per page options
   public perPageValues = [
     { value: '2', label: '2' },
@@ -50,7 +61,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
     { value: '4', label: '4' },
     { value: '6', label: '6' },
     { value: '8', label: '8' },
-    { value: '10', label: '10' },
+    { value: '12', label: '12' },
     { value: '20', label: '20' },
   ];
 
@@ -63,13 +74,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
     { value: 'createdAt desc', label: 'Newest First' },
     { value: 'createdAt asc', label: 'Oldest First' },
   ];
+  public isButtonHidden = false;
 
   constructor(
     private productService: ProductService,
     private filterService: FilterService,
     private router: Router,
-    private location: Location
-  ) {}
+    private location: Location,
+    private api: ApiService
+  ) {
+    this.isCopiedDiscount = this.api.discount$.value;
+  }
 
   public ngOnInit(): void {
     this.initializeSubscriptions();
@@ -121,6 +136,9 @@ export class CatalogComponent implements OnInit, OnDestroy {
         this.searchQuery = filters.searchQuery || '';
         this.loadProducts();
       });
+    if (this.isCopiedDiscount) {
+      this.isButtonHidden = true;
+    }
   }
 
   public initialiseQuery(): void {
@@ -352,5 +370,14 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   public get canGoToNext(): boolean {
     return this.currentPage < this.totalPages;
+  }
+  public copyDiscount(): void {
+    this.api.discount$.next('super_discaunt');
+    this.isCopiedDiscount = 'super_discaunt';
+    navigator.clipboard.writeText('super_discaunt');
+    setTimeout(() => {
+      this.isButtonHidden = true;
+      // eslint-disable-next-line no-magic-numbers
+    }, 2000);
   }
 }

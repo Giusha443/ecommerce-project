@@ -75,11 +75,11 @@ export class ProductService {
     if (params.filters) {
       httpParams = this.applyFilters(httpParams, params.filters);
     }
-    console.log('getProducts', params);
+    // console.log('getProducts', params);
 
     return this.http.get<ProductResponse>(this.productsUrl, { params: httpParams }).pipe(
       map(response => {
-        console.log(response);
+        // console.log(response);
         return this.transformResponse(response);
       }),
       catchError(error => {
@@ -92,7 +92,6 @@ export class ProductService {
 
   public searchProducts(query: string, limit = ITEMS_PER_PAGE): Observable<ProductCard[]> {
     console.log('searchProducts', query);
-
     return this.getProducts({ search: query, limit }).pipe(map(response => response.results));
   }
 
@@ -130,7 +129,7 @@ export class ProductService {
 
   private applyFilters(params: HttpParams, filters: ProductFilters): HttpParams {
     const filterExpressions: string[] = [];
-    console.log('applyFilters', params, filters);
+    // console.log('applyFilters', params, filters);
 
     if (filters.priceRange) {
       const { min, max } = filters.priceRange;

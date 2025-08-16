@@ -4,11 +4,18 @@ import { APP_TITLE } from '../../constants/app.title';
 import { ProductService } from '../../services/product.service';
 import { Attribute, Product } from '../../models/product.model';
 import { Router } from '@angular/router';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalImagesComponent } from '../../components/modal-images/modal-images.component';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { LineItem, type Cart } from '../cart/cart.component';
+import { MatIcon } from '@angular/material/icon';
+
+// constant to limit maximum quianity of items to add
+export const MAX_QUANTITY_TO_ADD = 99;
 
 // Интерфейс для breadcrumb элементов
 interface BreadcrumbItem {
@@ -19,7 +26,7 @@ interface BreadcrumbItem {
 
 @Component({
   selector: 'app-product',
-  imports: [MatButton, RouterLink, CommonModule],
+  imports: [MatButton, RouterLink, CommonModule, MatIcon, MatIconButton],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
 })
@@ -58,23 +65,41 @@ export class ProductComponent implements OnInit {
   public hasDiscount = false;
   public productSlug = '';
   public breadcrumbs: BreadcrumbItem[] = [];
+  public quantity = 1;
+  public isInCart = false;
+  public cart!: Cart;
+  public itemIdInCart = '';
 
   constructor(
     private title: Title,
     private productService: ProductService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private api: ApiService,
+    private auth: AuthService
   ) {}
 
   public ngOnInit(): void {
     this.productService.getProductById(this.id).subscribe(product => {
       if (product) {
         this.product = signal(product);
-        console.log(product);
         this.title.setTitle(`Product ${this.productName} - ${APP_TITLE}`);
         this.selectedPicture = this.product().images[0];
         this.hasDiscount = this.product().price.hasDiscount;
         this.productSlug = this.product().slug;
+        this.api.getCarts().subscribe(result => {
+          const cart = result?.results?.[0] as Cart;
+          if (cart) {
+            this.cart = cart;
+            if (cart.lineItems.length) {
+              const lineItem = this.getProductFromCart();
+              if (lineItem) {
+                this.itemIdInCart = lineItem.id;
+                this.isInCart = true;
+              }
+            }
+          }
+        });
 
         // Построение breadcrumbs
         this.buildBreadcrumbs();
@@ -86,10 +111,7 @@ export class ProductComponent implements OnInit {
       data: { images: this.product().images },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-    });
+    dialogRef.afterClosed();
   }
 
   private buildBreadcrumbs(): void {
@@ -111,6 +133,49 @@ export class ProductComponent implements OnInit {
         isActive: true,
       },
     ];
+  }
+
+  public addToCart(): void {
+    this.api.getCarts().subscribe(result => {
+      const cart = result?.results?.[0];
+      this.isInCart = true;
+      if (cart) {
+        this.api.updateCart(cart.id, this.id, cart.version, this.quantity).subscribe(cart => {
+          this.setNewItemIdInCart(cart as Cart);
+        });
+      } else {
+        this.createCart();
+      }
+    });
+  }
+  public createCart(): void {
+    this.api.createCart().subscribe(response => {
+      const cart = response as Cart;
+      this.api.updateCart(cart.id, this.id, cart.version, this.quantity).subscribe(cart => {
+        this.setNewItemIdInCart(cart as Cart);
+      });
+    });
+  }
+
+  public removeFromCart(): void {
+    if (this.cart.id && this.cart.version) {
+      this.api.removeItemCart(this.cart.id, this.itemIdInCart, this.cart.version).subscribe(() => {
+        this.isInCart = false;
+        this.quantity = 1;
+      });
+    }
+  }
+
+  private getProductFromCart(): LineItem | undefined {
+    return this.cart.lineItems.find(item => item.productId === this.id);
+  }
+
+  private setNewItemIdInCart(cart: Cart): void {
+    this.cart = cart;
+    const newLineItem = this.getProductFromCart();
+    if (newLineItem) {
+      this.itemIdInCart = newLineItem.id;
+    }
   }
 
   // Метод для навигации к определенному breadcrumb
@@ -152,5 +217,13 @@ export class ProductComponent implements OnInit {
 
   public selectPicture(index: number): void {
     this.selectedPicture = this.product().images[index];
+  }
+
+  public plusItem(): void {
+    this.quantity = Math.min(this.quantity + 1, MAX_QUANTITY_TO_ADD);
+  }
+
+  public minusItem(): void {
+    this.quantity = Math.max(this.quantity - 1, 1);
   }
 }

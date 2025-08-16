@@ -74,3 +74,20 @@ export const profileGuard: CanActivateFn = () => {
     })
   );
 };
+export const cartGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  const store = inject(StorageService);
+
+  if (!store.getTokens().accessToken) {
+    return router.createUrlTree(['/login']);
+  }
+
+  return auth.isAuth$.pipe(
+    filter(state => state !== null),
+    take(1),
+    map(isAuthenticated => {
+      return isAuthenticated ? true : router.createUrlTree(['/login']);
+    })
+  );
+};
